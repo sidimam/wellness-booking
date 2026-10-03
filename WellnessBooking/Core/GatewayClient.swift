@@ -172,6 +172,20 @@ actor GatewayClient {
     struct Empty: Decodable {}
     struct ErrorBody: Decodable { var error: String? }
 
+    // MARK: Health
+    struct Health: Decodable { var status: String; var version: String }
+    /// GET /healthz (senza autenticazione): il container è su?
+    func health() async throws -> Health {
+        var req = URLRequest(url: baseURL.appendingPathComponent("healthz"))
+        req.timeoutInterval = 6
+        for (k, v) in extraHeaders where !v.isEmpty { req.setValue(v, forHTTPHeaderField: k) }
+        let (data, resp) = try await session.data(for: req)
+        guard let http = resp as? HTTPURLResponse, (200..<300).contains(http.statusCode) else {
+            throw Failure(message: String(localized: "Gateway non raggiungibile"), status: (resp as? HTTPURLResponse)?.statusCode ?? 0)
+        }
+        return try decoder.decode(Health.self, from: data)
+    }
+
     // MARK: Auth
     struct LoginResponse: Decodable { var token: String; var user: GWUser; var version: String?; var push: Bool? }
     func login(username: String, password: String, deviceName: String) async throws -> LoginResponse {

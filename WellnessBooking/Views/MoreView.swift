@@ -24,6 +24,17 @@ struct MoreView: View {
             Section {
                 if engine.isServerMode {
                     LabeledContent { Text(engine.gatewayHostLabel).foregroundStyle(.green).multilineTextAlignment(.trailing) } label: { Label("Collegata", systemImage: "server.rack") }
+                    LabeledContent {
+                        HStack(spacing: 6) {
+                            Circle().fill(engine.serverOnline == true ? Color.green : (engine.serverOnline == false ? Color.red : Color.secondary)).frame(width: 9, height: 9)
+                            Text(engine.serverOnline == true ? "Online" : (engine.serverOnline == false ? "Non raggiungibile" : "…"))
+                                .foregroundStyle(engine.serverOnline == false ? .red : .secondary)
+                        }
+                    } label: { Label("Container", systemImage: "shippingbox") }
+                    Button { Task { await engine.refreshServer(force: true) } } label: { Label("Verifica ora", systemImage: "arrow.clockwise") }
+                    if let s = engine.serverStatus {
+                        LabeledContent { Text("avviato \(s.startedAt.itDateTime) · prossimo controllo \(s.nextWake.itTime)").font(.caption).foregroundStyle(.secondary).multilineTextAlignment(.trailing) } label: { Label("Motore", systemImage: "bolt") }
+                    }
                     NavigationLink { ServerProfilesView() } label: { Label("Profili mywellness (\(engine.profiles.count))", systemImage: "person.2") }
                     NavigationLink { ServerSettingsView() } label: { Label("Scheduler e osservazione", systemImage: "clock.badge") }
                     NavigationLink { CloudflareAccessView() } label: {

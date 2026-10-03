@@ -74,29 +74,25 @@ struct WatchListView: View {
     @ViewBuilder private var header: some View {
         if engine.isServerMode {
             Section {
-                HStack {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Gateway di casa attivo").font(.headline)
-                        Text(engine.gatewayHostLabel).font(.caption).foregroundStyle(.secondary)
+                HStack(spacing: 10) {
+                    Circle().fill(engine.serverOnline == true ? Color.green : (engine.serverOnline == false ? Color.red : Color.secondary)).frame(width: 10, height: 10)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(engine.serverOnline == false ? "Gateway non raggiungibile" : "Gateway online\(engine.serverVersion.isEmpty ? "" : " · v\(engine.serverVersion)")")
+                            .font(.subheadline.weight(.semibold))
                         if let p = engine.selectedProfile {
                             Text("\(p.label): prenotazioni attive \(p.activeBookings)/\(p.maxBookings)")
                                 .font(.caption).foregroundStyle(p.activeBookings >= p.maxBookings ? .orange : .secondary)
                             if p.userId != engine.serverUser?.id {
-                                Text("Stai vedendo il profilo di \(p.label). Il tuo account mywellness si collega in Altro → Profili mywellness.")
-                                    .font(.caption2).foregroundStyle(.orange)
+                                Text("Stai vedendo il profilo di \(p.label) (scelto dal menu profilo).").font(.caption2).foregroundStyle(.orange)
                             }
-                        }
-                        if let s = engine.serverStatus {
-                            Text("Prossimo controllo \(s.nextWake.itTime) · \(s.activeItems) lezioni in corso · push \(s.push ? "attivo" : "non configurato")")
-                                .font(.caption2).foregroundStyle(.tertiary)
+                        } else {
+                            Text("Nessun profilo mywellness: collega il tuo account in Altro → Profili mywellness.").font(.caption).foregroundStyle(.orange)
                         }
                     }
                     Spacer()
-                    Image(systemName: "server.rack").font(.title2).foregroundStyle(Color.accentColor)
+                    if let d = engine.serverLastSeen { Text(d.itTime).font(.caption2).foregroundStyle(.tertiary) }
                 }
                 if let e = engine.lastError { Label(e, systemImage: "exclamationmark.triangle").font(.footnote).foregroundStyle(.orange) }
-            } footer: {
-                Text("Il container su Unraid prenota e osserva 24 ore su 24, anche con l'iPhone spento. Le notifiche arrivano via push.")
             }
         } else {
             Section {

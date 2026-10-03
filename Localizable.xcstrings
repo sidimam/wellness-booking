@@ -1904,6 +1904,34 @@
         }
       }
     },
+    "Container": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Container"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Container"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contenedor"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conteneur"
+          }
+        }
+      }
+    },
     "Continua senza server": {
       "localizations": {
         "de": {
@@ -2460,6 +2488,90 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gateway maison actif"
+          }
+        }
+      }
+    },
+    "Gateway non raggiungibile": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gateway nicht erreichbar"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gateway unreachable"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gateway no accesible"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gateway injoignable"
+          }
+        }
+      }
+    },
+    "Gateway non raggiungibile: controlla rete, tunnel o container": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gateway nicht erreichbar: Netzwerk, Tunnel oder Container prüfen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gateway unreachable: check network, tunnel or container"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gateway no accesible: comprueba red, túnel o contenedor"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gateway injoignable : vérifiez réseau, tunnel ou conteneur"
+          }
+        }
+      }
+    },
+    "Gateway online%@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gateway online%@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gateway online%@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gateway en línea%@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gateway en ligne%@"
           }
         }
       }
@@ -3475,6 +3587,34 @@
         }
       }
     },
+    "Motore": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Motor"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Engine"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Motor"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moteur"
+          }
+        }
+      }
+    },
     "Motore attivo": {
       "localizations": {
         "de": {
@@ -3611,6 +3751,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aucun profil mywellness sur le gateway"
+          }
+        }
+      }
+    },
+    "Nessun profilo mywellness: collega il tuo account in Altro → Profili mywellness.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kein mywellness-Profil: verknüpfe dein Konto unter Mehr → mywellness-Profile."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No mywellness profile: link your account in More → mywellness profiles."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ningún perfil mywellness: vincula tu cuenta en Más → Perfiles mywellness."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun profil mywellness : liez votre compte dans Plus → Profils mywellness."
           }
         }
       }
@@ -3979,6 +4147,34 @@
         }
       }
     },
+    "Non raggiungibile": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nicht erreichbar"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unreachable"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No accesible"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Injoignable"
+          }
+        }
+      }
+    },
     "Non richieste": {
       "localizations": {
         "de": {
@@ -4199,6 +4395,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "Chaque semaine (même jour et heure)"
+          }
+        }
+      }
+    },
+    "Online": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Online"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Online"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En línea"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En ligne"
           }
         }
       }
@@ -6473,6 +6697,34 @@
         }
       }
     },
+    "Stai vedendo il profilo di %@ (scelto dal menu profilo).": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du siehst das Profil von %@ (im Profilmenü gewählt)."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You are viewing %@'s profile (chosen from the profile menu)."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estás viendo el perfil de %@ (elegido en el menú de perfil)."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous consultez le profil de %@ (choisi dans le menu profil)."
+          }
+        }
+      }
+    },
     "Stai vedendo il profilo di %@. Il tuo account mywellness si collega in Altro → Profili mywellness.": {
       "localizations": {
         "de": {
@@ -6922,6 +7174,34 @@
         }
       }
     },
+    "Verifica ora": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jetzt prüfen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check now"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comprobar ahora"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vérifier maintenant"
+          }
+        }
+      }
+    },
     "Versione": {
       "localizations": {
         "de": {
@@ -7089,6 +7369,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "actif"
+          }
+        }
+      }
+    },
+    "avviato %@ · prossimo controllo %@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "gestartet %@ · nächste Prüfung %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "started %@ · next check %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iniciado %@ · próxima comprobación %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "démarré %@ · prochaine vérification %@"
           }
         }
       }

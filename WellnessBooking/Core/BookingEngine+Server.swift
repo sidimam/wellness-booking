@@ -55,6 +55,7 @@ extension BookingEngine {
             Keychain.set(r.token, for: "gw.token"); Keychain.set(username, for: "gw.username")
             if let d = try? JSONEncoder().encode(r.user) { Keychain.set(String(decoding: d, as: UTF8.self), for: "gw.user") }
             serverUser = r.user; serverVersion = r.version ?? ""; serverPush = r.push ?? false
+            settings.profileChosen = false; settings.selectedProfileID = ""
             lastError = nil
             if isRunning { stop() }
             addLog("Collegata al gateway \(base.host ?? "") come \(r.user.displayName)", .success)
@@ -90,17 +91,39 @@ extension BookingEngine {
     }
 
     /// Scarica profili, lezioni del profilo selezionato, item, prenotazioni e stato.
+    /// Verifica che il container risponda (/healthz).
+    @discardableResult
+    func checkServerHealth() async -> Bool {
+        do {
+            let h = try await gateway.health()
+            serverOnline = true; serverLastSeen = Date()
+            if !h.version.isEmpty { serverVersion = h.version }
+            return true
+        } catch {
+            serverOnline = false
+            return false
+        }
+    }
+
     func refreshServer(force: Bool, quiet: Bool = false) async {
         guard isServerMode, !isRefreshing else { return }
         isRefreshing = true; defer { isRefreshing = false }
+        guard await checkServerHealth() else {
+            if !quiet { lastError = String(localized: "Gateway non raggiungibile: controlla rete, tunnel o container") }
+            return
+        }
         do {
             profiles = try await gateway.profiles()
+            let mine = profiles.first { $0.userId == serverUser?.id }?.id
+            if !settings.profileChosen, let mine, settings.selectedProfileID != mine {
+                settings.selectedProfileID = mine          // di default ognuno vede il proprio profilo
+            }
             if settings.selectedProfileID.isEmpty || !profiles.contains(where: { $0.id == settings.selectedProfileID }) {
-                // profilo personale della persona collegata, altrimenti il primo
-                settings.selectedProfileID = profiles.first { $0.userId == serverUser?.id }?.id ?? profiles.first?.id ?? ""
+                settings.selectedProfileID = mine ?? profiles.first?.id ?? ""
+                settings.profileChosen = false
             }
             let labels = Dictionary(uniqueKeysWithValues: profiles.map { ($0.id, $0.label) })
-            let gwItems = try await gateway.items()
+            let gwItems = try await gateway.items(profile: settings.selectedProfileID.isEmpty ? nil : settings.selectedProfileID)
             items = gwItems.map { WatchItem(gw: $0, profileLabel: labels[$0.profileId]) }.sorted { $0.start < $1.start }
             if let p = selectedProfile {
                 async let cls = gateway.classes(profile: p.id, refresh: force)
@@ -119,6 +142,7 @@ extension BookingEngine {
 
     func selectProfile(_ id: String) {
         settings.selectedProfileID = id
+        settings.profileChosen = (id != profiles.first { $0.userId == serverUser?.id }?.id)
         Task { await refreshServer(force: false) }
     }
 

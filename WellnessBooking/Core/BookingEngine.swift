@@ -28,6 +28,8 @@ final class BookingEngine: ObservableObject {
     @Published var serverStatus: GWStatus?
     @Published var serverSettings: GWSettings?
     @Published var serverLog: [GWLogLine] = []
+    @Published var serverOnline: Bool? = nil           // nil = non ancora verificato
+    @Published var serverLastSeen: Date?
     var isServerMode: Bool { serverUser != nil }
     var selectedProfile: GWProfile? { profiles.first { $0.id == settings.selectedProfileID } ?? profiles.first }
     let gateway: GatewayClient

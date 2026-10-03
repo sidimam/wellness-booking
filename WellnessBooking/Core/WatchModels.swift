@@ -61,6 +61,8 @@ struct AppSettings: Codable, Equatable {
     /// Server wellness-gateway (container Unraid): se collegato, è lui a prenotare.
     var serverURL: String = "https://booking.manieridimambro.it"
     var selectedProfileID: String = ""
+    /// true se l'utente ha scelto un profilo dal menu (altrimenti vale sempre il profilo personale).
+    var profileChosen: Bool = false
 }
 
 /// Stato di una lezione seguita dall'app.
