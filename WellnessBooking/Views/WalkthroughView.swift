@@ -8,6 +8,10 @@ struct WalkthroughView: View {
     @State private var email = ""
     @State private var password = ""
     @State private var busy = false
+    @State private var gwURL = ""
+    @State private var gwUser = ""
+    @State private var gwPass = ""
+    @State private var gwBusy = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -16,7 +20,8 @@ struct WalkthroughView: View {
                          text: String(localized: "Scegli le lezioni che ti interessano: l'app le prenota da sola all'apertura delle prenotazioni, anche alle 5 del mattino.")).tag(0)
                 pageView(icon: "eye.fill", title: String(localized: "Osservazione"),
                          text: String(localized: "Se una classe è piena, l'app entra in lista d'attesa e controlla di continuo i posti: appena qualcuno disdice, prenota al volo e ti avvisa con una notifica prioritaria, anche su Apple Watch.")).tag(1)
-                loginPage.tag(2)
+                serverPage.tag(2)
+                loginPage.tag(3)
             }
             .tabViewStyle(.page(indexDisplayMode: .always))
             .indexViewStyle(.page(backgroundDisplayMode: .always))
@@ -24,7 +29,7 @@ struct WalkthroughView: View {
             HStack {
                 Button("Salta") { done() }.foregroundStyle(.secondary)
                 Spacer()
-                if page < 2 { Button("Avanti") { withAnimation { page += 1 } }.buttonStyle(.borderedProminent) }
+                if page < 3 { Button("Avanti") { withAnimation { page += 1 } }.buttonStyle(.borderedProminent) }
             }
             .padding()
         }
@@ -39,6 +44,24 @@ struct WalkthroughView: View {
             Text(text).font(.body).multilineTextAlignment(.center).foregroundStyle(.secondary).padding(.horizontal, 32)
             Spacer()
         }
+    }
+
+    private var serverPage: some View {
+        VStack(spacing: 16) {
+            Spacer()
+            Image(systemName: "server.rack").font(.system(size: 64)).foregroundStyle(Color.accentColor)
+            Text("Server di casa").font(.title.bold())
+            Text("Consigliato: collega il container wellness-gateway del tuo NAS. Prenota lui, sempre acceso, per tutta la famiglia, e ti avvisa con le notifiche push. Senza server l'app lavora da sola ma solo in primo piano.")
+                .font(.footnote).foregroundStyle(.secondary).multilineTextAlignment(.center).padding(.horizontal, 32)
+            Form {
+                ServerLoginFields(url: $gwURL, username: $gwUser, password: $gwPass, busy: $gwBusy) { done() }
+                if let e = engine.lastError, !gwUser.isEmpty { Text(e).font(.footnote).foregroundStyle(.red) }
+            }
+            .frame(height: 260).scrollContentBackground(.hidden)
+            Button("Continua senza server") { withAnimation { page = 3 } }.font(.footnote)
+            Spacer()
+        }
+        .onAppear { if gwURL.isEmpty { gwURL = engine.settings.serverURL } }
     }
 
     private var loginPage: some View {

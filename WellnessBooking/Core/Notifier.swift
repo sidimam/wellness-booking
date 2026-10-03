@@ -18,6 +18,9 @@ final class Notifier: NSObject, UNUserNotificationCenterDelegate {
     func requestAuthorization() {
         center.requestAuthorization(options: [.alert, .sound, .badge, .timeSensitive]) { [weak self] ok, _ in
             self?.authorized = ok
+            #if os(iOS)
+            if ok { DispatchQueue.main.async { UIApplication.shared.registerForRemoteNotifications() } }
+            #endif
         }
     }
 

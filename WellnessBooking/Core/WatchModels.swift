@@ -57,6 +57,10 @@ struct AppSettings: Codable, Equatable {
     var iCloudSync: Bool = true
     var appIcon: String = "AppIcon"
     var accent: String = "teal"
+
+    /// Server wellness-gateway (container Unraid): se collegato, è lui a prenotare.
+    var serverURL: String = "https://booking.manieridimambro.it"
+    var selectedProfileID: String = ""
 }
 
 /// Stato di una lezione seguita dall'app.
@@ -68,6 +72,7 @@ enum WatchState: Codable, Equatable {
     case booked
     case failed(String)
     case expired
+    case cancelled        // disdetta (dal gateway, dall'app o da mywellness)
 
     var label: String {
         switch self {
@@ -78,10 +83,11 @@ enum WatchState: Codable, Equatable {
         case .booked: return String(localized: "Prenotata")
         case .failed: return String(localized: "Errore")
         case .expired: return String(localized: "Scaduta")
+        case .cancelled: return String(localized: "Disdetta")
         }
     }
     var isTerminal: Bool {
-        switch self { case .booked, .expired: return true; default: return false }
+        switch self { case .booked, .expired, .cancelled: return true; default: return false }
     }
     var symbol: String {
         switch self {
@@ -92,6 +98,7 @@ enum WatchState: Codable, Equatable {
         case .booked: return "checkmark.seal.fill"
         case .failed: return "exclamationmark.triangle.fill"
         case .expired: return "xmark.circle"
+        case .cancelled: return "minus.circle"
         }
     }
 }
@@ -106,6 +113,9 @@ struct WatchItem: Codable, Identifiable, Equatable {
     var end: Date
     var room: String?
     var trainer: String?
+    var pictureUrl: String?
+    var profileId: String?
+    var profileLabel: String?
     var serverOpensOn: Date?
     var maxParticipants: Int?
     var availablePlaces: Int?
@@ -118,10 +128,32 @@ struct WatchItem: Codable, Identifiable, Equatable {
 
     init(event e: ClassEvent, recurring: Bool) {
         id = e.key; classId = e.id; partitionDate = e.partitionDate; name = e.name
-        start = e.start; end = e.end; room = e.room; trainer = e.assignedTo
+        start = e.start; end = e.end; room = e.room; trainer = e.assignedTo; pictureUrl = e.pictureUrl
         serverOpensOn = e.opensOn; maxParticipants = e.maxParticipants; availablePlaces = e.availablePlaces
         self.recurring = recurring
     }
+
+    /// Da un item del server wellness-gateway.
+    init(gw g: GWItem, profileLabel: String?) {
+        id = g.id; classId = g.classId; partitionDate = g.partitionDate; name = g.name
+        start = g.start; end = g.end; room = g.room; trainer = g.trainer; pictureUrl = g.pictureUrl
+        profileId = g.profileId; self.profileLabel = profileLabel
+        serverOpensOn = g.serverOpensOn; serverFireAt = g.fireAt
+        maxParticipants = g.maxParticipants; availablePlaces = g.availablePlaces
+        recurring = g.recurring; lastMessage = g.lastMessage; lastCheck = g.lastCheck; attempts = g.attempts
+        switch g.state {
+        case "pending": state = .pending
+        case "bursting": state = .bursting
+        case "watching": state = .watching
+        case "waitingList": state = .waitingList
+        case "booked": state = .booked
+        case "expired": state = .expired
+        case "cancelled": state = .cancelled
+        default: state = .failed(g.lastMessage)
+        }
+    }
+    /// Orario calcolato dal server (vince su quello locale quando presente).
+    var serverFireAt: Date?
 
     /// Regola settimanale derivata (nome + giorno + ora) usata per agganciare le occorrenze future.
     var ruleKey: String {
@@ -141,6 +173,7 @@ struct WatchItem: Codable, Identifiable, Equatable {
 
     /// Quando l'app tenterà la prenotazione: orario del centro (se richiesto e disponibile) altrimenti quello impostato.
     func fireAt(settings s: AppSettings) -> Date? {
+        if let f = serverFireAt { return f }
         if !s.useCustomOpenTime, let server = serverOpensOn { return server }
         return customFireAt(settings: s)
     }

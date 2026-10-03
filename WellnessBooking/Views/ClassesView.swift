@@ -37,7 +37,7 @@ struct ClassesView: View {
                 Toggle(isOn: $onlyBookable) { Label("Solo prenotabili online", systemImage: "line.3.horizontal.decrease.circle") }
             } footer: {
                 if let lr = engine.lastRefresh {
-                    Text("\(engine.settings.facilityName) · \(filtered.count) lezioni nei prossimi \(engine.settings.daysAhead) giorni · aggiornato \(lr.itTime)")
+                    Text("\(engine.isServerMode ? (engine.selectedProfile.map { "\($0.label) · \($0.facilityName)" } ?? "Gateway") : engine.settings.facilityName) · \(filtered.count) lezioni nei prossimi \(engine.settings.daysAhead) giorni · aggiornato \(lr.itTime)")
                 } else { Text("Scorri verso il basso per aggiornare il calendario.") }
                 Text("Tocca una lezione per vedere lo scheduler e attivare la prenotazione automatica; tocca il cerchio per selezionarne più di una.")
             }
@@ -65,8 +65,11 @@ struct ClassesView: View {
                 }
             }
             ToolbarItem(placement: .topBarTrailing) {
-                Button { showAddSheet = true } label: { Text("Aggiungi \(selected.count)").bold() }
-                    .disabled(selected.isEmpty)
+                HStack {
+                    if engine.isServerMode && engine.profiles.count > 1 { ProfileMenu() }
+                    Button { showAddSheet = true } label: { Text("Aggiungi \(selected.count)").bold() }
+                        .disabled(selected.isEmpty)
+                }
             }
         }
         .refreshable { await engine.refreshClasses() }
@@ -111,6 +114,7 @@ struct ClassRow: View {
 
     var body: some View {
         HStack(alignment: .center, spacing: 12) {
+            ClassThumb(url: event.pictureUrl, size: 48)
             Button(action: onToggle) {
                 Image(systemName: tracked ? "checkmark.circle.fill" : (selected ? "checkmark.circle.fill" : "circle"))
                     .font(.title2)

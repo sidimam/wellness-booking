@@ -1,312 +1,241 @@
 {
   "sourceLanguage": "it",
   "strings": {
-    "": {},
-    "%1$@ %2$@ %3$@": {
-      "shouldTranslate": false
-    },
-    "%1$@ %2$@ è piena: osservazione attiva, prenoto appena si libera un posto.": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ %2$@ ist voll: Beobachtung aktiv, ich buche, sobald ein Platz frei wird."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ %2$@ is full: watching is active, I'll book as soon as a spot opens up."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ %2$@ está llena: observación activa, reservaré en cuanto se libere una plaza."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ %2$@ est complet : observation active, je réserve dès qu'une place se libère."
-          }
-        }
-      }
-    },
-    "%1$@ %2$@: sto prenotando…": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ %2$@: buche gerade…"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ %2$@: booking now…"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ %2$@: reservando…"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ %2$@ : réservation en cours…"
-          }
-        }
-      }
-    },
-    "%1$@ %2$@: tieni Wellness Booking aperta in primo piano.": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ %2$@: Wellness Booking im Vordergrund geöffnet lassen."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ %2$@: keep Wellness Booking open in the foreground."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ %2$@: mantén Wellness Booking abierta en primer plano."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ %2$@ : gardez Wellness Booking ouverte au premier plan."
-          }
-        }
-      }
-    },
-    "%1$@ alle %2$@": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ um %2$@"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ at %2$@"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ a las %2$@"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ à %2$@"
-          }
-        }
-      }
-    },
-    "%1$@ · %2$@ alle %3$@": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ · %2$@ um %3$@"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ · %2$@ at %3$@"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ · %2$@ a las %3$@"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ · %2$@ à %3$@"
-          }
-        }
-      }
-    },
-    "%1$@ · %2$lld lezioni nei prossimi %3$lld giorni · aggiornato %4$@": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ · %2$lld Kurse in den nächsten %3$lld Tagen · aktualisiert %4$@"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ · %2$lld classes in the next %3$lld days · updated %4$@"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ · %2$lld clases en los próximos %3$lld días · actualizado %4$@"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ · %2$lld cours dans les %3$lld prochains jours · mis à jour %4$@"
-          }
-        }
-      }
-    },
-    "%1$lld liberi su %2$lld": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld frei von %2$lld"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld free of %2$lld"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld libres de %2$lld"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld libres sur %2$lld"
-          }
-        }
-      }
-    },
-    "%1$lld/%2$lld": {
+    "": {
       "shouldTranslate": false
     },
     "%@ %@ %@": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "new",
-            "value": "%1$@ %2$@ %3$@"
-          }
-        }
-      }
+      "shouldTranslate": false
     },
     "%@ %@ è piena: osservazione attiva, prenoto appena si libera un posto.": {
       "localizations": {
-        "it": {
+        "de": {
           "stringUnit": {
-            "state": "new",
-            "value": "%1$@ %2$@ è piena: osservazione attiva, prenoto appena si libera un posto."
+            "state": "translated",
+            "value": "%@ %@ ist voll: Beobachtung aktiv, ich buche, sobald ein Platz frei wird."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ %@ is full: watching is active, I'll book as soon as a spot opens up."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ %@ está llena: observación activa, reservaré en cuanto se libere una plaza."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ %@ est complet : observation active, je réserve dès qu'une place se libère."
           }
         }
       }
     },
     "%@ %@: sto prenotando…": {
       "localizations": {
-        "it": {
+        "de": {
           "stringUnit": {
-            "state": "new",
-            "value": "%1$@ %2$@: sto prenotando…"
+            "state": "translated",
+            "value": "%@ %@: buche gerade…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ %@: booking now…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ %@: reservando…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ %@ : réservation en cours…"
           }
         }
       }
     },
     "%@ %@: tieni Wellness Booking aperta in primo piano.": {
       "localizations": {
-        "it": {
+        "de": {
           "stringUnit": {
-            "state": "new",
-            "value": "%1$@ %2$@: tieni Wellness Booking aperta in primo piano."
+            "state": "translated",
+            "value": "%@ %@: Wellness Booking im Vordergrund geöffnet lassen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ %@: keep Wellness Booking open in the foreground."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ %@: mantén Wellness Booking abierta en primer plano."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ %@ : gardez Wellness Booking ouverte au premier plan."
           }
         }
       }
     },
     "%@ alle %@": {
       "localizations": {
-        "it": {
+        "de": {
           "stringUnit": {
-            "state": "new",
-            "value": "%1$@ alle %2$@"
+            "state": "translated",
+            "value": "%@ um %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ at %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ a las %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ à %@"
           }
         }
       }
     },
     "%@ · %@": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "new",
-            "value": "%1$@ · %2$@"
-          }
-        }
-      }
+      "shouldTranslate": false
     },
     "%@ · %@ alle %@": {
       "localizations": {
-        "it": {
+        "de": {
           "stringUnit": {
-            "state": "new",
-            "value": "%1$@ · %2$@ alle %3$@"
+            "state": "translated",
+            "value": "%@ · %@ um %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · %@ at %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · %@ a las %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · %@ à %@"
           }
         }
       }
     },
     "%@ · %@–%@": {
+      "shouldTranslate": false
+    },
+    "%@ · %lld gg · %@": {
       "localizations": {
-        "it": {
+        "de": {
           "stringUnit": {
-            "state": "new",
-            "value": "%1$@ · %2$@–%3$@"
+            "state": "translated",
+            "value": "%@ · %lld Tage · %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · %lld days · %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · %lld días · %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · %lld j · %@"
           }
         }
       }
     },
     "%@ · %lld lezioni nei prossimi %lld giorni · aggiornato %@": {
       "localizations": {
-        "it": {
+        "de": {
           "stringUnit": {
-            "state": "new",
-            "value": "%1$@ · %2$lld lezioni nei prossimi %3$lld giorni · aggiornato %4$@"
+            "state": "translated",
+            "value": "%@ · %lld Kurse in den nächsten %lld Tagen · aktualisiert %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · %lld classes in the next %lld days · updated %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · %lld clases en los próximos %lld días · actualizado %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · %lld cours dans les %lld prochains jours · mis à jour %@"
           }
         }
       }
     },
     "%@ – %@": {
+      "shouldTranslate": false
+    },
+    "%@: prenotazioni attive %lld/%lld": {
       "localizations": {
-        "it": {
+        "de": {
           "stringUnit": {
-            "state": "new",
-            "value": "%1$@ – %2$@"
+            "state": "translated",
+            "value": "%@: aktive Buchungen %lld/%lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: active bookings %lld/%lld"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: reservas activas %lld/%lld"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ : réservations actives %lld/%lld"
           }
         }
       }
@@ -341,23 +270,34 @@
     },
     "%lld liberi su %lld": {
       "localizations": {
-        "it": {
+        "de": {
           "stringUnit": {
-            "state": "new",
-            "value": "%1$lld liberi su %2$lld"
+            "state": "translated",
+            "value": "%lld frei von %lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld free of %lld"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld libres de %lld"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld libres sur %lld"
           }
         }
       }
     },
     "%lld/%lld": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "new",
-            "value": "%1$lld/%2$lld"
-          }
-        }
-      }
+      "shouldTranslate": false
     },
     "Accedi a mywellness": {
       "localizations": {
@@ -527,6 +467,34 @@
         }
       }
     },
+    "Aggiungi": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hinzufügen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Añadir"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajouter"
+          }
+        }
+      }
+    },
     "Aggiungi %lld": {
       "localizations": {
         "de": {
@@ -607,6 +575,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ajouter le cours aux réservations automatiques"
+          }
+        }
+      }
+    },
+    "Aggiungi profilo mywellness": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "mywellness-Profil hinzufügen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add mywellness profile"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Añadir perfil mywellness"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajouter un profil mywellness"
           }
         }
       }
@@ -779,41 +775,30 @@
         }
       }
     },
-    "Apre %1$@ alle %2$@": {
-      "extractionState": "stale",
+    "Apre %@ alle %@": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Öffnet %1$@ um %2$@"
+            "value": "Öffnet %@ um %@"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Opens %1$@ at %2$@"
+            "value": "Opens %@ at %@"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Abre %1$@ a las %2$@"
+            "value": "Abre %@ a las %@"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ouvre %1$@ à %2$@"
-          }
-        }
-      }
-    },
-    "Apre %@ alle %@": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "new",
-            "value": "Apre %1$@ alle %2$@"
+            "value": "Ouvre %@ à %@"
           }
         }
       }
@@ -1211,6 +1196,7 @@
       }
     },
     "Cancella prenotazione": {
+      "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -1239,6 +1225,7 @@
       }
     },
     "Cancellare la prenotazione?": {
+      "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -1462,6 +1449,90 @@
         }
       }
     },
+    "Collega al gateway": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mit dem Gateway verbinden"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connect to the gateway"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conectar al gateway"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connecter au gateway"
+          }
+        }
+      }
+    },
+    "Collega il container wellness-gateway del tuo NAS: prenota lui, sempre acceso, anche con l'iPhone spento. Senza server l'app lavora da sola ma solo in primo piano.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verbinde den wellness-gateway-Container deines NAS: er bucht für dich, immer an, auch bei ausgeschaltetem iPhone. Ohne Server arbeitet die App allein, aber nur im Vordergrund."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connect the wellness-gateway container on your NAS: it books for you, always on, even with the iPhone off. Without a server the app works on its own but only in the foreground."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conecta el contenedor wellness-gateway de tu NAS: reserva él, siempre encendido, incluso con el iPhone apagado. Sin servidor la app trabaja sola pero solo en primer plano."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connectez le conteneur wellness-gateway de votre NAS : il réserve pour vous, toujours allumé, même iPhone éteint. Sans serveur l'app travaille seule mais seulement au premier plan."
+          }
+        }
+      }
+    },
+    "Collegata": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verbunden"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connected"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conectada"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connectée"
+          }
+        }
+      }
+    },
     "Colore app": {
       "localizations": {
         "de": {
@@ -1491,6 +1562,7 @@
       }
     },
     "Con \"Segui l'orario del centro\" attivo l'app usa l'apertura comunicata da mywellness per ogni lezione (Wellness Town: 3 giorni prima alle 05:00) e ricade su giorni/ora impostati qui solo se il centro non la comunica. Disattivalo per forzare giorni e ora.": {
+      "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -1658,6 +1730,62 @@
         }
       }
     },
+    "Consigliato: collega il container wellness-gateway del tuo NAS. Prenota lui, sempre acceso, per tutta la famiglia, e ti avvisa con le notifiche push. Senza server l'app lavora da sola ma solo in primo piano.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Empfohlen: verbinde den wellness-gateway-Container deines NAS. Er bucht für die ganze Familie, immer an, und benachrichtigt dich per Push. Ohne Server arbeitet die App allein, aber nur im Vordergrund."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recommended: connect the wellness-gateway container on your NAS. It books for the whole family, always on, and alerts you with push notifications. Without a server the app works on its own but only in the foreground."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recomendado: conecta el contenedor wellness-gateway de tu NAS. Reserva para toda la familia, siempre encendido, y te avisa con notificaciones push. Sin servidor la app trabaja sola pero solo en primer plano."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recommandé : connectez le conteneur wellness-gateway de votre NAS. Il réserve pour toute la famille, toujours allumé, et vous prévient par notifications push. Sans serveur l'app travaille seule mais seulement au premier plan."
+          }
+        }
+      }
+    },
+    "Continua senza server": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ohne Server fortfahren"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue without server"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continuar sin servidor"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continuer sans serveur"
+          }
+        }
+      }
+    },
     "Controlla ogni %lld s": {
       "localizations": {
         "de": {
@@ -1742,6 +1870,34 @@
         }
       }
     },
+    "Disdetta": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Storniert"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancelled"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anulada"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annulée"
+          }
+        }
+      }
+    },
     "Disdici": {
       "localizations": {
         "de": {
@@ -1766,6 +1922,62 @@
           "stringUnit": {
             "state": "translated",
             "value": "Désinscrire"
+          }
+        }
+      }
+    },
+    "Disdici su mywellness": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auf mywellness stornieren"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel on mywellness"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anular en mywellness"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annuler sur mywellness"
+          }
+        }
+      }
+    },
+    "Disdire la prenotazione?": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buchung stornieren?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel the booking?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Anular la reserva?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annuler la réservation ?"
           }
         }
       }
@@ -1938,6 +2150,34 @@
         }
       }
     },
+    "Etichetta (es. Daniela)": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bezeichnung (z. B. Daniela)"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Label (e.g. Daniela)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Etiqueta (p. ej. Daniela)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Libellé (ex. Daniela)"
+          }
+        }
+      }
+    },
     "Ferma": {
       "localizations": {
         "de": {
@@ -2050,6 +2290,34 @@
         }
       }
     },
+    "Gateway di casa attivo": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heim-Gateway aktiv"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Home gateway active"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gateway de casa activo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gateway maison actif"
+          }
+        }
+      }
+    },
     "Giorni di calendario: %lld": {
       "localizations": {
         "de": {
@@ -2079,6 +2347,7 @@
       }
     },
     "Giorni prima della lezione: %lld": {
+      "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -2190,6 +2459,62 @@
         }
       }
     },
+    "Il container su Unraid prenota e osserva 24 ore su 24 per tutti i profili e manda le notifiche push. Da qui scegli le lezioni e disdici.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Container auf Unraid bucht und beobachtet rund um die Uhr für alle Profile und sendet Push-Mitteilungen. Hier wählst du Kurse und stornierst."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The container on Unraid books and watches 24/7 for all profiles and sends push notifications. From here you pick classes and cancel."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El contenedor en Unraid reserva y observa las 24 horas para todos los perfiles y envía notificaciones push. Desde aquí eliges las clases y anulas."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le conteneur sur Unraid réserve et observe 24h/24 pour tous les profils et envoie les notifications push. D'ici vous choisissez les cours et annulez."
+          }
+        }
+      }
+    },
+    "Il container su Unraid prenota e osserva 24 ore su 24, anche con l'iPhone spento. Le notifiche arrivano via push.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Container auf Unraid bucht und beobachtet rund um die Uhr, auch bei ausgeschaltetem iPhone. Mitteilungen kommen per Push."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The container on Unraid books and watches 24/7, even with the iPhone off. Notifications arrive via push."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El contenedor en Unraid reserva y observa las 24 horas, incluso con el iPhone apagado. Las notificaciones llegan por push."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le conteneur sur Unraid réserve et observe 24h/24, même iPhone éteint. Les notifications arrivent par push."
+          }
+        }
+      }
+    },
     "Impostazioni app": {
       "localizations": {
         "de": {
@@ -2242,6 +2567,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "Réglages des notifications iOS"
+          }
+        }
+      }
+    },
+    "Impostazioni salvate sul gateway": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einstellungen auf dem Gateway gespeichert"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings saved on the gateway"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajustes guardados en el gateway"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réglages enregistrés sur le gateway"
           }
         }
       }
@@ -2303,6 +2656,7 @@
       }
     },
     "In background iOS risveglia l'app solo quando decide lui: per la massima precisione all'apertura tieni l'app in primo piano, altrimenti riceverai un promemoria 3 minuti prima.": {
+      "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -2326,6 +2680,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "En arrière-plan iOS ne réveille l'app que quand il le décide : pour une précision maximale à l'ouverture gardez l'app au premier plan, sinon vous recevrez un rappel 3 minutes avant."
+          }
+        }
+      }
+    },
+    "In background iOS risveglia l'app solo quando decide lui: per la massima precisione all'apertura tieni l'app in primo piano, altrimenti riceverai un promemoria 3 minuti prima. Collega il gateway di casa (Altro → Server) per prenotare 24 ore su 24.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Im Hintergrund weckt iOS die App nur nach eigenem Ermessen: für maximale Präzision die App zur Öffnung im Vordergrund lassen, sonst bekommst du 3 Minuten vorher eine Erinnerung. Verbinde das Heim-Gateway (Mehr → Server), um rund um die Uhr zu buchen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In the background iOS wakes the app only when it decides to: for maximum precision keep the app in the foreground at opening time, otherwise you'll get a reminder 3 minutes before. Connect the home gateway (More → Server) to book 24/7."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En segundo plano iOS activa la app solo cuando él decide: para la máxima precisión mantén la app en primer plano a la hora de apertura; si no, recibirás un recordatorio 3 minutos antes. Conecta el gateway de casa (Más → Servidor) para reservar las 24 horas."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En arrière-plan iOS ne réveille l'app que quand il le décide : pour une précision maximale gardez l'app au premier plan à l'ouverture, sinon vous recevrez un rappel 3 minutes avant. Connectez le gateway maison (Plus → Serveur) pour réserver 24h/24."
           }
         }
       }
@@ -2382,6 +2764,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "En liste d'attente"
+          }
+        }
+      }
+    },
+    "Indirizzo del server non valido": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ungültige Serveradresse"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invalid server address"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dirección del servidor no válida"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adresse du serveur non valide"
           }
         }
       }
@@ -2470,6 +2880,34 @@
         }
       }
     },
+    "Invia notifica di prova dal gateway": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Testmitteilung vom Gateway senden"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Send test notification from the gateway"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enviar notificación de prueba desde el gateway"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envoyer une notification test depuis le gateway"
+          }
+        }
+      }
+    },
     "Istruttore": {
       "localizations": {
         "de": {
@@ -2551,16 +2989,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "L'app réserve %1$lld jours avant le cours à %2$@."
-          }
-        }
-      }
-    },
-    "L'app prenota %lld giorni prima della lezione alle %@.": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "new",
-            "value": "L'app prenota %1$lld giorni prima della lezione alle %2$@."
           }
         }
       }
@@ -2817,6 +3245,34 @@
         }
       }
     },
+    "Login ok %@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Login ok %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Login ok %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Login ok %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connexion ok %@"
+          }
+        }
+      }
+    },
     "Massimo prenotazioni attive: %lld": {
       "localizations": {
         "de": {
@@ -2957,6 +3413,34 @@
         }
       }
     },
+    "Nessun profilo mywellness sul gateway": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kein mywellness-Profil auf dem Gateway"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No mywellness profile on the gateway"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ningún perfil mywellness en el gateway"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun profil mywellness sur le gateway"
+          }
+        }
+      }
+    },
     "Nessuna attività": {
       "localizations": {
         "de": {
@@ -3069,6 +3553,34 @@
         }
       }
     },
+    "Nessuna prenotazione attiva": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine aktiven Buchungen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No active bookings"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ninguna reserva activa"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune réservation active"
+          }
+        }
+      }
+    },
     "Nome lezione (es. Reformer)": {
       "localizations": {
         "de": {
@@ -3093,6 +3605,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nom du cours (ex. Reformer)"
+          }
+        }
+      }
+    },
+    "Nome utente del gateway": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gateway-Benutzername"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gateway username"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usuario del gateway"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nom d'utilisateur du gateway"
           }
         }
       }
@@ -3321,6 +3861,90 @@
         }
       }
     },
+    "Nuovo profilo": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neues Profil"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New profile"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nuevo perfil"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nouveau profil"
+          }
+        }
+      }
+    },
+    "OK": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        }
+      }
+    },
+    "Ogni profilo è un account Technogym mywellness. Le password restano cifrate sul NAS; il gateway fa il login e rinnova la sessione da solo. I profili \"famiglia\" sono visibili a tutti gli utenti del gateway.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jedes Profil ist ein Technogym-mywellness-Konto. Passwörter bleiben verschlüsselt auf dem NAS; das Gateway meldet sich an und erneuert die Sitzung selbst. „Familien“-Profile sehen alle Gateway-Nutzer."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Each profile is a Technogym mywellness account. Passwords stay encrypted on the NAS; the gateway logs in and renews the session on its own. \"Family\" profiles are visible to every gateway user."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cada perfil es una cuenta Technogym mywellness. Las contraseñas quedan cifradas en el NAS; el gateway inicia sesión y la renueva solo. Los perfiles \"familia\" son visibles para todos los usuarios del gateway."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chaque profil est un compte Technogym mywellness. Les mots de passe restent chiffrés sur le NAS ; le gateway se connecte et renouvelle la session seul. Les profils « famille » sont visibles par tous les utilisateurs du gateway."
+          }
+        }
+      }
+    },
     "Ogni settimana (stesso giorno e ora)": {
       "localizations": {
         "de": {
@@ -3350,6 +3974,7 @@
       }
     },
     "Ora di apertura": {
+      "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -3485,6 +4110,62 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mot de passe"
+          }
+        }
+      }
+    },
+    "Password del gateway": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gateway-Passwort"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gateway password"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contraseña del gateway"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mot de passe du gateway"
+          }
+        }
+      }
+    },
+    "Password mywellness": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "mywellness-Passwort"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "mywellness password"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contraseña de mywellness"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mot de passe mywellness"
           }
         }
       }
@@ -3657,41 +4338,58 @@
         }
       }
     },
-    "Prenota ogni %1$@ alle %2$@": {
-      "extractionState": "stale",
+    "Prenota il gateway di casa, sempre acceso: regole e anticipo in Altro → Scheduler.": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Jeden %1$@ um %2$@ buchen"
+            "value": "Das stets aktive Heim-Gateway bucht: Regeln und Vorlauf unter Mehr → Zeitplaner."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Book every %1$@ at %2$@"
+            "value": "The always-on home gateway books: rules and lead time in More → Scheduler."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reservar cada %1$@ a las %2$@"
+            "value": "Reserva el gateway de casa, siempre encendido: reglas y antelación en Más → Planificador."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Réserver chaque %1$@ à %2$@"
+            "value": "Le gateway maison, toujours allumé, réserve : règles et avance dans Plus → Planificateur."
           }
         }
       }
     },
     "Prenota ogni %@ alle %@": {
       "localizations": {
-        "it": {
+        "de": {
           "stringUnit": {
-            "state": "new",
-            "value": "Prenota ogni %1$@ alle %2$@"
+            "state": "translated",
+            "value": "Jeden %@ um %@ buchen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Book every %@ at %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reservar cada %@ a las %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réserver chaque %@ à %@"
           }
         }
       }
@@ -3724,6 +4422,62 @@
         }
       }
     },
+    "Prenotata da mywellness (app o web)": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auf mywellness gebucht (App oder Web)"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Booked on mywellness (app or web)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reservada en mywellness (app o web)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réservé sur mywellness (app ou web)"
+          }
+        }
+      }
+    },
+    "Prenotata dal gateway": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vom Gateway gebucht"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Booked by the gateway"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reservada por el gateway"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réservé par le gateway"
+          }
+        }
+      }
+    },
     "Prenotata ✅": {
       "localizations": {
         "de": {
@@ -3748,6 +4502,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "Réservé ✅"
+          }
+        }
+      }
+    },
+    "Prenotate su mywellness · %@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auf mywellness gebucht · %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Booked on mywellness · %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reservadas en mywellness · %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réservés sur mywellness · %@"
           }
         }
       }
@@ -3864,118 +4646,170 @@
         }
       }
     },
-    "Prenotazioni %1$lld/%2$lld": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Buchungen %1$lld/%2$lld"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bookings %1$lld/%2$lld"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Reservas %1$lld/%2$lld"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Réservations %1$lld/%2$lld"
-          }
-        }
-      }
-    },
     "Prenotazioni %lld/%lld": {
       "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "new",
-            "value": "Prenotazioni %1$lld/%2$lld"
-          }
-        }
-      }
-    },
-    "Prenotazioni attive: %1$lld/%2$lld": {
-      "extractionState": "stale",
-      "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aktive Buchungen: %1$lld/%2$lld"
+            "value": "Buchungen %lld/%lld"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Active bookings: %1$lld/%2$lld"
+            "value": "Bookings %lld/%lld"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reservas activas: %1$lld/%2$lld"
+            "value": "Reservas %lld/%lld"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Réservations actives : %1$lld/%2$lld"
+            "value": "Réservations %lld/%lld"
           }
         }
       }
     },
     "Prenotazioni attive: %lld/%lld": {
       "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "new",
-            "value": "Prenotazioni attive: %1$lld/%2$lld"
-          }
-        }
-      }
-    },
-    "Prenoto %1$@ alle %2$@": {
-      "extractionState": "stale",
-      "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Buche %1$@ um %2$@"
+            "value": "Aktive Buchungen: %lld/%lld"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Booking %1$@ at %2$@"
+            "value": "Active bookings: %lld/%lld"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reservaré %1$@ a las %2$@"
+            "value": "Reservas activas: %lld/%lld"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Je réserve %1$@ à %2$@"
+            "value": "Réservations actives : %lld/%lld"
           }
         }
       }
     },
     "Prenoto %@ alle %@": {
       "localizations": {
-        "it": {
+        "de": {
           "stringUnit": {
-            "state": "new",
-            "value": "Prenoto %1$@ alle %2$@"
+            "state": "translated",
+            "value": "Buche %@ um %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Booking %@ at %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reservaré %@ a las %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je réserve %@ à %@"
+          }
+        }
+      }
+    },
+    "Profili mywellness": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "mywellness-Profile"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "mywellness profiles"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Perfiles mywellness"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Profils mywellness"
+          }
+        }
+      }
+    },
+    "Profili mywellness (%lld)": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "mywellness-Profile (%lld)"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "mywellness profiles (%lld)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Perfiles mywellness (%lld)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Profils mywellness (%lld)"
+          }
+        }
+      }
+    },
+    "Profilo": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Profil"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Profile"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Perfil"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Profil"
           }
         }
       }
@@ -4008,6 +4842,62 @@
         }
       }
     },
+    "Prossimo controllo %@ · %lld lezioni in corso · push %@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nächste Prüfung %@ · %lld Kurse laufend · Push %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next check %@ · %lld classes in progress · push %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Próxima comprobación %@ · %lld clases en curso · push %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prochaine vérification %@ · %lld cours en cours · push %@"
+          }
+        }
+      }
+    },
+    "Push dal gateway": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Push vom Gateway"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Push from the gateway"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Push desde el gateway"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Push depuis le gateway"
+          }
+        }
+      }
+    },
     "Quando": {
       "localizations": {
         "de": {
@@ -4032,6 +4922,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "Quand"
+          }
+        }
+      }
+    },
+    "Quando una classe è piena il gateway resta in lista d'attesa e controlla i posti liberi a questo intervallo (più fitto nelle ultime ore utili). Appena si libera un posto prenota e manda la notifica.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ist ein Kurs voll, bleibt das Gateway auf der Warteliste und prüft in diesem Intervall auf freie Plätze (häufiger in den letzten nutzbaren Stunden). Sobald ein Platz frei wird, bucht es und sendet die Mitteilung."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When a class is full the gateway stays on the waiting list and checks for free spots at this interval (more often in the last useful hours). As soon as a spot opens up it books and sends the notification."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cuando una clase está llena el gateway permanece en la lista de espera y comprueba las plazas libres con este intervalo (más frecuente en las últimas horas útiles). En cuanto se libera una plaza reserva y envía la notificación."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quand un cours est complet, le gateway reste en liste d'attente et vérifie les places libres à cet intervalle (plus souvent dans les dernières heures utiles). Dès qu'une place se libère, il réserve et envoie la notification."
           }
         }
       }
@@ -4149,6 +5067,34 @@
         }
       }
     },
+    "Registro del gateway": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gateway-Protokoll"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gateway log"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registro del gateway"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Journal du gateway"
+          }
+        }
+      }
+    },
     "Regola": {
       "localizations": {
         "de": {
@@ -4257,6 +5203,62 @@
           "stringUnit": {
             "state": "translated",
             "value": "Résumé"
+          }
+        }
+      }
+    },
+    "Rifai login": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erneut anmelden"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log in again"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repetir login"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se reconnecter"
+          }
+        }
+      }
+    },
+    "Rimuovere il profilo e le sue lezioni seguite?": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Profil und seine verfolgten Kurse entfernen?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove the profile and its tracked classes?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Eliminar el perfil y sus clases seguidas?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supprimer le profil et ses cours suivis ?"
           }
         }
       }
@@ -4457,6 +5459,34 @@
         }
       }
     },
+    "Salva": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sichern"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guardar"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer"
+          }
+        }
+      }
+    },
     "Salva e verifica login": {
       "localizations": {
         "de": {
@@ -4569,6 +5599,90 @@
         }
       }
     },
+    "Scheduler del gateway": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gateway-Zeitplaner"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gateway scheduler"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Planificador del gateway"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Planificateur du gateway"
+          }
+        }
+      }
+    },
+    "Scheduler e osservazione": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zeitplaner und Beobachtung"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scheduler and watching"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Planificador y observación"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Planificateur et observation"
+          }
+        }
+      }
+    },
+    "Scollega": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trennen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Disconnect"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desconectar"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déconnecter"
+          }
+        }
+      }
+    },
     "Scorri verso il basso per aggiornare il calendario.": {
       "localizations": {
         "de": {
@@ -4593,6 +5707,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tirez vers le bas pour actualiser le planning."
+          }
+        }
+      }
+    },
+    "Scrivi tu il testo da cercare nel nome della lezione (es. Reformer → 3 giorni); la prima regola che corrisponde decide giorni e ora, * vale per tutte le altre. Con \"Segui l'orario del centro\" attivo le regole servono solo quando mywellness non comunica l'apertura.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du gibst den Text ein, der im Kursnamen gesucht wird (z. B. Reformer → 3 Tage); die erste passende Regel bestimmt Tage und Uhrzeit, * gilt für alle anderen. Mit „Zeitplan des Studios folgen“ gelten die Regeln nur, wenn mywellness keine Öffnung meldet."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You type the text to look for in the class name (e.g. Reformer → 3 days); the first matching rule sets days and time, * applies to all the others. With \"Follow the club's schedule\" on, rules are used only when mywellness reports no opening time."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tú escribes el texto a buscar en el nombre de la clase (p. ej. Reformer → 3 días); la primera regla que coincide decide días y hora, * vale para todas las demás. Con \"Seguir el horario del centro\" activado las reglas se usan solo cuando mywellness no indica la apertura."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous saisissez le texte à chercher dans le nom du cours (ex. Reformer → 3 jours) ; la première règle qui correspond fixe jours et heure, * s'applique à tous les autres. Avec « Suivre l'horaire du club » activé, les règles ne servent que si mywellness n'indique pas l'ouverture."
           }
         }
       }
@@ -4765,6 +5907,62 @@
         }
       }
     },
+    "Server di casa": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heimserver"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Home server"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Servidor de casa"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Serveur maison"
+          }
+        }
+      }
+    },
+    "Server di casa (wellness-gateway)": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heimserver (wellness-gateway)"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Home server (wellness-gateway)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Servidor de casa (wellness-gateway)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Serveur maison (wellness-gateway)"
+          }
+        }
+      }
+    },
     "Sessione scaduta": {
       "localizations": {
         "de": {
@@ -4845,6 +6043,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "Système"
+          }
+        }
+      }
+    },
+    "Solo l'amministratore del gateway può modificare queste impostazioni.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nur der Gateway-Administrator kann diese Einstellungen ändern."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Only the gateway administrator can change these settings."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Solo el administrador del gateway puede cambiar estos ajustes."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seul l'administrateur du gateway peut modifier ces réglages."
           }
         }
       }
@@ -5130,6 +6356,34 @@
         }
       }
     },
+    "Tutte le prenotazioni attive del profilo, fatte dal gateway o dall'app/sito Technogym. Scorri a sinistra per disdire.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle aktiven Buchungen des Profils, vom Gateway oder in der Technogym-App/Website gemacht. Nach links wischen zum Stornieren."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All active bookings of the profile, made by the gateway or in the Technogym app/website. Swipe left to cancel."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Todas las reservas activas del perfil, hechas por el gateway o en la app/web de Technogym. Desliza a la izquierda para anular."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toutes les réservations actives du profil, faites par le gateway ou dans l'app/le site Technogym. Balayez vers la gauche pour annuler."
+          }
+        }
+      }
+    },
     "URL centro (es. wellnesstown)": {
       "localizations": {
         "de": {
@@ -5158,41 +6412,30 @@
         }
       }
     },
-    "Ultimo controllo %1$@ · tentativi %2$lld": {
-      "extractionState": "stale",
+    "Ultimo controllo %@ · tentativi %lld": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Letzte Prüfung %1$@ · Versuche %2$lld"
+            "value": "Letzte Prüfung %@ · Versuche %lld"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Last check %1$@ · attempts %2$lld"
+            "value": "Last check %@ · attempts %lld"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Última comprobación %1$@ · intentos %2$lld"
+            "value": "Última comprobación %@ · intentos %lld"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dernière vérification %1$@ · tentatives %2$lld"
-          }
-        }
-      }
-    },
-    "Ultimo controllo %@ · tentativi %lld": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "new",
-            "value": "Ultimo controllo %1$@ · tentativi %2$lld"
+            "value": "Dernière vérification %@ · tentatives %lld"
           }
         }
       }
@@ -5393,6 +6636,34 @@
         }
       }
     },
+    "Visibile solo a me": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nur für mich sichtbar"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Visible only to me"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Visible solo para mí"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Visible seulement par moi"
+          }
+        }
+      }
+    },
     "Wellness": {
       "localizations": {
         "de": {
@@ -5421,8 +6692,38 @@
         }
       }
     },
-    "Wellness Booking": {},
-    "WellnessBookingWidget": {
+    "Wellness Booking": {
+      "shouldTranslate": false
+    },
+    "attivo": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "aktiv"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "active"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "activo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "actif"
+          }
+        }
+      }
+    },
+    "https://booking.manieridimambro.it": {
       "shouldTranslate": false
     },
     "iOS non esegue l'app in background a orari precisi: tieni l'app aperta all'orario di apertura.": {
@@ -5450,6 +6751,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "iOS n'exécute pas l'app en arrière-plan à heure fixe : gardez l'app ouverte à l'heure d'ouverture."
+          }
+        }
+      }
+    },
+    "non configurato": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "nicht konfiguriert"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "not configured"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "no configurado"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "non configuré"
           }
         }
       }

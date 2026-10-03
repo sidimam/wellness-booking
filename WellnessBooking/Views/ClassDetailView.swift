@@ -16,6 +16,12 @@ struct ClassDetailView: View {
     var body: some View {
         NavigationStack {
             Form {
+                if let u = event.pictureUrl, let url = URL(string: u) {
+                    Section {
+                        AsyncImage(url: url) { img in img.resizable().scaledToFill() } placeholder: { Color.secondary.opacity(0.15) }
+                            .frame(height: 160).clipped().listRowInsets(EdgeInsets())
+                    }
+                }
                 Section {
                     LabeledContent("Lezione", value: event.name)
                     LabeledContent("Quando", value: "\(event.start.itLongDay) · \(event.start.itTime)–\(event.end.itTime)")
@@ -43,8 +49,12 @@ struct ClassDetailView: View {
                         let r = engine.settings.rule(for: event.name)
                         Text("\(r.isDefault ? "*" : r.pattern) · \(r.daysBefore) gg · \(String(format: "%02d:%02d", r.hour, r.minute))")
                     }
-                    Toggle(isOn: .init(get: { !engine.settings.useCustomOpenTime }, set: { engine.settings.useCustomOpenTime = !$0 })) {
-                        Text("Segui l'orario del centro")
+                    if !engine.isServerMode {
+                        Toggle(isOn: .init(get: { !engine.settings.useCustomOpenTime }, set: { engine.settings.useCustomOpenTime = !$0 })) {
+                            Text("Segui l'orario del centro")
+                        }
+                    } else if let p = engine.selectedProfile {
+                        LabeledContent("Profilo", value: p.label)
                     }
                     if event.isFull || event.isParticipant != true {
                         Label(event.isFull ? "Classe piena: entro in lista d'attesa e l'osservazione prenota appena si libera un posto."
@@ -52,7 +62,7 @@ struct ClassDetailView: View {
                               systemImage: "eye").font(.footnote).foregroundStyle(.secondary)
                     }
                 } header: { Text("Scheduler") } footer: {
-                    Text("Ora e anticipo in millisecondi si regolano in Altro → Scheduler.")
+                    Text(engine.isServerMode ? "Prenota il gateway di casa, sempre acceso: regole e anticipo in Altro → Scheduler." : "Ora e anticipo in millisecondi si regolano in Altro → Scheduler.")
                 }
 
                 Section {

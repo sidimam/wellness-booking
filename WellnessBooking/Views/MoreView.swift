@@ -14,9 +14,33 @@ struct MoreView: View {
     @State private var notifStatus = "…"
     @State private var openTime = Date()
     @State private var loaded = false
+    @State private var gwURL = ""
+    @State private var gwUser = ""
+    @State private var gwPass = ""
+    @State private var gwBusy = false
 
     var body: some View {
         Form {
+            Section {
+                if engine.isServerMode {
+                    LabeledContent { Text(engine.gatewayHostLabel).foregroundStyle(.green).multilineTextAlignment(.trailing) } label: { Label("Collegata", systemImage: "server.rack") }
+                    NavigationLink { ServerProfilesView() } label: { Label("Profili mywellness (\(engine.profiles.count))", systemImage: "person.2") }
+                    NavigationLink { ServerSettingsView() } label: { Label("Scheduler e osservazione", systemImage: "clock.badge") }
+                    if let s = engine.serverStatus {
+                        LabeledContent { Text(s.push ? "attivo" : "non configurato").foregroundStyle(s.push ? .green : .orange) } label: { Label("Push dal gateway", systemImage: "bell.and.waves.left.and.right") }
+                    }
+                    Button(role: .destructive) { Task { await engine.serverLogout() } } label: { Label("Scollega", systemImage: "power") }
+                } else {
+                    ServerLoginFields(url: $gwURL, username: $gwUser, password: $gwPass, busy: $gwBusy)
+                    if let e = engine.lastError, !gwUser.isEmpty { Label(e, systemImage: "exclamationmark.triangle").foregroundStyle(.orange).font(.footnote) }
+                }
+            } header: { Text("Server di casa (wellness-gateway)") } footer: {
+                Text(engine.isServerMode
+                     ? "Il container su Unraid prenota e osserva 24 ore su 24 per tutti i profili e manda le notifiche push. Da qui scegli le lezioni e disdici."
+                     : "Collega il container wellness-gateway del tuo NAS: prenota lui, sempre acceso, anche con l'iPhone spento. Senza server l'app lavora da sola ma solo in primo piano.")
+            }
+
+            if !engine.isServerMode {
             Section {
                 TextField("Email mywellness", text: $email)
                     .textContentType(.username).keyboardType(.emailAddress).textInputAutocapitalization(.never).autocorrectionDisabled()
@@ -79,14 +103,18 @@ struct MoreView: View {
             } header: { Text("Osservazione") } footer: {
                 Text("Quando una classe è piena l'app resta in lista d'attesa e controlla i posti liberi a questo intervallo (più fitto nelle ultime ore utili). Appena si libera un posto prenota e ti avvisa.\nIn background iOS concede risvegli solo a sua discrezione (Background App Refresh): l'app li chiede vicino all'apertura e ai controlli, ma non sono garantiti al secondo. Lo schermo acceso serve solo se vuoi la precisione massima tenendo l'app in primo piano.")
             }
+            } // !isServerMode
 
             Section {
                 Toggle(isOn: $engine.settings.priorityNotifications) { Label("Notifiche prioritarie", systemImage: "bell.badge") }
                 Toggle(isOn: $engine.settings.hapticsEnabled) { Label("Vibrazione", systemImage: "iphone.radiowaves.left.and.right") }
                 LabeledContent { Text(notifStatus).foregroundStyle(.secondary) } label: { Label("Permesso notifiche", systemImage: "bell") }
                 Button { openNotificationSettings() } label: { Label("Impostazioni notifiche di iOS", systemImage: "gear") }
-                Button { Notifier.shared.notify(title: String(localized: "Notifica di prova"), body: String(localized: "Così ti avviso quando prenoto o si libera un posto."), priority: engine.settings.priorityNotifications) } label: {
-                    Label("Invia notifica di prova", systemImage: "paperplane")
+                Button {
+                    if engine.isServerMode { Task { _ = await engine.serverTestNotification() } }
+                    else { Notifier.shared.notify(title: String(localized: "Notifica di prova"), body: String(localized: "Così ti avviso quando prenoto o si libera un posto."), priority: engine.settings.priorityNotifications) }
+                } label: {
+                    Label(engine.isServerMode ? "Invia notifica di prova dal gateway" : "Invia notifica di prova", systemImage: "paperplane")
                 }
             } header: { Text("Notifiche") } footer: {
                 Text("Le notifiche prioritarie (Time Sensitive) arrivano anche con Focus o Non disturbare attivi e compaiono su Apple Watch.")
@@ -125,6 +153,7 @@ struct MoreView: View {
             loaded = true
             email = engine.username; password = engine.password
             facilityUrl = engine.settings.facilityUrl
+            gwURL = UserDefaults.standard.string(forKey: "serverURLOverride") ?? engine.settings.serverURL; gwUser = engine.serverUsername
             openTime = Calendar.current.date(bySettingHour: engine.settings.customOpenHour, minute: engine.settings.customOpenMinute, second: 0, of: Date()) ?? Date()
             refreshNotifStatus()
         }
@@ -182,6 +211,9 @@ struct OpenRuleRow: View {
 struct LogView: View {
     @EnvironmentObject var engine: BookingEngine
     var body: some View {
+        if engine.isServerMode { ServerLogView() } else { localLog }
+    }
+    private var localLog: some View {
         List(engine.log) { l in
             HStack(alignment: .top, spacing: 8) {
                 Circle().fill(color(l.level)).frame(width: 8, height: 8).padding(.top, 6)
@@ -205,5 +237,30 @@ struct LogView: View {
     }
     private func color(_ l: LogLine.Level) -> Color {
         switch l { case .info: .secondary; case .success: .green; case .warn: .orange; case .error: .red }
+    }
+}
+
+struct ServerLogView: View {
+    @EnvironmentObject var engine: BookingEngine
+    var body: some View {
+        let names = Dictionary(uniqueKeysWithValues: engine.profiles.map { ($0.id, $0.label) })
+        List(engine.serverLog) { l in
+            HStack(alignment: .top, spacing: 8) {
+                Circle().fill(color(l.level)).frame(width: 8, height: 8).padding(.top, 6)
+                VStack(alignment: .leading, spacing: 2) {
+                    if let p = l.profileId, let n = names[p] { Text(n).font(.caption.weight(.semibold)).foregroundStyle(Color.accentColor) }
+                    Text(l.text).font(.subheadline)
+                    Text(l.time.itFull).font(.caption2).foregroundStyle(.secondary)
+                }
+            }
+        }
+        .overlay { if engine.serverLog.isEmpty { ContentUnavailableView("Nessuna attività", systemImage: "doc.text") } }
+        .navigationTitle("Registro del gateway")
+        .navigationBarTitleDisplayMode(.inline)
+        .task { await engine.loadServerLog() }
+        .refreshable { await engine.loadServerLog() }
+    }
+    private func color(_ l: String) -> Color {
+        switch l { case "success": .green; case "warn": .orange; case "error": .red; default: .secondary }
     }
 }

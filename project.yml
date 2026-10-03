@@ -5,8 +5,8 @@ options:
   xcodeVersion: "16.0"
 settings:
   base:
-    MARKETING_VERSION: "1.0.0"
-    CURRENT_PROJECT_VERSION: 1
+    MARKETING_VERSION: "1.1.0"
+    CURRENT_PROJECT_VERSION: 2
     SWIFT_VERSION: "5.9"
     CODE_SIGN_STYLE: Automatic
     DEVELOPMENT_TEAM: X5SR67A8AL
@@ -44,6 +44,7 @@ targets:
       properties:
         com.apple.developer.ubiquity-kvstore-identifier: $(TeamIdentifierPrefix)com.sdimambro.wellness-booking
         com.apple.developer.usernotifications.time-sensitive: true
+        aps-environment: development
         com.apple.security.application-groups:
           - group.com.sdimambro.wellness-booking
         com.apple.developer.associated-domains:
@@ -61,11 +62,10 @@ targets:
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait
-        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES: "AppIcon-blu AppIcon-verde AppIcon-arancione AppIcon-viola AppIcon-rosso AppIcon-grafite"
         ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS: YES
-        TARGETED_DEVICE_FAMILY: "1,2"
+        TARGETED_DEVICE_FAMILY: "1"
   WellnessBookingWatch:
     type: application
     platform: watchOS
@@ -110,4 +110,4 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.sdimambro.wellness-booking.widget
         GENERATE_INFOPLIST_FILE: NO
         SKIP_INSTALL: YES
-        TARGETED_DEVICE_FAMILY: "1,2"
+        TARGETED_DEVICE_FAMILY: "1"

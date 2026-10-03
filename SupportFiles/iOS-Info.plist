@@ -7,6 +7,13 @@
 		<string>com.sdimambro.wellness-booking.refresh</string>
 		<string>com.sdimambro.wellness-booking.processing</string>
 	</array>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+	</dict>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Serve per collegarsi al gateway wellness-gateway sul NAS di casa dalla rete locale.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

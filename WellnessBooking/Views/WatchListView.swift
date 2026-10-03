@@ -1,15 +1,100 @@
 import SwiftUI
 
-/// Lezioni seguite: stato dello scheduler e del watchdog.
+/// Lezioni seguite + prenotazioni attive (gateway e mywellness), con disdetta.
 struct WatchListView: View {
     @EnvironmentObject var engine: BookingEngine
-    @State private var confirmCancel: WatchItem?
+    @State private var confirmCancel: (name: String, classId: String, partitionDate: Int)?
 
     private var active: [WatchItem] { engine.items.filter { !$0.state.isTerminal } }
+    private func bookedByGateway(_ e: ClassEvent) -> Bool {
+        let pid = engine.selectedProfile?.id
+        return engine.items.contains { $0.classId == e.id && $0.partitionDate == e.partitionDate && $0.profileId == pid }
+    }
     private var done: [WatchItem] { engine.items.filter { $0.state.isTerminal } }
 
     var body: some View {
         List {
+            header
+            if engine.isServerMode {
+                Section {
+                    if engine.bookings.isEmpty {
+                        Text("Nessuna prenotazione attiva").foregroundStyle(.secondary)
+                    }
+                    ForEach(engine.bookings) { e in
+                        HStack(spacing: 12) {
+                            ClassThumb(url: e.pictureUrl, size: 44)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(e.name).font(.body.weight(.semibold))
+                                Text("\(e.start.itLongDay) · \(e.start.itTime)–\(e.end.itTime)").font(.subheadline)
+                                Text(bookedByGateway(e) ? "Prenotata dal gateway" : "Prenotata da mywellness (app o web)")
+                                    .font(.caption).foregroundStyle(.secondary)
+                            }
+                            Spacer()
+                            Image(systemName: "checkmark.seal.fill").foregroundStyle(.green)
+                        }
+                        .swipeActions(edge: .trailing) {
+                            Button(role: .destructive) { confirmCancel = (e.name, e.id, e.partitionDate) } label: { Label("Disdici", systemImage: "xmark.circle") }
+                        }
+                    }
+                } header: { Text("Prenotate su mywellness · \(engine.selectedProfile?.label ?? "")") } footer: {
+                    Text("Tutte le prenotazioni attive del profilo, fatte dal gateway o dall'app/sito Technogym. Scorri a sinistra per disdire.")
+                }
+            }
+            if active.isEmpty && done.isEmpty {
+                Section { ContentUnavailableView("Nessuna lezione selezionata", systemImage: "calendar.badge.plus",
+                                                 description: Text("Vai in Lezioni, seleziona le classi che ti interessano e tocca Aggiungi.")) }
+            }
+            if !active.isEmpty { Section("In corso") { ForEach(active) { item in row(item) } } }
+            if !done.isEmpty { Section("Concluse") { ForEach(done) { item in row(item) } } }
+        }
+        .listStyle(.insetGrouped)
+        .navigationTitle("Prenotazioni")
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                HStack {
+                    if engine.isServerMode && engine.profiles.count > 1 { ProfileMenu() }
+                    Button { Task { await engine.refreshClasses() } } label: { Image(systemName: "arrow.clockwise") }
+                }
+            }
+        }
+        .refreshable { await engine.refreshClasses() }
+        .alert("Disdire la prenotazione?", isPresented: .init(get: { confirmCancel != nil }, set: { if !$0 { confirmCancel = nil } })) {
+            Button("Disdici su mywellness", role: .destructive) {
+                if let c = confirmCancel {
+                    Task {
+                        if engine.isServerMode { await engine.serverUnbook(classId: c.classId, partitionDate: c.partitionDate) }
+                        else if let it = engine.items.first(where: { $0.classId == c.classId && $0.partitionDate == c.partitionDate }) { await engine.cancelBooking(it) }
+                    }
+                }
+            }
+            Button("Annulla", role: .cancel) {}
+        } message: { Text(confirmCancel?.name ?? "") }
+    }
+
+    @ViewBuilder private var header: some View {
+        if engine.isServerMode {
+            Section {
+                HStack {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Gateway di casa attivo").font(.headline)
+                        Text(engine.gatewayHostLabel).font(.caption).foregroundStyle(.secondary)
+                        if let p = engine.selectedProfile {
+                            Text("\(p.label): prenotazioni attive \(p.activeBookings)/\(p.maxBookings)")
+                                .font(.caption).foregroundStyle(p.activeBookings >= p.maxBookings ? .orange : .secondary)
+                        }
+                        if let s = engine.serverStatus {
+                            Text("Prossimo controllo \(s.nextWake.itTime) · \(s.activeItems) lezioni in corso · push \(s.push ? "attivo" : "non configurato")")
+                                .font(.caption2).foregroundStyle(.tertiary)
+                        }
+                    }
+                    Spacer()
+                    Image(systemName: "server.rack").font(.title2).foregroundStyle(Color.accentColor)
+                }
+                if let e = engine.lastError { Label(e, systemImage: "exclamationmark.triangle").font(.footnote).foregroundStyle(.orange) }
+            } footer: {
+                Text("Il container su Unraid prenota e osserva 24 ore su 24, anche con l'iPhone spento. Le notifiche arrivano via push.")
+            }
+        } else {
             Section {
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
@@ -27,36 +112,14 @@ struct WatchListView: View {
             } footer: {
                 Text(engine.settings.keepScreenAwake
                      ? "Con il motore attivo lo schermo resta acceso: tieni l'iPhone in carica e l'app in primo piano all'orario di apertura."
-                     : "In background iOS risveglia l'app solo quando decide lui: per la massima precisione all'apertura tieni l'app in primo piano, altrimenti riceverai un promemoria 3 minuti prima.")
-            }
-
-            if active.isEmpty && done.isEmpty {
-                Section { ContentUnavailableView("Nessuna lezione selezionata", systemImage: "calendar.badge.plus",
-                                                 description: Text("Vai in Lezioni, seleziona le classi che ti interessano e tocca Aggiungi.")) }
-            }
-            if !active.isEmpty {
-                Section("In corso") { ForEach(active) { item in row(item) } }
-            }
-            if !done.isEmpty {
-                Section("Concluse") { ForEach(done) { item in row(item) } }
+                     : "In background iOS risveglia l'app solo quando decide lui: per la massima precisione all'apertura tieni l'app in primo piano, altrimenti riceverai un promemoria 3 minuti prima. Collega il gateway di casa (Altro → Server) per prenotare 24 ore su 24.")
             }
         }
-        .listStyle(.insetGrouped)
-        .navigationTitle("Prenotazioni")
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button { Task { await engine.refreshClasses() } } label: { Image(systemName: "arrow.clockwise") }
-            }
-        }
-        .alert("Cancellare la prenotazione?", isPresented: .init(get: { confirmCancel != nil }, set: { if !$0 { confirmCancel = nil } })) {
-            Button("Cancella prenotazione", role: .destructive) { if let it = confirmCancel { Task { await engine.cancelBooking(it) } } }
-            Button("Annulla", role: .cancel) {}
-        } message: { Text(confirmCancel.map { "\($0.name) · \($0.start.itDateTime)" } ?? "") }
     }
 
     @ViewBuilder
     private func row(_ item: WatchItem) -> some View {
-        WatchItemRow(item: item, settings: engine.settings)
+        WatchItemRow(item: item, settings: engine.settings, showProfile: engine.isServerMode && engine.profiles.count > 1)
             .swipeActions(edge: .trailing) {
                 Button(role: .destructive) { engine.remove(item) } label: { Label("Rimuovi", systemImage: "trash") }
                 if item.recurring {
@@ -65,7 +128,9 @@ struct WatchListView: View {
             }
             .swipeActions(edge: .leading) {
                 if case .failed = item.state { Button { engine.retry(item) } label: { Label("Riprova", systemImage: "arrow.clockwise") }.tint(.blue) }
-                if item.state == .booked, item.start > Date() { Button { confirmCancel = item } label: { Label("Disdici", systemImage: "xmark.circle") }.tint(.red) }
+                if item.state == .booked, item.start > Date() {
+                    Button { confirmCancel = (item.name, item.classId, item.partitionDate) } label: { Label("Disdici", systemImage: "xmark.circle") }.tint(.red)
+                }
             }
     }
 }
@@ -73,28 +138,31 @@ struct WatchListView: View {
 struct WatchItemRow: View {
     let item: WatchItem
     let settings: AppSettings
+    var showProfile = false
 
     private var color: Color {
         switch item.state {
         case .booked: return .green
         case .watching, .waitingList: return .orange
         case .bursting: return .blue
-        case .failed, .expired: return .red
+        case .failed, .expired, .cancelled: return .red
         case .pending: return .secondary
         }
     }
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
-            Image(systemName: item.state.symbol).font(.title2).foregroundStyle(color).frame(width: 30)
+            ClassThumb(url: item.pictureUrl, size: 48)
             VStack(alignment: .leading, spacing: 3) {
                 HStack {
+                    Image(systemName: item.state.symbol).foregroundStyle(color)
                     Text(item.name).font(.body.weight(.semibold))
                     if item.recurring { Image(systemName: "repeat").font(.caption).foregroundStyle(.secondary) }
                     Spacer()
                     Text(item.state.label).font(.caption.weight(.medium)).foregroundStyle(color)
                 }
                 Text("\(item.start.itLongDay) · \(item.start.itTime)–\(item.end.itTime)").font(.subheadline)
+                if showProfile, let p = item.profileLabel { Text(p).font(.caption).foregroundStyle(Color.accentColor) }
                 if item.state == .pending, let f = item.fireAt(settings: settings) {
                     Text("Prenoto \(f.itShortDay) alle \(f.itTime)").font(.caption).foregroundStyle(.secondary)
                 }

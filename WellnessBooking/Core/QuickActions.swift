@@ -38,6 +38,15 @@ final class QuickActionAppDelegate: NSObject, UIApplicationDelegate {
         config.delegateClass = QuickActionSceneDelegate.self
         return config
     }
+
+    // Token APNs → gateway (notifiche push dal server di casa).
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        let hex = deviceToken.map { String(format: "%02x", $0) }.joined()
+        Task { @MainActor in await BookingEngine.shared.registerAPNS(token: hex) }
+    }
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        Task { @MainActor in BookingEngine.shared.addLog("Registrazione push fallita: \(error.localizedDescription)", .warn) }
+    }
 }
 
 final class QuickActionSceneDelegate: NSObject, UIWindowSceneDelegate {

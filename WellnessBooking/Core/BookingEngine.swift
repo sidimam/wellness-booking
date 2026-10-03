@@ -19,6 +19,20 @@ final class BookingEngine: ObservableObject {
     @Published var isRefreshing = false
     @Published var lastError: String?
 
+    // Modalità server (wellness-gateway)
+    @Published var serverUser: GWUser?
+    @Published var serverVersion: String = ""
+    @Published var serverPush: Bool = false
+    @Published var profiles: [GWProfile] = []
+    @Published var bookings: [ClassEvent] = []          // prenotazioni attive del profilo (gateway + mywellness)
+    @Published var serverStatus: GWStatus?
+    @Published var serverSettings: GWSettings?
+    @Published var serverLog: [GWLogLine] = []
+    var isServerMode: Bool { serverUser != nil }
+    var selectedProfile: GWProfile? { profiles.first { $0.id == settings.selectedProfileID } ?? profiles.first }
+    let gateway: GatewayClient
+    var serverPollTask: Task<Void, Never>?
+
     let api = MyWellnessAPI()
     private var loopTask: Task<Void, Never>?
     private var nextPoll: [String: Date] = [:]
@@ -37,10 +51,12 @@ final class BookingEngine: ObservableObject {
     var hasCredentials: Bool { !username.isEmpty && !password.isEmpty }
 
     private init() {
-        settings = Store.loadSettings()
+        let s = Store.loadSettings()
+        settings = s
         items = Store.loadItems()
         log = Store.loadLog()
-        Task { await restoreSession() }
+        gateway = GatewayClient(baseURL: URL(string: s.serverURL) ?? URL(string: "https://booking.manieridimambro.it")!, token: Keychain.get("gw.token"))
+        Task { await restoreSession(); await restoreServer() }
         Store.onCloudChange = { [weak self] in Task { @MainActor in self?.mergeFromCloud() } }
     }
 
@@ -106,6 +122,7 @@ final class BookingEngine: ObservableObject {
     // MARK: - Calendario
 
     func refreshClasses() async {
+        if isServerMode { await refreshServer(force: true); return }
         guard !isRefreshing else { return }
         isRefreshing = true; defer { isRefreshing = false }
         let from = Date()
@@ -163,6 +180,7 @@ final class BookingEngine: ObservableObject {
     func isSelected(_ e: ClassEvent) -> Bool { items.contains { $0.id == e.key } }
 
     func add(_ events: [ClassEvent], recurring: Bool) {
+        if isServerMode { Task { await serverAdd(events, recurring: recurring) }; return }
         var added = 0
         for e in events where !isSelected(e) {
             var it = WatchItem(event: e, recurring: recurring)
@@ -179,24 +197,28 @@ final class BookingEngine: ObservableObject {
     }
 
     func remove(_ item: WatchItem) {
+        if isServerMode { Task { await serverRemove(item, rule: false) }; return }
         items.removeAll { $0.id == item.id }
         nextPoll[item.id] = nil
         Notifier.shared.scheduleReminders(for: items, settings: settings)
     }
 
     func removeRule(of item: WatchItem) {
+        if isServerMode { Task { await serverRemove(item, rule: true) }; return }
         let k = item.ruleKey
         items.removeAll { $0.ruleKey == k && !$0.state.isTerminal }
         for i in items.indices where items[i].ruleKey == k { items[i].recurring = false }
     }
 
     func retry(_ item: WatchItem) {
+        if isServerMode { Task { await serverRetry(item) }; return }
         guard let i = items.firstIndex(where: { $0.id == item.id }) else { return }
         items[i].state = .pending; items[i].lastMessage = ""; items[i].attempts = 0
         nextPoll[item.id] = nil
     }
 
     func cancelBooking(_ item: WatchItem) async {
+        if isServerMode { await serverUnbook(classId: item.classId, partitionDate: item.partitionDate); return }
         if !isLoggedIn { guard await login() else { return } }
         do {
             if try await api.unbook(classId: item.classId, partitionDate: item.partitionDate) {
@@ -209,6 +231,7 @@ final class BookingEngine: ObservableObject {
     // MARK: - Start / Stop
 
     func start() {
+        if isServerMode { addLog("Il gateway di casa prenota per te: il motore locale resta spento"); return }
         guard !isRunning else { return }
         isRunning = true
         addLog("Motore avviato", .success)
@@ -419,7 +442,7 @@ final class BookingEngine: ObservableObject {
     private var snapshotKind: (WatchState) -> String = { st in
         switch st {
         case .pending: return "pending"; case .bursting: return "bursting"; case .watching: return "watching"
-        case .waitingList: return "waitingList"; case .booked: return "booked"; case .failed: return "failed"; case .expired: return "expired"
+        case .waitingList: return "waitingList"; case .booked: return "booked"; case .failed: return "failed"; case .expired: return "expired"; case .cancelled: return "cancelled"
         }
     }
 
