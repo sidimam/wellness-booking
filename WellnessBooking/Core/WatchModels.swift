@@ -1,15 +1,20 @@
 import Foundation
 
 /// Regola di apertura prenotazioni: le lezioni il cui nome contiene `pattern` aprono `daysBefore` giorni prima.
-/// Pattern vuoto o "*" = tutte le altre lezioni (regola predefinita). Vince la prima regola che corrisponde.
+/// "*" = tutte le altre lezioni (regola predefinita); una regola senza nome non si applica. Vince la prima che corrisponde.
 struct OpenRule: Codable, Equatable, Identifiable {
     var id = UUID()
     var pattern: String
     var daysBefore: Int
     var hour: Int = 5
     var minute: Int = 0
-    var isDefault: Bool { pattern.trimmingCharacters(in: .whitespaces).isEmpty || pattern == "*" }
-    func matches(_ name: String) -> Bool { isDefault || name.localizedCaseInsensitiveContains(pattern.trimmingCharacters(in: .whitespaces)) }
+    var isDefault: Bool { pattern.trimmingCharacters(in: .whitespaces) == "*" }
+    var isEmpty: Bool { pattern.trimmingCharacters(in: .whitespaces).isEmpty }
+    func matches(_ name: String) -> Bool {
+        if isDefault { return true }
+        if isEmpty { return false }
+        return name.localizedCaseInsensitiveContains(pattern.trimmingCharacters(in: .whitespaces))
+    }
 }
 
 /// Impostazioni dell'app (persistite in UserDefaults + iCloud KVS).
@@ -25,11 +30,11 @@ struct AppSettings: Codable, Equatable {
     var customOpenHour: Int = 5
     var customOpenMinute: Int = 0
     var customDaysBefore: Int = 3
-    /// Regole per classe (Wellness Town: Reformer 3 giorni, tutte le altre 7).
-    var openRules: [OpenRule] = [OpenRule(pattern: "Reformer", daysBefore: 3), OpenRule(pattern: "*", daysBefore: 7)]
+    /// Regole per classe: i nomi li inserisce l'utente (es. "Reformer" → 3 giorni); "*" vale per tutte le altre.
+    var openRules: [OpenRule] = [OpenRule(pattern: "", daysBefore: 3), OpenRule(pattern: "*", daysBefore: 7)]
 
     func rule(for className: String) -> OpenRule {
-        openRules.first { !$0.isDefault && $0.matches(className) }
+        openRules.first { !$0.isDefault && !$0.isEmpty && $0.matches(className) }
             ?? openRules.first { $0.isDefault }
             ?? OpenRule(pattern: "*", daysBefore: customDaysBefore, hour: customOpenHour, minute: customOpenMinute)
     }

@@ -1518,30 +1518,30 @@
         }
       }
     },
-    "Con \"Segui l'orario del centro\" attivo l'app usa l'apertura comunicata da mywellness per ogni lezione (Wellness Town: Reformer 3 giorni prima, le altre 7, alle 05:00). Le regole qui sotto servono quando il centro non la comunica o se disattivi l'opzione: la prima regola il cui testo è contenuto nel nome della lezione decide giorni e ora; * vale per tutte le altre.": {
+    "Con \"Segui l'orario del centro\" attivo l'app usa l'apertura comunicata da mywellness per ogni lezione. Le regole qui sotto servono quando il centro non la comunica o se disattivi l'opzione: scrivi tu il testo da cercare nel nome della lezione (es. Reformer → 3 giorni); la prima regola che corrisponde decide giorni e ora, * vale per tutte le altre.": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mit „Zeitplan des Studios folgen“ nutzt die App die von mywellness gemeldete Öffnung je Kurs (Wellness Town: Reformer 3 Tage vorher, die anderen 7, um 05:00). Die Regeln unten gelten, wenn das Studio keine meldet oder du die Option ausschaltest: die erste Regel, deren Text im Kursnamen enthalten ist, bestimmt Tage und Uhrzeit; * gilt für alle anderen."
+            "value": "Mit „Zeitplan des Studios folgen“ nutzt die App die von mywellness gemeldete Öffnung je Kurs. Die Regeln unten gelten, wenn das Studio keine meldet oder du die Option ausschaltest: du gibst den Text ein, der im Kursnamen gesucht wird (z. B. Reformer → 3 Tage); die erste passende Regel bestimmt Tage und Uhrzeit, * gilt für alle anderen."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "With \"Follow the club's schedule\" on, the app uses the opening time reported by mywellness for each class (Wellness Town: Reformer 3 days before, the others 7, at 05:00). The rules below are used when the club doesn't report one or if you turn the option off: the first rule whose text is contained in the class name sets days and time; * applies to all the others."
+            "value": "With \"Follow the club's schedule\" on, the app uses the opening time reported by mywellness for each class. The rules below are used when the club doesn't report one or if you turn the option off: you type the text to look for in the class name (e.g. Reformer → 3 days); the first matching rule sets days and time, * applies to all the others."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Con \"Seguir el horario del centro\" activado, la app usa la apertura indicada por mywellness para cada clase (Wellness Town: Reformer 3 días antes, las demás 7, a las 05:00). Las reglas de abajo se usan cuando el centro no la indica o si desactivas la opción: la primera regla cuyo texto esté contenido en el nombre de la clase decide días y hora; * vale para todas las demás."
+            "value": "Con \"Seguir el horario del centro\" activado, la app usa la apertura indicada por mywellness para cada clase. Las reglas de abajo se usan cuando el centro no la indica o si desactivas la opción: tú escribes el texto a buscar en el nombre de la clase (p. ej. Reformer → 3 días); la primera regla que coincide decide días y hora, * vale para todas las demás."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Avec « Suivre l'horaire du club » activé, l'app utilise l'ouverture indiquée par mywellness pour chaque cours (Wellness Town : Reformer 3 jours avant, les autres 7, à 05:00). Les règles ci-dessous servent quand le club ne l'indique pas ou si vous désactivez l'option : la première règle dont le texte est contenu dans le nom du cours fixe jours et heure ; * s'applique à tous les autres."
+            "value": "Avec « Suivre l'horaire du club » activé, l'app utilise l'ouverture indiquée par mywellness pour chaque cours. Les règles ci-dessous servent quand le club ne l'indique pas ou si vous désactivez l'option : vous saisissez le texte à chercher dans le nom du cours (ex. Reformer → 3 jours) ; la première règle qui correspond fixe jours et heure, * s'applique à tous les autres."
           }
         }
       }
@@ -2621,30 +2621,30 @@
         }
       }
     },
-    "L'app usa le regole qui sopra: la prima regola il cui testo è contenuto nel nome della lezione decide giorni e ora di apertura; la regola con * vale per tutte le altre.": {
+    "L'app usa le regole qui sopra: scrivi tu il testo da cercare nel nome della lezione (es. Reformer); la prima regola che corrisponde decide giorni e ora di apertura, la regola * vale per tutte le altre. Le regole senza nome sono ignorate.": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Die App nutzt die Regeln oben: die erste Regel, deren Text im Kursnamen enthalten ist, bestimmt Tage und Uhrzeit der Öffnung; die Regel mit * gilt für alle anderen."
+            "value": "Die App nutzt die Regeln oben: du gibst den Text ein, der im Kursnamen gesucht wird (z. B. Reformer); die erste passende Regel bestimmt Tage und Uhrzeit der Öffnung, die Regel * gilt für alle anderen. Regeln ohne Namen werden ignoriert."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The app uses the rules above: the first rule whose text is contained in the class name sets the opening days and time; the * rule applies to all the others."
+            "value": "The app uses the rules above: you type the text to look for in the class name (e.g. Reformer); the first matching rule sets the opening days and time, the * rule applies to all the others. Rules without a name are ignored."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "La app usa las reglas de arriba: la primera regla cuyo texto esté contenido en el nombre de la clase decide días y hora de apertura; la regla con * vale para todas las demás."
+            "value": "La app usa las reglas de arriba: tú escribes el texto a buscar en el nombre de la clase (p. ej. Reformer); la primera regla que coincide decide días y hora de apertura, la regla * vale para todas las demás. Las reglas sin nombre se ignoran."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "L'app utilise les règles ci-dessus : la première règle dont le texte est contenu dans le nom du cours fixe jours et heure d'ouverture ; la règle * s'applique à tous les autres."
+            "value": "L'app utilise les règles ci-dessus : vous saisissez le texte à chercher dans le nom du cours (ex. Reformer) ; la première règle qui correspond fixe jours et heure d'ouverture, la règle * s'applique à tous les autres. Les règles sans nom sont ignorées."
           }
         }
       }
@@ -3069,30 +3069,30 @@
         }
       }
     },
-    "Nome lezione (es. Reformer) o * per tutte": {
+    "Nome lezione (es. Reformer)": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kursname (z. B. Reformer) oder * für alle"
+            "value": "Kursname (z. B. Reformer)"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Class name (e.g. Reformer) or * for all"
+            "value": "Class name (e.g. Reformer)"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nombre de clase (p. ej. Reformer) o * para todas"
+            "value": "Nombre de clase (p. ej. Reformer)"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nom du cours (ex. Reformer) ou * pour tous"
+            "value": "Nom du cours (ex. Reformer)"
           }
         }
       }

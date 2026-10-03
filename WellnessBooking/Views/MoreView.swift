@@ -63,14 +63,14 @@ struct MoreView: View {
                 }
                 .onDelete { idx in engine.settings.openRules.remove(atOffsets: idx) }
                 Button {
-                    engine.settings.openRules.insert(OpenRule(pattern: "", daysBefore: 7), at: max(0, engine.settings.openRules.count - 1))
+                    engine.settings.openRules.insert(OpenRule(pattern: "", daysBefore: 3), at: max(0, engine.settings.openRules.count - 1))
                 } label: { Label("Aggiungi regola", systemImage: "plus.circle") }
                 Stepper("Anticipo: \(engine.settings.leadMilliseconds) ms", value: $engine.settings.leadMilliseconds, in: 0...3000, step: 100)
                 Stepper("Insisti per \(engine.settings.burstSeconds) s dopo l'apertura", value: $engine.settings.burstSeconds, in: 10...600, step: 10)
             } header: { Text("Scheduler") } footer: {
                 Text(engine.settings.useCustomOpenTime
-                     ? "L'app usa le regole qui sopra: la prima regola il cui testo è contenuto nel nome della lezione decide giorni e ora di apertura; la regola con * vale per tutte le altre."
-                     : "Con \"Segui l'orario del centro\" attivo l'app usa l'apertura comunicata da mywellness per ogni lezione (Wellness Town: Reformer 3 giorni prima, le altre 7, alle 05:00). Le regole qui sotto servono quando il centro non la comunica o se disattivi l'opzione: la prima regola il cui testo è contenuto nel nome della lezione decide giorni e ora; * vale per tutte le altre.")
+                     ? "L'app usa le regole qui sopra: scrivi tu il testo da cercare nel nome della lezione (es. Reformer); la prima regola che corrisponde decide giorni e ora di apertura, la regola * vale per tutte le altre. Le regole senza nome sono ignorate."
+                     : "Con \"Segui l'orario del centro\" attivo l'app usa l'apertura comunicata da mywellness per ogni lezione. Le regole qui sotto servono quando il centro non la comunica o se disattivi l'opzione: scrivi tu il testo da cercare nel nome della lezione (es. Reformer → 3 giorni); la prima regola che corrisponde decide giorni e ora, * vale per tutte le altre.")
             }
 
             Section {
@@ -162,9 +162,9 @@ struct OpenRuleRow: View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
                 Image(systemName: rule.isDefault ? "asterisk.circle" : "textformat").foregroundStyle(.secondary)
-                TextField("Nome lezione (es. Reformer) o * per tutte", text: $rule.pattern)
+                TextField("Nome lezione (es. Reformer)", text: $rule.pattern)
                     .textInputAutocapitalization(.never).autocorrectionDisabled()
-                    .disabled(rule.isDefault && rule.pattern == "*")
+                    .disabled(rule.isDefault)
             }
             HStack {
                 Stepper("Giorni prima: \(rule.daysBefore)", value: $rule.daysBefore, in: 0...30)
