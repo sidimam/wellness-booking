@@ -82,6 +82,15 @@ struct ServerProfilesView: View {
 
     var body: some View {
         List {
+            if !engine.profiles.contains(where: { $0.userId == engine.serverUser?.id }) {
+                Section {
+                    Button { mine = true; label = engine.serverUser?.displayName ?? ""; showAdd = true } label: {
+                        Label("Collega il mio account mywellness", systemImage: "person.crop.circle.badge.plus")
+                    }
+                } footer: {
+                    Text("Non hai ancora un profilo mywellness tuo: finché manca, l'app mostra il primo profilo della famiglia.")
+                }
+            }
             Section {
                 ForEach(engine.profiles) { p in
                     VStack(alignment: .leading, spacing: 3) {

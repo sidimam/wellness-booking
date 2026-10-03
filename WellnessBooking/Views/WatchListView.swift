@@ -81,6 +81,10 @@ struct WatchListView: View {
                         if let p = engine.selectedProfile {
                             Text("\(p.label): prenotazioni attive \(p.activeBookings)/\(p.maxBookings)")
                                 .font(.caption).foregroundStyle(p.activeBookings >= p.maxBookings ? .orange : .secondary)
+                            if p.userId != engine.serverUser?.id {
+                                Text("Stai vedendo il profilo di \(p.label). Il tuo account mywellness si collega in Altro → Profili mywellness.")
+                                    .font(.caption2).foregroundStyle(.orange)
+                            }
                         }
                         if let s = engine.serverStatus {
                             Text("Prossimo controllo \(s.nextWake.itTime) · \(s.activeItems) lezioni in corso · push \(s.push ? "attivo" : "non configurato")")

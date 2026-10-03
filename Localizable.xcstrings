@@ -1595,6 +1595,34 @@
         }
       }
     },
+    "Collega il mio account mywellness": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mein mywellness-Konto verknüpfen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Link my mywellness account"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vincular mi cuenta mywellness"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lier mon compte mywellness"
+          }
+        }
+      }
+    },
     "Collegata": {
       "localizations": {
         "de": {
@@ -3891,6 +3919,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "Non connectée à mywellness"
+          }
+        }
+      }
+    },
+    "Non hai ancora un profilo mywellness tuo: finché manca, l'app mostra il primo profilo della famiglia.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du hast noch kein eigenes mywellness-Profil: bis dahin zeigt die App das erste Familienprofil."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You do not have your own mywellness profile yet: until then the app shows the first family profile."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aún no tienes un perfil mywellness propio: hasta entonces la app muestra el primer perfil de la familia."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous n'avez pas encore de profil mywellness personnel : en attendant, l'app affiche le premier profil de la famille."
           }
         }
       }
@@ -6413,6 +6469,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "Seulement ces dates"
+          }
+        }
+      }
+    },
+    "Stai vedendo il profilo di %@. Il tuo account mywellness si collega in Altro → Profili mywellness.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du siehst das Profil von %@. Verknüpfe dein mywellness-Konto unter Mehr → mywellness-Profile."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You are viewing %@'s profile. Link your mywellness account in More → mywellness profiles."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estás viendo el perfil de %@. Vincula tu cuenta mywellness en Más → Perfiles mywellness."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous consultez le profil de %@. Liez votre compte mywellness dans Plus → Profils mywellness."
           }
         }
       }
