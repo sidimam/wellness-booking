@@ -5,6 +5,7 @@ import UserNotifications
 struct MoreView: View {
     @EnvironmentObject var engine: BookingEngine
     @AppStorage("themeMode") private var themeMode = ThemeMode.system.rawValue
+    @AppStorage(AppLanguage.storageKey) private var appLanguage = AppLanguage.system.rawValue
     @AppStorage("walkthroughDone") private var walkthroughDone = false
     @State private var email = ""
     @State private var password = ""
@@ -36,7 +37,7 @@ struct MoreView: View {
                     Label(e, systemImage: "exclamationmark.triangle").foregroundStyle(.orange).font(.footnote)
                 }
             } header: { Text("Account Technogym mywellness") } footer: {
-                Text("Le stesse credenziali della web app mywellness. Sono salvate solo nel Keychain di questo iPhone.")
+                Text("Le stesse credenziali della web app mywellness: tocca il campo e usa l'icona chiave della tastiera per prenderle dalle Password di iCloud. Sono salvate nel Keychain di questo iPhone.")
             }
 
             Section {
@@ -54,28 +55,29 @@ struct MoreView: View {
             }
 
             Section {
-                Stepper("Giorni prima della lezione: \(engine.settings.customDaysBefore)", value: $engine.settings.customDaysBefore, in: 0...14)
-                DatePicker("Ora di apertura", selection: $openTime, displayedComponents: .hourAndMinute)
-                    .onChange(of: openTime) { _, d in
-                        let c = Calendar.current.dateComponents([.hour, .minute], from: d)
-                        engine.settings.customOpenHour = c.hour ?? 5; engine.settings.customOpenMinute = c.minute ?? 0
-                    }
                 Toggle(isOn: .init(get: { !engine.settings.useCustomOpenTime }, set: { engine.settings.useCustomOpenTime = !$0 })) {
                     Label("Segui l'orario del centro", systemImage: "building.2.crop.circle")
                 }
+                ForEach($engine.settings.openRules) { $rule in
+                    OpenRuleRow(rule: $rule)
+                }
+                .onDelete { idx in engine.settings.openRules.remove(atOffsets: idx) }
+                Button {
+                    engine.settings.openRules.insert(OpenRule(pattern: "", daysBefore: 7), at: max(0, engine.settings.openRules.count - 1))
+                } label: { Label("Aggiungi regola", systemImage: "plus.circle") }
                 Stepper("Anticipo: \(engine.settings.leadMilliseconds) ms", value: $engine.settings.leadMilliseconds, in: 0...3000, step: 100)
                 Stepper("Insisti per \(engine.settings.burstSeconds) s dopo l'apertura", value: $engine.settings.burstSeconds, in: 10...600, step: 10)
             } header: { Text("Scheduler") } footer: {
                 Text(engine.settings.useCustomOpenTime
-                     ? "L'app prenota \(engine.settings.customDaysBefore) giorni prima della lezione alle \(String(format: "%02d:%02d", engine.settings.customOpenHour, engine.settings.customOpenMinute))."
-                     : "Con \"Segui l'orario del centro\" attivo l'app usa l'apertura comunicata da mywellness per ogni lezione (Wellness Town: 3 giorni prima alle 05:00) e ricade su giorni/ora impostati qui solo se il centro non la comunica. Disattivalo per forzare giorni e ora.")
+                     ? "L'app usa le regole qui sopra: la prima regola il cui testo è contenuto nel nome della lezione decide giorni e ora di apertura; la regola con * vale per tutte le altre."
+                     : "Con \"Segui l'orario del centro\" attivo l'app usa l'apertura comunicata da mywellness per ogni lezione (Wellness Town: Reformer 3 giorni prima, le altre 7, alle 05:00). Le regole qui sotto servono quando il centro non la comunica o se disattivi l'opzione: la prima regola il cui testo è contenuto nel nome della lezione decide giorni e ora; * vale per tutte le altre.")
             }
 
             Section {
                 Stepper("Controlla ogni \(engine.settings.pollSeconds) s", value: $engine.settings.pollSeconds, in: 5...300, step: 5)
-                Toggle(isOn: $engine.settings.keepScreenAwake) { Label("Tieni lo schermo acceso", systemImage: "sun.max") }
+                Toggle(isOn: $engine.settings.keepScreenAwake) { Label("Tieni lo schermo acceso (in primo piano)", systemImage: "sun.max") }
             } header: { Text("Osservazione") } footer: {
-                Text("Quando una classe è piena l'app resta in lista d'attesa e controlla i posti liberi a questo intervallo (più fitto nelle ultime ore utili). Appena si libera un posto prenota e ti avvisa.")
+                Text("Quando una classe è piena l'app resta in lista d'attesa e controlla i posti liberi a questo intervallo (più fitto nelle ultime ore utili). Appena si libera un posto prenota e ti avvisa.\nIn background iOS concede risvegli solo a sua discrezione (Background App Refresh): l'app li chiede vicino all'apertura e ai controlli, ma non sono garantiti al secondo. Lo schermo acceso serve solo se vuoi la precisione massima tenendo l'app in primo piano.")
             }
 
             Section {
@@ -83,7 +85,7 @@ struct MoreView: View {
                 Toggle(isOn: $engine.settings.hapticsEnabled) { Label("Vibrazione", systemImage: "iphone.radiowaves.left.and.right") }
                 LabeledContent { Text(notifStatus).foregroundStyle(.secondary) } label: { Label("Permesso notifiche", systemImage: "bell") }
                 Button { openNotificationSettings() } label: { Label("Impostazioni notifiche di iOS", systemImage: "gear") }
-                Button { Notifier.shared.notify(title: "Notifica di prova", body: "Così ti avviso quando prenoto o si libera un posto.", priority: engine.settings.priorityNotifications) } label: {
+                Button { Notifier.shared.notify(title: String(localized: "Notifica di prova"), body: String(localized: "Così ti avviso quando prenoto o si libera un posto."), priority: engine.settings.priorityNotifications) } label: {
                     Label("Invia notifica di prova", systemImage: "paperplane")
                 }
             } header: { Text("Notifiche") } footer: {
@@ -92,13 +94,15 @@ struct MoreView: View {
 
             Section {
                 Picker(selection: $themeMode) { ForEach(ThemeMode.allCases) { Text($0.label).tag($0.rawValue) } } label: { Label("Aspetto", systemImage: "circle.lefthalf.filled") }
+                Picker(selection: $appLanguage) { ForEach(AppLanguage.allCases) { Text($0.label).tag($0.rawValue) } } label: { Label("Lingua", systemImage: "globe") }
+                    .onChange(of: appLanguage) { _, new in AppLanguage(rawValue: new)?.apply() }
                 VStack(alignment: .leading, spacing: 6) {
                     Label("Colore app", systemImage: "paintpalette")
                     IconColorPicker(selection: $engine.settings.accent)
                 }
                 Toggle(isOn: $engine.settings.iCloudSync) { Label("Sincronizza con iCloud", systemImage: "icloud") }
             } header: { Text("Impostazioni app") } footer: {
-                Text("Il colore cambia anche l'icona. iCloud sincronizza impostazioni e lezioni selezionate tra i tuoi dispositivi (non la password).")
+                Text("Il colore cambia anche l'icona. La lingua si applica subito ai testi e completamente al riavvio dell'app. iCloud sincronizza impostazioni e lezioni selezionate tra i tuoi dispositivi (non la password).")
             }
 
             Section("Supporto") {
@@ -107,7 +111,8 @@ struct MoreView: View {
             }
 
             Section("Informazioni app") {
-                LabeledContent("Versione", value: appVersionString())
+                LabeledContent("Versione", value: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "?")
+                LabeledContent("Build", value: Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "?")
                 LabeledContent("Autore", value: "Simone Di Mambro")
                 Link(destination: URL(string: "https://widgets.mywellness.com/facility/\(engine.settings.facilityUrl)/schedule/\(engine.settings.facilityUrl)")!) {
                     Label("Apri il calendario mywellness", systemImage: "arrow.up.right.square")
@@ -129,10 +134,10 @@ struct MoreView: View {
         UNUserNotificationCenter.current().getNotificationSettings { s in
             let t: String
             switch s.authorizationStatus {
-            case .authorized: t = s.timeSensitiveSetting == .enabled ? "Attive (prioritarie ok)" : "Attive"
-            case .provisional: t = "Riepilogo"
-            case .denied: t = "Disattivate"
-            case .notDetermined: t = "Non richieste"
+            case .authorized: t = s.timeSensitiveSetting == .enabled ? String(localized: "Attive (prioritarie ok)") : String(localized: "Attive")
+            case .provisional: t = String(localized: "Riepilogo")
+            case .denied: t = String(localized: "Disattivate")
+            case .notDetermined: t = String(localized: "Non richieste")
             default: t = "—"
             }
             DispatchQueue.main.async { notifStatus = t }
@@ -146,6 +151,31 @@ struct MoreView: View {
                 else if let url = URL(string: UIApplication.openNotificationSettingsURLString) { UIApplication.shared.open(url) }
             }
         }
+    }
+}
+
+/// Riga di una regola di apertura: testo da cercare nel nome, giorni prima, ora.
+struct OpenRuleRow: View {
+    @Binding var rule: OpenRule
+    @State private var time = Date()
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack {
+                Image(systemName: rule.isDefault ? "asterisk.circle" : "textformat").foregroundStyle(.secondary)
+                TextField("Nome lezione (es. Reformer) o * per tutte", text: $rule.pattern)
+                    .textInputAutocapitalization(.never).autocorrectionDisabled()
+                    .disabled(rule.isDefault && rule.pattern == "*")
+            }
+            HStack {
+                Stepper("Giorni prima: \(rule.daysBefore)", value: $rule.daysBefore, in: 0...30)
+                DatePicker("", selection: $time, displayedComponents: .hourAndMinute).labelsHidden()
+                    .onChange(of: time) { _, d in
+                        let c = Calendar.current.dateComponents([.hour, .minute], from: d)
+                        rule.hour = c.hour ?? 5; rule.minute = c.minute ?? 0
+                    }
+            }
+        }
+        .onAppear { time = Calendar.current.date(bySettingHour: rule.hour, minute: rule.minute, second: 0, of: Date()) ?? Date() }
     }
 }
 

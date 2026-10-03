@@ -10,7 +10,7 @@ struct ClassDetailView: View {
     private var probe: WatchItem { WatchItem(event: event, recurring: false) }
     private var fireAt: Date? { probe.fireAt(settings: engine.settings) }
     private var weekday: String {
-        let f = DateFormatter(); f.locale = Locale(identifier: "it_IT"); f.dateFormat = "EEEE"; return f.string(from: event.start)
+        let f = DateFormatter(); f.locale = AppLanguage.current.locale; f.dateFormat = "EEEE"; return f.string(from: event.start)
     }
 
     var body: some View {
@@ -39,8 +39,10 @@ struct ClassDetailView: View {
                                 .foregroundStyle(Color.accentColor).bold()
                         }
                     }
-                    Stepper("Giorni prima: \(engine.settings.customDaysBefore)", value: $engine.settings.customDaysBefore, in: 0...14)
-                        .disabled(!engine.settings.useCustomOpenTime)
+                    LabeledContent("Regola") {
+                        let r = engine.settings.rule(for: event.name)
+                        Text("\(r.isDefault ? "*" : r.pattern) · \(r.daysBefore) gg · \(String(format: "%02d:%02d", r.hour, r.minute))")
+                    }
                     Toggle(isOn: .init(get: { !engine.settings.useCustomOpenTime }, set: { engine.settings.useCustomOpenTime = !$0 })) {
                         Text("Segui l'orario del centro")
                     }

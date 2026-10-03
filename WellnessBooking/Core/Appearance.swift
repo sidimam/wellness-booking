@@ -11,13 +11,13 @@ struct AppIconColor: Identifiable, Equatable {
     var id: String { key }
 
     static let all: [AppIconColor] = [
-        .init(key: "teal",      label: "Verde acqua (originale)", tint: Color(red: 0.05, green: 0.64, blue: 0.65)),
-        .init(key: "blu",       label: "Blu",       tint: Color(red: 0.18, green: 0.44, blue: 0.89)),
-        .init(key: "verde",     label: "Verde",     tint: Color(red: 0.24, green: 0.62, blue: 0.34)),
-        .init(key: "arancione", label: "Arancione", tint: Color(red: 0.91, green: 0.35, blue: 0.05)),
-        .init(key: "viola",     label: "Viola",     tint: Color(red: 0.49, green: 0.30, blue: 0.88)),
-        .init(key: "rosso",     label: "Rosso",     tint: Color(red: 0.84, green: 0.27, blue: 0.25)),
-        .init(key: "grafite",   label: "Grafite",   tint: Color(red: 0.35, green: 0.40, blue: 0.45)),
+        .init(key: "teal",      label: String(localized: "Verde acqua (originale)"), tint: Color(red: 0.05, green: 0.64, blue: 0.65)),
+        .init(key: "blu",       label: String(localized: "Blu"),       tint: Color(red: 0.18, green: 0.44, blue: 0.89)),
+        .init(key: "verde",     label: String(localized: "Verde"),     tint: Color(red: 0.24, green: 0.62, blue: 0.34)),
+        .init(key: "arancione", label: String(localized: "Arancione"), tint: Color(red: 0.91, green: 0.35, blue: 0.05)),
+        .init(key: "viola",     label: String(localized: "Viola"),     tint: Color(red: 0.49, green: 0.30, blue: 0.88)),
+        .init(key: "rosso",     label: String(localized: "Rosso"),     tint: Color(red: 0.84, green: 0.27, blue: 0.25)),
+        .init(key: "grafite",   label: String(localized: "Grafite"),   tint: Color(red: 0.35, green: 0.40, blue: 0.45)),
     ]
 
     static func tint(for key: String) -> Color { all.first { $0.key == key }?.tint ?? all[0].tint }
@@ -58,7 +58,7 @@ struct IconColorPicker: View {
 enum ThemeMode: String, CaseIterable, Identifiable {
     case system, light, dark
     var id: String { rawValue }
-    var label: String { switch self { case .system: "Sistema"; case .light: "Chiaro"; case .dark: "Scuro" } }
+    var label: String { switch self { case .system: String(localized: "Sistema"); case .light: String(localized: "Chiaro"); case .dark: String(localized: "Scuro") } }
     var scheme: ColorScheme? { switch self { case .system: nil; case .light: .light; case .dark: .dark } }
 }
 

@@ -27,7 +27,7 @@ struct WatchListView: View {
             } footer: {
                 Text(engine.settings.keepScreenAwake
                      ? "Con il motore attivo lo schermo resta acceso: tieni l'iPhone in carica e l'app in primo piano all'orario di apertura."
-                     : "iOS non esegue l'app in background a orari precisi: tieni l'app aperta all'orario di apertura.")
+                     : "In background iOS risveglia l'app solo quando decide lui: per la massima precisione all'apertura tieni l'app in primo piano, altrimenti riceverai un promemoria 3 minuti prima.")
             }
 
             if active.isEmpty && done.isEmpty {

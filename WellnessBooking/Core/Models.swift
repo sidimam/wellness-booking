@@ -44,8 +44,8 @@ struct ClassEvent: Codable, Identifiable, Hashable {
     var opensOn: Date? { bookingInfo?.bookingOpensOn.flatMap(DateParsing.offsetDateTime) }
     var isFull: Bool { (availablePlaces ?? 1) <= 0 }
     var placesText: String {
-        if let a = availablePlaces, let m = maxParticipants { return "\(a) liberi su \(m)" }
-        if let a = availablePlaces { return "\(a) liberi" }
+        if let a = availablePlaces, let m = maxParticipants { return String(localized: "\(a) liberi su \(m)") }
+        if let a = availablePlaces { return String(localized: "\(a) liberi") }
         return ""
     }
 }
@@ -124,13 +124,13 @@ enum BookOutcome: Equatable {
 
     var text: String {
         switch self {
-        case .booked: return "Prenotata"
-        case .waitingList: return "In lista d'attesa"
-        case .full: return "Classe piena"
-        case .notOpenYet(let m): return "Non ancora aperta: \(m)"
-        case .tokenInvalid: return "Sessione scaduta"
-        case .noPermission(let m): return "Non autorizzato: \(m)"
-        case .failed(let m): return "Errore: \(m)"
+        case .booked: return String(localized: "Prenotata")
+        case .waitingList: return String(localized: "In lista d'attesa")
+        case .full: return String(localized: "Classe piena")
+        case .notOpenYet(let m): return String(localized: "Non ancora aperta: \(m)")
+        case .tokenInvalid: return String(localized: "Sessione scaduta")
+        case .noPermission(let m): return String(localized: "Non autorizzato: \(m)")
+        case .failed(let m): return String(localized: "Errore: \(m)")
         }
     }
 }
@@ -183,21 +183,19 @@ enum DateParsing {
 }
 
 extension Date {
-    var itShortDay: String {
-        let f = DateFormatter(); f.locale = Locale(identifier: "it_IT"); f.timeZone = DateParsing.rome
-        f.dateFormat = "EEE d MMM"; return f.string(from: self)
+    private func fmt(_ template: String) -> DateFormatter {
+        let f = DateFormatter(); f.locale = AppLanguage.current.locale; f.timeZone = DateParsing.rome
+        f.setLocalizedDateFormatFromTemplate(template); return f
     }
-    var itLongDay: String {
-        let f = DateFormatter(); f.locale = Locale(identifier: "it_IT"); f.timeZone = DateParsing.rome
-        f.dateFormat = "EEEE d MMMM"; return f.string(from: self).capitalized
-    }
+    var itShortDay: String { fmt("EEEdMMM").string(from: self) }
+    var itLongDay: String { fmt("EEEEdMMMM").string(from: self).capitalized }
     var itTime: String {
-        let f = DateFormatter(); f.locale = Locale(identifier: "it_IT"); f.timeZone = DateParsing.rome
+        let f = DateFormatter(); f.locale = AppLanguage.current.locale; f.timeZone = DateParsing.rome
         f.dateFormat = "HH:mm"; return f.string(from: self)
     }
     var itDateTime: String { "\(itShortDay) \(itTime)" }
     var itFull: String {
-        let f = DateFormatter(); f.locale = Locale(identifier: "it_IT"); f.timeZone = DateParsing.rome
+        let f = DateFormatter(); f.locale = AppLanguage.current.locale; f.timeZone = DateParsing.rome
         f.dateFormat = "EEE d MMM HH:mm:ss"; return f.string(from: self)
     }
 }

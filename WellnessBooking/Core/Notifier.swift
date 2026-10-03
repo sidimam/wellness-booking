@@ -42,8 +42,8 @@ final class Notifier: NSObject, UNUserNotificationCenterDelegate {
                 let when = fire.addingTimeInterval(-180)
                 guard when > Date() else { continue }
                 let c = UNMutableNotificationContent()
-                c.title = "Apertura prenotazioni tra 3 minuti"
-                c.body = "\(it.name) \(it.start.itDateTime): tieni Wellness Booking aperta in primo piano."
+                c.title = String(localized: "Apertura prenotazioni tra 3 minuti")
+                c.body = String(localized: "\(it.name) \(it.start.itDateTime): tieni Wellness Booking aperta in primo piano.")
                 c.sound = .default
                 c.interruptionLevel = settings.priorityNotifications ? .timeSensitive : .active
                 let comps = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: when)

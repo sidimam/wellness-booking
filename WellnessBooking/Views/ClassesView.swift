@@ -101,11 +101,11 @@ struct ClassRow: View {
     var onToggle: () -> Void = {}
 
     private var statusText: (String, Color) {
-        if event.isParticipant == true { return ("Prenotata", .green) }
-        if event.isInWaitingList == true { return ("In lista d'attesa", .orange) }
-        if event.bookingInfo?.bookingAvailable == false { return ("Non prenotabile online", .secondary) }
-        if let o = event.opensOn, o > Date() { return ("Apre \(o.itShortDay) alle \(o.itTime)", .blue) }
-        if event.isFull { return ("Piena" + ((event.bookingInfo?.bookingHasWaitingList ?? false) ? " · lista d'attesa" : ""), .red) }
+        if event.isParticipant == true { return (String(localized: "Prenotata"), .green) }
+        if event.isInWaitingList == true { return (String(localized: "In lista d'attesa"), .orange) }
+        if event.bookingInfo?.bookingAvailable == false { return (String(localized: "Non prenotabile online"), .secondary) }
+        if let o = event.opensOn, o > Date() { return (String(localized: "Apre \(o.itShortDay) alle \(o.itTime)"), .blue) }
+        if event.isFull { return ((event.bookingInfo?.bookingHasWaitingList ?? false) ? String(localized: "Piena · lista d'attesa") : String(localized: "Piena"), .red) }
         return (event.placesText, .green)
     }
 

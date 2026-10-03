@@ -10,6 +10,8 @@ settings:
     SWIFT_VERSION: "5.9"
     CODE_SIGN_STYLE: Automatic
     DEVELOPMENT_TEAM: X5SR67A8AL
+    SWIFT_EMIT_LOC_STRINGS: YES
+    LOCALIZATION_PREFERS_STRING_CATALOGS: YES
 targets:
   WellnessBooking:
     type: application
@@ -17,6 +19,8 @@ targets:
     deploymentTarget: "17.0"
     sources:
       - path: WellnessBooking
+      - path: Shared
+      - path: Localizable.xcstrings
       - path: Icons/AppIcon.icon
         type: file
       - path: Icons/AppIcon-blu.icon
@@ -33,12 +37,18 @@ targets:
         type: file
     dependencies:
       - target: WellnessBookingWatch
+      - target: WellnessBookingWidget
     # Entitlements: modificali QUI, xcodegen riscrive il file.
     entitlements:
       path: SupportFiles/iOS.entitlements
       properties:
         com.apple.developer.ubiquity-kvstore-identifier: $(TeamIdentifierPrefix)com.sdimambro.wellness-booking
         com.apple.developer.usernotifications.time-sensitive: true
+        com.apple.security.application-groups:
+          - group.com.sdimambro.wellness-booking
+        com.apple.developer.associated-domains:
+          - webcredentials:mywellness.com
+          - webcredentials:widgets.mywellness.com
         keychain-access-groups:
           - $(AppIdentifierPrefix)com.sdimambro.wellness-booking
     settings:
@@ -62,6 +72,8 @@ targets:
     deploymentTarget: "10.0"
     sources:
       - path: Watch
+      - path: Localizable.xcstrings
+      - path: WellnessBooking/Core/Localization.swift
       - path: Icons/AppIcon.icon
         type: file
     settings:
@@ -73,3 +85,29 @@ targets:
         INFOPLIST_KEY_CFBundleDisplayName: Wellness Booking
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         TARGETED_DEVICE_FAMILY: "4"
+  WellnessBookingWidget:
+    type: app-extension
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: Widget
+      - path: Shared
+      - path: Localizable.xcstrings
+    entitlements:
+      path: SupportFiles/Widget.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.sdimambro.wellness-booking
+    info:
+      path: SupportFiles/Widget-Info.plist
+      properties:
+        CFBundleDisplayName: Wellness Booking
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    settings:
+      base:
+        PRODUCT_NAME: WellnessBookingWidget
+        PRODUCT_BUNDLE_IDENTIFIER: com.sdimambro.wellness-booking.widget
+        GENERATE_INFOPLIST_FILE: NO
+        SKIP_INSTALL: YES
+        TARGETED_DEVICE_FAMILY: "1,2"

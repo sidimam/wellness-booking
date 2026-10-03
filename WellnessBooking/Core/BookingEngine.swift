@@ -1,6 +1,7 @@
 import Foundation
 import SwiftUI
 import Combine
+import WidgetKit
 
 /// Motore: scheduler (prenota all'apertura), watchdog (posti liberati), lista d'attesa, ricorrenze.
 @MainActor
@@ -8,9 +9,9 @@ final class BookingEngine: ObservableObject {
     static let shared = BookingEngine()
 
     @Published var settings: AppSettings { didSet { if settings != oldValue { Store.saveSettings(settings); applyKeepAwake() } } }
-    @Published var items: [WatchItem] { didSet { if items != oldValue { Store.saveItems(items); WatchBridge.shared.push(items: items, running: isRunning) } } }
+    @Published var items: [WatchItem] { didSet { if items != oldValue { Store.saveItems(items); WatchBridge.shared.push(items: items, running: isRunning); publishSnapshot() } } }
     @Published var classes: [ClassEvent] = []
-    @Published var isRunning = false { didSet { applyKeepAwake(); WatchBridge.shared.push(items: items, running: isRunning) } }
+    @Published var isRunning = false { didSet { applyKeepAwake(); WatchBridge.shared.push(items: items, running: isRunning); publishSnapshot() } }
     @Published var isLoggedIn = false
     @Published var userName: String?
     @Published var log: [LogLine] = []
@@ -350,7 +351,7 @@ final class BookingEngine: ObservableObject {
             if item.state != .waitingList {
                 items[idx].state = .waitingList
                 addLog("\(item.name) \(item.start.itDateTime): classe piena, sei in lista d'attesa. Osservazione attiva.", .warn)
-                Notifier.shared.notify(title: "Lista d'attesa", body: "\(item.name) \(item.start.itDateTime) è piena: osservazione attiva, prenoto appena si libera un posto.", priority: false)
+                Notifier.shared.notify(title: String(localized: "Lista d'attesa"), body: String(localized: "\(item.name) \(item.start.itDateTime) è piena: osservazione attiva, prenoto appena si libera un posto."), priority: false)
             }
         case .full:
             if item.state != .watching && item.state != .waitingList {
@@ -364,7 +365,7 @@ final class BookingEngine: ObservableObject {
         case .noPermission(let m):
             items[idx].state = .failed(m)
             addLog("\(item.name): non autorizzato (\(m))", .error)
-            Notifier.shared.notify(title: "Prenotazione rifiutata", body: "\(item.name): \(m)", priority: true)
+            Notifier.shared.notify(title: String(localized: "Prenotazione rifiutata"), body: "\(item.name): \(m)", priority: true)
         case .failed(let m):
             if item.state == .bursting { items[idx].lastMessage = "Tentativo fallito: \(m)" }
             else { addLog("\(item.name): \(m)", .warn) }
@@ -377,7 +378,7 @@ final class BookingEngine: ObservableObject {
         items[idx].lastMessage = note
         nextPoll[item.id] = nil
         addLog("✅ \(item.name) \(item.start.itDateTime): \(note)", .success)
-        Notifier.shared.notify(title: "Prenotata ✅", body: "\(item.name) · \(item.start.itLongDay) alle \(item.start.itTime)", priority: true)
+        Notifier.shared.notify(title: String(localized: "Prenotata ✅"), body: String(localized: "\(item.name) · \(item.start.itLongDay) alle \(item.start.itTime)"), priority: true)
         Haptics.success(enabled: settings.hapticsEnabled)
     }
 
@@ -398,7 +399,7 @@ final class BookingEngine: ObservableObject {
             if e.isParticipant == true { markBooked(index: idx, note: "Posto confermato dal calendario"); return }
             if (e.availablePlaces ?? 0) > 0 {
                 addLog("🔔 Posto libero per \(item.name) \(item.start.itDateTime): prenoto subito", .success)
-                Notifier.shared.notify(title: "Posto libero!", body: "\(item.name) \(item.start.itDateTime): sto prenotando…", priority: true)
+                Notifier.shared.notify(title: String(localized: "Posto libero!"), body: String(localized: "\(item.name) \(item.start.itDateTime): sto prenotando…"), priority: true)
                 await attempt(index: idx, reason: "posto liberato")
                 if items.indices.contains(idx), items[idx].state != .booked {
                     // qualcun altro è stato più veloce: resta in watchdog stretto
@@ -411,6 +412,42 @@ final class BookingEngine: ObservableObject {
             items[idx].lastMessage = "Rete: \(error.localizedDescription)"
             if (error as? MyWellnessAPI.APIFailure)?.status == 401 { _ = await login() }
         }
+    }
+
+    // MARK: - Widget
+
+    private var snapshotKind: (WatchState) -> String = { st in
+        switch st {
+        case .pending: return "pending"; case .bursting: return "bursting"; case .watching: return "watching"
+        case .waitingList: return "waitingList"; case .booked: return "booked"; case .failed: return "failed"; case .expired: return "expired"
+        }
+    }
+
+    func publishSnapshot() {
+        let snap = SharedSnapshot(running: isRunning, loggedIn: isLoggedIn, activeBookings: activeBookingsCount,
+                                  maxBookings: settings.maxActiveBookings, updated: Date(),
+                                  entries: items.filter { $0.start > Date().addingTimeInterval(-3600) }.prefix(20).map {
+                                      .init(id: $0.id, name: $0.name, start: $0.start, end: $0.end, state: $0.state.label,
+                                            kind: snapshotKind($0.state), fireAt: $0.fireAt(settings: settings),
+                                            places: $0.availablePlaces, maxPlaces: $0.maxParticipants)
+                                  })
+        snap.save()
+        WidgetCenter.shared.reloadAllTimelines()
+    }
+
+    /// Prossimo istante utile per un risveglio in background (apertura prenotazioni o controllo osservazione).
+    var nextBackgroundDeadline: Date? {
+        var best: Date?
+        for it in items where !it.state.isTerminal {
+            var d: Date?
+            switch it.state {
+            case .pending: d = it.fireAt(settings: settings)?.addingTimeInterval(-30)
+            case .watching, .waitingList, .bursting: d = Date().addingTimeInterval(Double(max(60, settings.pollSeconds)))
+            default: break
+            }
+            if let d, d > Date(), best == nil || d < best! { best = d }
+        }
+        return best
     }
 
     // MARK: - Background (best effort)

@@ -1,5 +1,17 @@
 import Foundation
 
+/// Regola di apertura prenotazioni: le lezioni il cui nome contiene `pattern` aprono `daysBefore` giorni prima.
+/// Pattern vuoto o "*" = tutte le altre lezioni (regola predefinita). Vince la prima regola che corrisponde.
+struct OpenRule: Codable, Equatable, Identifiable {
+    var id = UUID()
+    var pattern: String
+    var daysBefore: Int
+    var hour: Int = 5
+    var minute: Int = 0
+    var isDefault: Bool { pattern.trimmingCharacters(in: .whitespaces).isEmpty || pattern == "*" }
+    func matches(_ name: String) -> Bool { isDefault || name.localizedCaseInsensitiveContains(pattern.trimmingCharacters(in: .whitespaces)) }
+}
+
 /// Impostazioni dell'app (persistite in UserDefaults + iCloud KVS).
 struct AppSettings: Codable, Equatable {
     var facilityUrl: String = "wellnesstown"
@@ -13,6 +25,14 @@ struct AppSettings: Codable, Equatable {
     var customOpenHour: Int = 5
     var customOpenMinute: Int = 0
     var customDaysBefore: Int = 3
+    /// Regole per classe (Wellness Town: Reformer 3 giorni, tutte le altre 7).
+    var openRules: [OpenRule] = [OpenRule(pattern: "Reformer", daysBefore: 3), OpenRule(pattern: "*", daysBefore: 7)]
+
+    func rule(for className: String) -> OpenRule {
+        openRules.first { !$0.isDefault && $0.matches(className) }
+            ?? openRules.first { $0.isDefault }
+            ?? OpenRule(pattern: "*", daysBefore: customDaysBefore, hour: customOpenHour, minute: customOpenMinute)
+    }
     /// Anticipo in millisecondi rispetto all'orario di apertura (per compensare la latenza).
     var leadMilliseconds: Int = 300
     /// Per quanti secondi insistere (ogni ~1.5 s) subito dopo l'apertura.
@@ -26,7 +46,7 @@ struct AppSettings: Codable, Equatable {
     /// Limite di prenotazioni attive imposto dal centro (Wellness Town: 5).
     var maxActiveBookings: Int = 5
 
-    var keepScreenAwake: Bool = true
+    var keepScreenAwake: Bool = false
     var hapticsEnabled: Bool = true
     var priorityNotifications: Bool = true   // interruptionLevel .timeSensitive
     var iCloudSync: Bool = true
@@ -46,13 +66,13 @@ enum WatchState: Codable, Equatable {
 
     var label: String {
         switch self {
-        case .pending: return "In attesa"
-        case .bursting: return "Prenotazione in corso"
-        case .watching: return "Osservazione: piena"
-        case .waitingList: return "Lista d'attesa"
-        case .booked: return "Prenotata"
-        case .failed: return "Errore"
-        case .expired: return "Scaduta"
+        case .pending: return String(localized: "In attesa")
+        case .bursting: return String(localized: "Prenotazione in corso")
+        case .watching: return String(localized: "Osservazione: piena")
+        case .waitingList: return String(localized: "Lista d'attesa")
+        case .booked: return String(localized: "Prenotata")
+        case .failed: return String(localized: "Errore")
+        case .expired: return String(localized: "Scaduta")
         }
     }
     var isTerminal: Bool {
@@ -105,12 +125,13 @@ struct WatchItem: Codable, Identifiable, Equatable {
         return "\(name.lowercased())|\(c.weekday ?? 0)|\(c.hour ?? 0):\(c.minute ?? 0)"
     }
 
-    /// Orario di apertura calcolato con le impostazioni (giorni prima + ora).
+    /// Orario di apertura calcolato con le regole per classe (giorni prima + ora).
     func customFireAt(settings s: AppSettings) -> Date? {
+        let r = s.rule(for: name)
         var cal = DateParsing.calendar
         cal.timeZone = DateParsing.rome
-        guard let day = cal.date(byAdding: .day, value: -s.customDaysBefore, to: cal.startOfDay(for: start)) else { return nil }
-        return cal.date(bySettingHour: s.customOpenHour, minute: s.customOpenMinute, second: 0, of: day)
+        guard let day = cal.date(byAdding: .day, value: -r.daysBefore, to: cal.startOfDay(for: start)) else { return nil }
+        return cal.date(bySettingHour: r.hour, minute: r.minute, second: 0, of: day)
     }
 
     /// Quando l'app tenterà la prenotazione: orario del centro (se richiesto e disponibile) altrimenti quello impostato.

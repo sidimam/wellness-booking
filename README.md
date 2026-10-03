@@ -9,9 +9,12 @@ piena, tiene un **osservazione** che prende al volo i posti che si liberano.
 - **Lezioni**: scopre tutte le lezioni del centro nei prossimi N giorni (filtro predefinito "Reformer"),
   mostra posti liberi, stato (piena / lista d'attesa / apre il …), istruttore e sala. Selezione multipla,
   aggiunta "solo queste date" oppure **ogni settimana** (stesso giorno e ora).
-- **Scheduler**: prenota nell'istante di apertura (per Wellness Town: 3 giorni prima alle 05:00, letto
-  dall'API `bookingOpensOn`), con anticipo configurabile in ms e ritentativi ravvicinati per N secondi.
-  Orario personalizzato (ora + giorni prima) in Altro → Scheduler.
+- **Scheduler**: prenota nell'istante di apertura comunicato dall'API per ogni lezione (`bookingOpensOn`; Wellness Town:
+  Reformer 3 giorni prima, le altre 7, alle 05:00), con anticipo in ms e ritentativi ravvicinati. **Regole di apertura**
+  per classe configurabili in Altro → Scheduler (testo nel nome → giorni prima + ora; `*` per tutte le altre).
+- **Integrazioni iOS**: widget home e lock screen (piccolo/medio/grande/circolare/rettangolare/inline), App Intents per
+  Siri/Comandi rapidi/Action Button, azioni rapide dall'icona, Password AutoFill (Password di iCloud), Background App
+  Refresh/Processing best-effort, iCloud KVS, Apple Watch.
 - **Osservazione**: se la classe è piena l'app entra in lista d'attesa (mywellness **non** prenota
   automaticamente dalla lista: avvisa soltanto) e interroga il calendario ogni N secondi, più fitto nelle
   ultime ore utili (la disdetta è possibile fino a 2 h prima). Appena `availablePlaces > 0` chiama `Book`
