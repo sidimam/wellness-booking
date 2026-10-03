@@ -68,8 +68,12 @@ xcrun devicectl device install app --device <UDID> <path>/Wellness\ Booking.app
 
 ### TestFlight
 
-Archive da Xcode (Product → Archive → Distribute → TestFlight) oppure `xcodebuild archive` +
-`-exportArchive` con `ExportOptions.plist` (`app-store-connect`, team `X5SR67A8AL`) e upload con
-`xcrun altool --upload-app`. Prima di archiviare: `xattr -cr .`.
+```bash
+scripts/release.sh
+```
+
+Archive, export (firma cloud con la sessione dell'account Xcode, `-allowProvisioningUpdates`) e upload su App Store Connect
+(app id 6818849644). La chiave API ASC non ha il permesso di firma cloud: non va passata a `xcodebuild`.
+Prima build caricata il 3 ottobre 2026 (1.0.0 build 1).
 
 Struttura: `WellnessBooking/` (Core + Views iOS), `Watch/`, `Icons/*.icon`, `SupportFiles/`, `scripts/`.
