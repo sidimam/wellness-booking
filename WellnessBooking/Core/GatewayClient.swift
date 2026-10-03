@@ -110,6 +110,7 @@ actor GatewayClient {
 
     private(set) var baseURL: URL
     private(set) var token: String?
+    private(set) var extraHeaders: [String: String] = [:]
     private let session: URLSession
     private let decoder: JSONDecoder = {
         let d = JSONDecoder()
@@ -135,7 +136,8 @@ actor GatewayClient {
         session = URLSession(configuration: cfg)
     }
 
-    func configure(baseURL: URL, token: String?) { self.baseURL = baseURL; self.token = token }
+    func configure(baseURL: URL, token: String?, extraHeaders: [String: String] = [:]) { self.baseURL = baseURL; self.token = token; self.extraHeaders = extraHeaders }
+    func setExtraHeaders(_ h: [String: String]) { extraHeaders = h }
     var isLoggedIn: Bool { token != nil }
 
     private func request<T: Decodable>(_ method: String, _ path: String, query: [String: String] = [:], body: (any Encodable)? = nil, auth: Bool = true, as type: T.Type) async throws -> T {
@@ -144,6 +146,7 @@ actor GatewayClient {
         var req = URLRequest(url: comps.url!)
         req.httpMethod = method
         req.setValue("application/json", forHTTPHeaderField: "Accept")
+        for (k, v) in extraHeaders where !v.isEmpty { req.setValue(v, forHTTPHeaderField: k) }
         if auth, let token { req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization") }
         if let body {
             req.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -154,7 +157,11 @@ actor GatewayClient {
         if http.statusCode == 401 { token = nil }
         guard (200..<300).contains(http.statusCode) else {
             if let ct = http.value(forHTTPHeaderField: "Content-Type"), ct.contains("text/html") {
-                throw Failure(message: "Il server ha risposto con una pagina web (proxy o Cloudflare Access?)", status: http.statusCode)
+                let host = http.url?.host ?? ""
+                let msg = host.hasSuffix("cloudflareaccess.com") || http.statusCode == 302 || http.statusCode == 403
+                    ? String(localized: "Bloccato da Cloudflare Access: attiva \"Connessione tramite Cloudflare Access\" e inserisci Client ID e Client Secret del service token.")
+                    : String(localized: "Il server ha risposto con una pagina web (proxy o Cloudflare Access?)")
+                throw Failure(message: msg, status: http.statusCode)
             }
             let msg = (try? decoder.decode(ErrorBody.self, from: data))?.error ?? "HTTP \(http.statusCode)"
             throw Failure(message: msg, status: http.statusCode)

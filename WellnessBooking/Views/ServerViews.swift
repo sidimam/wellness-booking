@@ -8,19 +8,61 @@ struct ServerLoginFields: View {
     @Binding var password: String
     @Binding var busy: Bool
     var onSuccess: () -> Void = {}
+    @State private var useAccess = false
+    @State private var cfID = ""
+    @State private var cfSecret = ""
 
     var body: some View {
         TextField("https://booking.manieridimambro.it", text: $url)
             .keyboardType(.URL).textInputAutocapitalization(.never).autocorrectionDisabled().textContentType(.URL)
         TextField("Nome utente del gateway", text: $username).textInputAutocapitalization(.never).autocorrectionDisabled().textContentType(.username)
         SecureField("Password del gateway", text: $password).textContentType(.password)
+        Toggle(isOn: $useAccess.animation()) { Label("Connessione tramite Cloudflare Access", systemImage: "cloud.fill") }
+        if useAccess {
+            TextField("CF-Access-Client-Id", text: $cfID).textInputAutocapitalization(.never).autocorrectionDisabled().font(.footnote.monospaced())
+            SecureField("CF-Access-Client-Secret", text: $cfSecret).font(.footnote.monospaced())
+            Text("Service token dell'applicazione Access che protegge l'indirizzo del gateway (Zero Trust → Access → Service Auth). Inviato come intestazione su ogni richiesta.")
+                .font(.caption).foregroundStyle(.secondary)
+        }
         Button {
             busy = true
-            Task { if await engine.serverLogin(url: url, username: username, password: password) { onSuccess() }; busy = false }
+            Task {
+                await engine.setCloudflareAccess(clientID: useAccess ? cfID : "", clientSecret: useAccess ? cfSecret : "")
+                if await engine.serverLogin(url: url, username: username, password: password) { onSuccess() }
+                busy = false
+            }
         } label: {
             HStack { Label("Collega al gateway", systemImage: "server.rack"); Spacer(); if busy { ProgressView() } }
         }
-        .disabled(url.isEmpty || username.isEmpty || password.isEmpty || busy)
+        .disabled(url.isEmpty || username.isEmpty || password.isEmpty || busy || (useAccess && (cfID.isEmpty || cfSecret.isEmpty)))
+        .onAppear { cfID = engine.cfAccessClientID; cfSecret = engine.cfAccessClientSecret; useAccess = !cfID.isEmpty }
+    }
+}
+
+/// Modifica del service token Cloudflare Access a gateway già collegato.
+struct CloudflareAccessView: View {
+    @EnvironmentObject var engine: BookingEngine
+    @Environment(\.dismiss) private var dismiss
+    @State private var cfID = ""
+    @State private var cfSecret = ""
+    var body: some View {
+        Form {
+            Section {
+                TextField("CF-Access-Client-Id", text: $cfID).textInputAutocapitalization(.never).autocorrectionDisabled().font(.footnote.monospaced())
+                SecureField("CF-Access-Client-Secret", text: $cfSecret).font(.footnote.monospaced())
+            } header: { Text("Service token") } footer: {
+                Text("Se l'indirizzo del gateway è protetto da Cloudflare Access, l'app invia queste intestazioni su ogni richiesta (come Unraid Drive). Lascia vuoto per disattivare. I valori restano nel Keychain di questo iPhone.")
+            }
+            Section {
+                Button("Salva") { Task { await engine.setCloudflareAccess(clientID: cfID, clientSecret: cfSecret); await engine.refreshServer(force: true); dismiss() } }
+                if !engine.cfAccessClientID.isEmpty {
+                    Button("Rimuovi service token", role: .destructive) { Task { await engine.setCloudflareAccess(clientID: "", clientSecret: ""); dismiss() } }
+                }
+            }
+        }
+        .navigationTitle("Cloudflare Access")
+        .navigationBarTitleDisplayMode(.inline)
+        .onAppear { cfID = engine.cfAccessClientID; cfSecret = engine.cfAccessClientSecret }
     }
 }
 

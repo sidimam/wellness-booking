@@ -4,12 +4,27 @@ import SwiftUI
 /// Modalità server: l'app è il telecomando del container wellness-gateway su Unraid.
 extension BookingEngine {
     var serverUsername: String { Keychain.get("gw.username") ?? "" }
+    var cfAccessClientID: String { Keychain.get("gw.cf-id") ?? "" }
+    var cfAccessClientSecret: String { Keychain.get("gw.cf-secret") ?? "" }
+    var cfAccessHeaders: [String: String] {
+        guard !cfAccessClientID.isEmpty, !cfAccessClientSecret.isEmpty else { return [:] }
+        return ["CF-Access-Client-Id": cfAccessClientID, "CF-Access-Client-Secret": cfAccessClientSecret]
+    }
+    /// Salva (o cancella) il service token Cloudflare Access usato su ogni richiesta al gateway.
+    func setCloudflareAccess(clientID: String, clientSecret: String) async {
+        let id = clientID.trimmingCharacters(in: .whitespacesAndNewlines), sec = clientSecret.trimmingCharacters(in: .whitespacesAndNewlines)
+        if id.isEmpty || sec.isEmpty { Keychain.delete("gw.cf-id"); Keychain.delete("gw.cf-secret") }
+        else { Keychain.set(id, for: "gw.cf-id"); Keychain.set(sec, for: "gw.cf-secret") }
+        await gateway.setExtraHeaders(cfAccessHeaders)
+        objectWillChange.send()
+    }
     var gatewayHostLabel: String {
         let host = URL(string: settings.serverURL)?.host ?? settings.serverURL
         return "\(host) · \(serverUser?.displayName ?? serverUsername)\(serverVersion.isEmpty ? "" : " · v\(serverVersion)")"
     }
 
     func restoreServer() async {
+        await gateway.setExtraHeaders(cfAccessHeaders)
         guard Keychain.get("gw.token") != nil else { return }
         do {
             let me = try await gateway.me()
@@ -33,7 +48,7 @@ extension BookingEngine {
         guard let base = URL(string: url.trimmingCharacters(in: .whitespaces)), base.scheme != nil else {
             lastError = String(localized: "Indirizzo del server non valido"); return false
         }
-        await gateway.configure(baseURL: base, token: nil)
+        await gateway.configure(baseURL: base, token: nil, extraHeaders: cfAccessHeaders)
         do {
             let r = try await gateway.login(username: username, password: password, deviceName: UIDevice.current.name)
             settings.serverURL = base.absoluteString

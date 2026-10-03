@@ -971,6 +971,34 @@
         }
       }
     },
+    "Attivo": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktiv"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actif"
+          }
+        }
+      }
+    },
     "Autore": {
       "localizations": {
         "de": {
@@ -1111,6 +1139,34 @@
         }
       }
     },
+    "Bloccato da Cloudflare Access: attiva \"Connessione tramite Cloudflare Access\" e inserisci Client ID e Client Secret del service token.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Von Cloudflare Access blockiert: aktiviere „Verbindung über Cloudflare Access“ und gib Client ID und Client Secret des Service-Tokens ein."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blocked by Cloudflare Access: turn on \"Connect through Cloudflare Access\" and enter the service token Client ID and Client Secret."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloqueado por Cloudflare Access: activa \"Conexión mediante Cloudflare Access\" e introduce Client ID y Client Secret del service token."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloqué par Cloudflare Access : activez « Connexion via Cloudflare Access » et saisissez le Client ID et le Client Secret du service token."
+          }
+        }
+      }
+    },
     "Blu": {
       "localizations": {
         "de": {
@@ -1166,6 +1222,12 @@
           }
         }
       }
+    },
+    "CF-Access-Client-Id": {
+      "shouldTranslate": false
+    },
+    "CF-Access-Client-Secret": {
+      "shouldTranslate": false
     },
     "Calendario aggiornato.": {
       "localizations": {
@@ -1449,6 +1511,34 @@
         }
       }
     },
+    "Cloudflare Access": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudflare Access"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudflare Access"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudflare Access"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudflare Access"
+          }
+        }
+      }
+    },
     "Collega al gateway": {
       "localizations": {
         "de": {
@@ -1726,6 +1816,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "Connectée en tant que %@"
+          }
+        }
+      }
+    },
+    "Connessione tramite Cloudflare Access": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verbindung über Cloudflare Access"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connect through Cloudflare Access"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conexión mediante Cloudflare Access"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connexion via Cloudflare Access"
           }
         }
       }
@@ -2511,6 +2629,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "Le conteneur sur Unraid réserve et observe 24h/24, même iPhone éteint. Les notifications arrivent par push."
+          }
+        }
+      }
+    },
+    "Il server ha risposto con una pagina web (proxy o Cloudflare Access?)": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Server antwortete mit einer Webseite (Proxy oder Cloudflare Access?)"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The server answered with a web page (proxy or Cloudflare Access?)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El servidor respondió con una página web (¿proxy o Cloudflare Access?)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le serveur a répondu par une page web (proxy ou Cloudflare Access ?)"
           }
         }
       }
@@ -3577,6 +3723,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aucune réservation active"
+          }
+        }
+      }
+    },
+    "No": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nein"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non"
           }
         }
       }
@@ -5319,6 +5493,34 @@
         }
       }
     },
+    "Rimuovi service token": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Service-Token entfernen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove service token"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminar service token"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supprimer le service token"
+          }
+        }
+      }
+    },
     "Riprova": {
       "localizations": {
         "de": {
@@ -5795,6 +5997,34 @@
         }
       }
     },
+    "Se l'indirizzo del gateway è protetto da Cloudflare Access, l'app invia queste intestazioni su ogni richiesta (come Unraid Drive). Lascia vuoto per disattivare. I valori restano nel Keychain di questo iPhone.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ist die Gateway-Adresse durch Cloudflare Access geschützt, sendet die App diese Header bei jeder Anfrage (wie Unraid Drive). Leer lassen zum Deaktivieren. Die Werte bleiben im Schlüsselbund dieses iPhones."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "If the gateway address is protected by Cloudflare Access, the app sends these headers on every request (like Unraid Drive). Leave empty to disable. Values stay in this iPhone's Keychain."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Si la dirección del gateway está protegida por Cloudflare Access, la app envía estas cabeceras en cada petición (como Unraid Drive). Déjalo vacío para desactivar. Los valores quedan en el llavero de este iPhone."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Si l'adresse du gateway est protégée par Cloudflare Access, l'app envoie ces en-têtes à chaque requête (comme Unraid Drive). Laissez vide pour désactiver. Les valeurs restent dans le trousseau de cet iPhone."
+          }
+        }
+      }
+    },
     "Se una classe è piena, l'app entra in lista d'attesa e controlla di continuo i posti: appena qualcuno disdice, prenota al volo e ti avvisa con una notifica prioritaria, anche su Apple Watch.": {
       "localizations": {
         "de": {
@@ -5959,6 +6189,62 @@
           "stringUnit": {
             "state": "translated",
             "value": "Serveur maison (wellness-gateway)"
+          }
+        }
+      }
+    },
+    "Service token": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Service-Token"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Service token"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Service token"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Service token"
+          }
+        }
+      }
+    },
+    "Service token dell'applicazione Access che protegge l'indirizzo del gateway (Zero Trust → Access → Service Auth). Inviato come intestazione su ogni richiesta.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Service-Token der Access-Anwendung, die die Gateway-Adresse schützt (Zero Trust → Access → Service Auth). Wird bei jeder Anfrage als Header gesendet."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Service token of the Access application protecting the gateway address (Zero Trust → Access → Service Auth). Sent as a header on every request."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Service token de la aplicación Access que protege la dirección del gateway (Zero Trust → Access → Service Auth). Se envía como cabecera en cada petición."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Service token de l'application Access qui protège l'adresse du gateway (Zero Trust → Access → Service Auth). Envoyé en en-tête à chaque requête."
           }
         }
       }

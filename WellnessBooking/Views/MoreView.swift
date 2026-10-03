@@ -26,6 +26,9 @@ struct MoreView: View {
                     LabeledContent { Text(engine.gatewayHostLabel).foregroundStyle(.green).multilineTextAlignment(.trailing) } label: { Label("Collegata", systemImage: "server.rack") }
                     NavigationLink { ServerProfilesView() } label: { Label("Profili mywellness (\(engine.profiles.count))", systemImage: "person.2") }
                     NavigationLink { ServerSettingsView() } label: { Label("Scheduler e osservazione", systemImage: "clock.badge") }
+                    NavigationLink { CloudflareAccessView() } label: {
+                        LabeledContent { Text(engine.cfAccessClientID.isEmpty ? "No" : "Attivo").foregroundStyle(.secondary) } label: { Label("Cloudflare Access", systemImage: "cloud.fill") }
+                    }
                     if let s = engine.serverStatus {
                         LabeledContent { Text(s.push ? "attivo" : "non configurato").foregroundStyle(s.push ? .green : .orange) } label: { Label("Push dal gateway", systemImage: "bell.and.waves.left.and.right") }
                     }
