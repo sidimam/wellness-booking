@@ -4,6 +4,14 @@ App iOS (SwiftUI, iOS 17+) con companion Apple Watch che prenota da sola le lezi
 Technogym **mywellness** (es. Wellness Town, Roma) all'apertura delle prenotazioni e, se la classe è
 piena, tiene un **osservazione** che prende al volo i posti che si liberano.
 
+## Novità 1.1 (build 2)
+
+- **Server di casa**: l'app si collega al container [wellness-gateway](https://github.com/sidimam/wellness-gateway) su Unraid,
+  che prenota e osserva 24 ore su 24 per più profili mywellness (famiglia) e manda notifiche push APNs. L'app sceglie le lezioni,
+  mostra le prenotazioni attive (anche quelle fatte dall'app/sito Technogym) e permette di disdirle; le disdette fatte su mywellness
+  vengono rilevate e non riprenotate. Altro → Server di casa; senza server l'app continua a lavorare da sola in primo piano.
+- Immagini delle classi, target solo iPhone + Apple Watch, accesso al gateway anche via LAN (http).
+
 ## Funzioni
 
 - **Lezioni**: scopre tutte le lezioni del centro nei prossimi N giorni (filtro predefinito "Reformer"),
