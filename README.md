@@ -16,6 +16,10 @@ piena, tiene un **osservazione** che prende al volo i posti che si liberano.
   automaticamente dalla lista: avvisa soltanto) e interroga il calendario ogni N secondi, più fitto nelle
   ultime ore utili (la disdetta è possibile fino a 2 h prima). Appena `availablePlaces > 0` chiama `Book`
   e manda una **notifica prioritaria** (Time Sensitive, passa Focus/Non disturbare, arriva su Apple Watch).
+- **Scheda lezione**: toccando una lezione si vede quando l'app prenoterà (apertura comunicata dal centro o giorni/ora
+  impostati) e si attiva la prenotazione automatica singola o settimanale. Il cerchio a sinistra serve per la selezione multipla.
+- **Limite prenotazioni attive**: default 5 (regola del centro, modificabile in Altro → Centro). Il conteggio include le
+  prenotazioni fatte direttamente su mywellness (`isParticipant` dal calendario letto con il login).
 - **Account**: login con le credenziali mywellness (Keychain). Centro configurabile tramite URL del widget.
 - **Apple Watch**: stato delle lezioni seguite, Avvia/Ferma motore, Aggiorna (WatchConnectivity).
 - **Altro**: colore app + icona alternativa (7 colori, Icon Composer), tema chiaro/scuro, iCloud KVS
