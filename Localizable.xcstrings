@@ -2296,6 +2296,34 @@
         }
       }
     },
+    "Esci dalla lista d'attesa": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warteliste verlassen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leave the waiting list"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salir de la lista de espera"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quitter la liste d'attente"
+          }
+        }
+      }
+    },
     "Esporta": {
       "localizations": {
         "de": {
@@ -2769,6 +2797,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "Le conteneur sur Unraid réserve et observe 24h/24, même iPhone éteint. Les notifications arrivent par push."
+          }
+        }
+      }
+    },
+    "Il gateway ti toglie dalla lista d'attesa su mywellness e smette di seguire la lezione. \"Rimuovi\" invece lascia la lista d'attesa com'è e toglie solo il monitoraggio.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Das Gateway entfernt dich von der mywellness-Warteliste und verfolgt den Kurs nicht mehr. „Entfernen“ lässt die Warteliste unverändert und beendet nur die Verfolgung."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The gateway removes you from the mywellness waiting list and stops tracking the class. \"Remove\" instead leaves the waiting list as it is and only stops tracking."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El gateway te quita de la lista de espera de mywellness y deja de seguir la clase. \"Eliminar\" en cambio deja la lista de espera como está y solo quita el seguimiento."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le gateway vous retire de la liste d'attente mywellness et cesse de suivre le cours. « Supprimer » laisse la liste d'attente telle quelle et retire seulement le suivi."
           }
         }
       }
@@ -3587,6 +3643,34 @@
         }
       }
     },
+    "Mostra password": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passwort anzeigen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show password"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mostrar contraseña"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afficher le mot de passe"
+          }
+        }
+      }
+    },
     "Motore": {
       "localizations": {
         "de": {
@@ -3723,6 +3807,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "Moteur arrêté"
+          }
+        }
+      }
+    },
+    "Nascondi password": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passwort verbergen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hide password"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ocultar contraseña"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Masquer le mot de passe"
           }
         }
       }
@@ -7086,6 +7198,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "Utilisez l'e-mail et le mot de passe du compte Technogym mywellness avec lequel vous réservez au club."
+          }
+        }
+      }
+    },
+    "Uscire dalla lista d'attesa?": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warteliste verlassen?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leave the waiting list?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Salir de la lista de espera?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quitter la liste d'attente ?"
           }
         }
       }

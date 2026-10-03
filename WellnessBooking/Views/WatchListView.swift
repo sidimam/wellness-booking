@@ -4,6 +4,7 @@ import SwiftUI
 struct WatchListView: View {
     @EnvironmentObject var engine: BookingEngine
     @State private var confirmCancel: (name: String, classId: String, partitionDate: Int)?
+    @State private var confirmLeave: WatchItem?
 
     private var active: [WatchItem] { engine.items.filter { !$0.state.isTerminal } }
     private func bookedByGateway(_ e: ClassEvent) -> Bool {
@@ -69,6 +70,10 @@ struct WatchListView: View {
             }
             Button("Annulla", role: .cancel) {}
         } message: { Text(confirmCancel?.name ?? "") }
+        .alert("Uscire dalla lista d'attesa?", isPresented: .init(get: { confirmLeave != nil }, set: { if !$0 { confirmLeave = nil } })) {
+            Button("Esci dalla lista d'attesa", role: .destructive) { if let it = confirmLeave { Task { await engine.serverLeaveWaitingList(it) } } }
+            Button("Annulla", role: .cancel) {}
+        } message: { Text("Il gateway ti toglie dalla lista d'attesa su mywellness e smette di seguire la lezione. \"Rimuovi\" invece lascia la lista d'attesa com'è e toglie solo il monitoraggio.") }
     }
 
     @ViewBuilder private var header: some View {
@@ -121,7 +126,10 @@ struct WatchListView: View {
     private func row(_ item: WatchItem) -> some View {
         WatchItemRow(item: item, settings: engine.settings, showProfile: engine.isServerMode && engine.profiles.count > 1)
             .swipeActions(edge: .trailing) {
-                Button(role: .destructive) { engine.remove(item) } label: { Label("Rimuovi", systemImage: "trash") }
+                if item.state == .waitingList && engine.isServerMode {
+                    Button(role: .destructive) { confirmLeave = item } label: { Label("Esci dalla lista d'attesa", systemImage: "person.2.slash") }
+                }
+                Button { engine.remove(item) } label: { Label("Rimuovi", systemImage: "trash") }.tint(.gray)
                 if item.recurring {
                     Button { engine.removeRule(of: item) } label: { Label("Stop ricorrenza", systemImage: "repeat.circle") }.tint(.orange)
                 }

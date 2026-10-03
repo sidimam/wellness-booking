@@ -32,3 +32,28 @@ struct ProfileMenu: View {
         }
     }
 }
+
+
+/// Campo password con occhio per mostrare/nascondere (eye / eye.slash).
+struct PasswordField: View {
+    let title: LocalizedStringKey
+    @Binding var text: String
+    var contentType: UITextContentType = .password
+    var monospaced = false
+    @State private var show = false
+    var body: some View {
+        HStack {
+            Group {
+                if show { TextField(title, text: $text).textInputAutocapitalization(.never).autocorrectionDisabled() }
+                else { SecureField(title, text: $text) }
+            }
+            .textContentType(contentType)
+            .font(monospaced ? .footnote.monospaced() : .body)
+            Button { show.toggle() } label: {
+                Image(systemName: show ? "eye.slash" : "eye").foregroundStyle(.secondary)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(show ? Text("Nascondi password") : Text("Mostra password"))
+        }
+    }
+}

@@ -220,6 +220,11 @@ actor GatewayClient {
         _ = try await request("POST", "/profiles/\(profile)/unbook", body: B(classId: classId, partitionDate: partitionDate), as: Empty.self)
     }
 
+    func leaveWaitingList(profile: String, classId: String, partitionDate: Int, removeItem: Bool) async throws {
+        struct B: Encodable { let classId: String; let partitionDate: Int; let removeItem: Bool }
+        _ = try await request("POST", "/profiles/\(profile)/leave-waiting-list", body: B(classId: classId, partitionDate: partitionDate, removeItem: removeItem), as: Empty.self)
+    }
+
     // MARK: Items
     func items(profile: String? = nil) async throws -> [GWItem] {
         try await request("GET", "/items", query: profile.map { ["profile": $0] } ?? [:], as: [GWItem].self)

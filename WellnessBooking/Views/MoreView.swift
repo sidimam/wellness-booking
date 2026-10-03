@@ -58,7 +58,7 @@ struct MoreView: View {
             Section {
                 TextField("Email mywellness", text: $email)
                     .textContentType(.username).keyboardType(.emailAddress).textInputAutocapitalization(.never).autocorrectionDisabled()
-                SecureField("Password", text: $password).textContentType(.password)
+                PasswordField(title: "Password", text: $password)
                 Button {
                     engine.username = email.trimmingCharacters(in: .whitespaces)
                     engine.password = password

@@ -72,7 +72,7 @@ struct WalkthroughView: View {
             Text("Usa email e password dell'account Technogym mywellness con cui prenoti al centro.").font(.footnote).foregroundStyle(.secondary).multilineTextAlignment(.center).padding(.horizontal, 32)
             VStack(spacing: 10) {
                 TextField("Email", text: $email).textContentType(.username).keyboardType(.emailAddress).textInputAutocapitalization(.never).autocorrectionDisabled()
-                SecureField("Password", text: $password).textContentType(.password)
+                PasswordField(title: "Password", text: $password)
             }
             .textFieldStyle(.roundedBorder).padding(.horizontal, 32)
             Button {

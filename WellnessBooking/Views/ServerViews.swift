@@ -16,11 +16,11 @@ struct ServerLoginFields: View {
         TextField("https://booking.manieridimambro.it", text: $url)
             .keyboardType(.URL).textInputAutocapitalization(.never).autocorrectionDisabled().textContentType(.URL)
         TextField("Nome utente del gateway", text: $username).textInputAutocapitalization(.never).autocorrectionDisabled().textContentType(.username)
-        SecureField("Password del gateway", text: $password).textContentType(.password)
+        PasswordField(title: "Password del gateway", text: $password)
         Toggle(isOn: $useAccess.animation()) { Label("Connessione tramite Cloudflare Access", systemImage: "cloud.fill") }
         if useAccess {
             TextField("CF-Access-Client-Id", text: $cfID).textInputAutocapitalization(.never).autocorrectionDisabled().font(.footnote.monospaced())
-            SecureField("CF-Access-Client-Secret", text: $cfSecret).font(.footnote.monospaced())
+            PasswordField(title: "CF-Access-Client-Secret", text: $cfSecret, contentType: .oneTimeCode, monospaced: true)
             Text("Service token dell'applicazione Access che protegge l'indirizzo del gateway (Zero Trust → Access → Service Auth). Inviato come intestazione su ogni richiesta.")
                 .font(.caption).foregroundStyle(.secondary)
         }
@@ -49,7 +49,7 @@ struct CloudflareAccessView: View {
         Form {
             Section {
                 TextField("CF-Access-Client-Id", text: $cfID).textInputAutocapitalization(.never).autocorrectionDisabled().font(.footnote.monospaced())
-                SecureField("CF-Access-Client-Secret", text: $cfSecret).font(.footnote.monospaced())
+                PasswordField(title: "CF-Access-Client-Secret", text: $cfSecret, contentType: .oneTimeCode, monospaced: true)
             } header: { Text("Service token") } footer: {
                 Text("Se l'indirizzo del gateway è protetto da Cloudflare Access, l'app invia queste intestazioni su ogni richiesta (come Unraid Drive). Lascia vuoto per disattivare. I valori restano nel Keychain di questo iPhone.")
             }
@@ -129,7 +129,7 @@ struct ServerProfilesView: View {
                     Section("Account Technogym mywellness") {
                         TextField("Etichetta (es. Daniela)", text: $label)
                         TextField("Email mywellness", text: $email).textContentType(.username).keyboardType(.emailAddress).textInputAutocapitalization(.never).autocorrectionDisabled()
-                        SecureField("Password mywellness", text: $password).textContentType(.password)
+                        PasswordField(title: "Password mywellness", text: $password)
                     }
                     Section("Centro") {
                         TextField("URL centro (es. wellnesstown)", text: $facility).textInputAutocapitalization(.never).autocorrectionDisabled()

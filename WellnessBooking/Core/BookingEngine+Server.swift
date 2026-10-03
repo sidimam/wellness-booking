@@ -177,6 +177,16 @@ extension BookingEngine {
         await refreshServer(force: true)
     }
 
+    func serverLeaveWaitingList(_ item: WatchItem) async {
+        guard let pid = item.profileId else { return }
+        do {
+            try await gateway.leaveWaitingList(profile: pid, classId: item.classId, partitionDate: item.partitionDate, removeItem: true)
+            addLog("Uscita dalla lista d'attesa: \(item.name) \(item.start.itDateTime)", .warn)
+            Haptics.success(enabled: settings.hapticsEnabled)
+        } catch { lastError = error.localizedDescription; addLog("Uscita dalla lista d'attesa fallita: \(error.localizedDescription)", .error) }
+        await refreshServer(force: true)
+    }
+
     func serverAddProfile(label: String, username: String, password: String, facilityUrl: String, maxBookings: Int, isPrivate: Bool, mine: Bool = false) async -> Bool {
         do {
             let p = try await gateway.addProfile(label: label, username: username, password: password, facilityUrl: facilityUrl, maxBookings: maxBookings, isPrivate: isPrivate, mine: mine)
