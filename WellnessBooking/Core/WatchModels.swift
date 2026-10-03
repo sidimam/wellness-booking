@@ -38,6 +38,9 @@ struct AppSettings: Codable, Equatable {
             ?? openRules.first { $0.isDefault }
             ?? OpenRule(pattern: "*", daysBefore: customDaysBefore, hour: customOpenHour, minute: customOpenMinute)
     }
+    func hasSpecificRule(for className: String) -> Bool {
+        openRules.contains { !$0.isDefault && !$0.isEmpty && $0.matches(className) }
+    }
     /// Anticipo in millisecondi rispetto all'orario di apertura (per compensare la latenza).
     var leadMilliseconds: Int = 300
     /// Per quanti secondi insistere (ogni ~1.5 s) subito dopo l'apertura.
@@ -176,7 +179,7 @@ struct WatchItem: Codable, Identifiable, Equatable {
     /// Quando l'app tenterà la prenotazione: orario del centro (se richiesto e disponibile) altrimenti quello impostato.
     func fireAt(settings s: AppSettings) -> Date? {
         if let f = serverFireAt { return f }
-        if !s.useCustomOpenTime, let server = serverOpensOn { return server }
+        if !s.hasSpecificRule(for: name), !s.useCustomOpenTime, let server = serverOpensOn { return server }
         return customFireAt(settings: s)
     }
 }

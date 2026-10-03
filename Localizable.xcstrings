@@ -4,6 +4,34 @@
     "": {
       "shouldTranslate": false
     },
+    " · solo prenotabili online": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": " · nur online buchbare"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": " · bookable online only"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": " · solo reservables en línea"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": " · réservables en ligne seulement"
+          }
+        }
+      }
+    },
     "%@ %@ %@": {
       "shouldTranslate": false
     },
@@ -205,6 +233,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ · %lld cours dans les %lld prochains jours · mis à jour %@"
+          }
+        }
+      }
+    },
+    "%@ · %lld lezioni nei prossimi %lld giorni · aggiornato %@%@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · %lld Kurse in den nächsten %lld Tagen · aktualisiert %@%@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · %lld classes in the next %lld days · updated %@%@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · %lld clases en los próximos %lld días · actualizado %@%@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · %lld cours dans les %lld prochains jours · mis à jour %@%@"
           }
         }
       }
@@ -6329,6 +6385,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tirez vers le bas pour actualiser le planning."
+          }
+        }
+      }
+    },
+    "Scrivi tu il testo da cercare nel nome della lezione (es. Reformer → 3 giorni alle 05:01): una regola con un nome vince sempre. \"Segui l'orario del centro\" riguarda solo le lezioni coperte da *, per cui si usa l'apertura comunicata da mywellness.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du gibst den Text ein, der im Kursnamen gesucht wird (z. B. Reformer → 3 Tage um 05:01): eine benannte Regel gewinnt immer. „Zeitplan des Studios folgen“ betrifft nur Kurse unter *, für die die von mywellness gemeldete Öffnung gilt."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You type the text to look for in the class name (e.g. Reformer → 3 days at 05:01): a named rule always wins. \"Follow the club's schedule\" only concerns classes covered by *, for which the opening time reported by mywellness is used."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tú escribes el texto a buscar en el nombre de la clase (p. ej. Reformer → 3 días a las 05:01): una regla con nombre siempre gana. \"Seguir el horario del centro\" solo afecta a las clases cubiertas por *, para las que se usa la apertura indicada por mywellness."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous saisissez le texte à chercher dans le nom du cours (ex. Reformer → 3 jours à 05:01) : une règle nommée l'emporte toujours. « Suivre l'horaire du club » ne concerne que les cours couverts par *, pour lesquels l'ouverture indiquée par mywellness est utilisée."
           }
         }
       }

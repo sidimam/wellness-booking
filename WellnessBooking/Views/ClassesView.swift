@@ -34,10 +34,10 @@ struct ClassesView: View {
                 Section { Label(err, systemImage: "exclamationmark.triangle").foregroundStyle(.orange) }
             }
             Section {
-                Toggle(isOn: $onlyBookable) { Label("Solo prenotabili online", systemImage: "line.3.horizontal.decrease.circle") }
+                EmptyView()
             } footer: {
                 if let lr = engine.lastRefresh {
-                    Text("\(engine.isServerMode ? (engine.selectedProfile.map { "\($0.label) · \($0.facilityName)" } ?? "Gateway") : engine.settings.facilityName) · \(filtered.count) lezioni nei prossimi \(engine.settings.daysAhead) giorni · aggiornato \(lr.itTime)")
+                    Text("\(engine.isServerMode ? (engine.selectedProfile.map { "\($0.label) · \($0.facilityName)" } ?? "Gateway") : engine.settings.facilityName) · \(filtered.count) lezioni nei prossimi \(engine.settings.daysAhead) giorni · aggiornato \(lr.itTime)\(onlyBookable ? " · solo prenotabili online" : "")")
                 } else { Text("Scorri verso il basso per aggiornare il calendario.") }
                 Text("Tocca una lezione per vedere lo scheduler e attivare la prenotazione automatica; tocca il cerchio per selezionarne più di una.")
             }
@@ -67,6 +67,11 @@ struct ClassesView: View {
             ToolbarItem(placement: .topBarTrailing) {
                 HStack {
                     if engine.isServerMode && engine.profiles.count > 1 && engine.serverUser?.isAdmin == true { ProfileMenu() }
+                    Button { onlyBookable.toggle(); Haptics.tap(enabled: engine.settings.hapticsEnabled) } label: {
+                        Image(systemName: onlyBookable ? "line.3.horizontal.decrease.circle.fill" : "line.3.horizontal.decrease.circle")
+                    }
+                    .accessibilityLabel(Text("Solo prenotabili online"))
+                    .help(Text("Solo prenotabili online"))
                     Button { showAddSheet = true } label: { Text("Aggiungi \(selected.count)").bold() }
                         .disabled(selected.isEmpty)
                 }

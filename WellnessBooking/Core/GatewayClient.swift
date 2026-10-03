@@ -240,10 +240,10 @@ actor GatewayClient {
         return try await request("POST", "/items", body: B(profileId: profile, classId: classId, partitionDate: partitionDate, recurring: recurring), as: GWItem.self)
     }
     func deleteItem(_ id: String, rule: Bool) async throws {
-        _ = try await request("DELETE", "/items/\(id.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? id)", query: rule ? ["rule": "1"] : [:], as: Empty.self)
+        _ = try await request("DELETE", "/items/\(id)", query: rule ? ["rule": "1"] : [:], as: Empty.self)
     }
     func retry(_ id: String) async throws -> GWItem {
-        try await request("POST", "/items/\(id.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? id)/retry", as: GWItem.self)
+        try await request("POST", "/items/\(id)/retry", as: GWItem.self)
     }
 
     // MARK: Impostazioni e registro
