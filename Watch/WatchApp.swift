@@ -116,7 +116,7 @@ struct WatchRootView: View {
     private func color(_ state: String) -> Color {
         switch state {
         case "Prenotata": return .green
-        case "Lista d'attesa", "Watchdog: piena": return .orange
+        case "Lista d'attesa", "Osservazione: piena": return .orange
         case "Prenotazione in corso": return .blue
         case "Errore", "Scaduta": return .red
         default: return .secondary

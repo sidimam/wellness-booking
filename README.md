@@ -2,7 +2,7 @@
 
 App iOS (SwiftUI, iOS 17+) con companion Apple Watch che prenota da sola le lezioni di un centro
 Technogym **mywellness** (es. Wellness Town, Roma) all'apertura delle prenotazioni e, se la classe è
-piena, tiene un **watchdog** che prende al volo i posti che si liberano.
+piena, tiene un **osservazione** che prende al volo i posti che si liberano.
 
 ## Funzioni
 
@@ -12,7 +12,7 @@ piena, tiene un **watchdog** che prende al volo i posti che si liberano.
 - **Scheduler**: prenota nell'istante di apertura (per Wellness Town: 3 giorni prima alle 05:00, letto
   dall'API `bookingOpensOn`), con anticipo configurabile in ms e ritentativi ravvicinati per N secondi.
   Orario personalizzato (ora + giorni prima) in Altro → Scheduler.
-- **Watchdog**: se la classe è piena l'app entra in lista d'attesa (mywellness **non** prenota
+- **Osservazione**: se la classe è piena l'app entra in lista d'attesa (mywellness **non** prenota
   automaticamente dalla lista: avvisa soltanto) e interroga il calendario ogni N secondi, più fitto nelle
   ultime ore utili (la disdetta è possibile fino a 2 h prima). Appena `availablePlaces > 0` chiama `Book`
   e manda una **notifica prioritaria** (Time Sensitive, passa Focus/Non disturbare, arriva su Apple Watch).
@@ -24,7 +24,7 @@ piena, tiene un **watchdog** che prende al volo i posti che si liberano.
 ## Limite iOS da conoscere
 
 iOS non esegue un'app in background a un orario preciso. Per prenotare alle 05:00 in punto e far girare
-il watchdog l'app deve restare **in primo piano** (tiene lo schermo acceso da sola: iPhone in carica,
+il osservazione l'app deve restare **in primo piano** (tiene lo schermo acceso da sola: iPhone in carica,
 app aperta). In background resta solo il *BGAppRefresh* best-effort (iOS decide quando) e un promemoria
 3 minuti prima dell'apertura.
 

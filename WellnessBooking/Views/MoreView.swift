@@ -48,32 +48,33 @@ struct MoreView: View {
                 LabeledContent { Text(engine.settings.facilityName) } label: { Label("Centro", systemImage: "building.2") }
                 TextField("Filtro lezioni predefinito", text: $engine.settings.nameFilter)
                 Stepper("Giorni di calendario: \(engine.settings.daysAhead)", value: $engine.settings.daysAhead, in: 3...30)
+                Stepper("Massimo prenotazioni attive: \(engine.settings.maxActiveBookings)", value: $engine.settings.maxActiveBookings, in: 1...30)
             } header: { Text("Centro") } footer: {
-                Text("L'URL è la parte finale dell'indirizzo del widget: widgets.mywellness.com/facility/‹url›/schedule/…")
+                Text("L'URL è la parte finale dell'indirizzo del widget: widgets.mywellness.com/facility/‹url›/schedule/…\nIl limite di prenotazioni attive è quello imposto dal centro (Wellness Town: 5). Il conteggio include anche le prenotazioni fatte direttamente su mywellness (lette dal calendario con il tuo login): l'app non supera il limite e riprende appena una lezione è passata o viene disdetta.")
             }
 
             Section {
-                Toggle(isOn: $engine.settings.useCustomOpenTime) { Label("Orario personalizzato", systemImage: "clock.badge") }
-                if engine.settings.useCustomOpenTime {
-                    DatePicker("Prenota alle", selection: $openTime, displayedComponents: .hourAndMinute)
-                        .onChange(of: openTime) { _, d in
-                            let c = Calendar.current.dateComponents([.hour, .minute], from: d)
-                            engine.settings.customOpenHour = c.hour ?? 5; engine.settings.customOpenMinute = c.minute ?? 0
-                        }
-                    Stepper("Giorni prima della lezione: \(engine.settings.customDaysBefore)", value: $engine.settings.customDaysBefore, in: 0...14)
+                Stepper("Giorni prima della lezione: \(engine.settings.customDaysBefore)", value: $engine.settings.customDaysBefore, in: 0...14)
+                DatePicker("Ora di apertura", selection: $openTime, displayedComponents: .hourAndMinute)
+                    .onChange(of: openTime) { _, d in
+                        let c = Calendar.current.dateComponents([.hour, .minute], from: d)
+                        engine.settings.customOpenHour = c.hour ?? 5; engine.settings.customOpenMinute = c.minute ?? 0
+                    }
+                Toggle(isOn: .init(get: { !engine.settings.useCustomOpenTime }, set: { engine.settings.useCustomOpenTime = !$0 })) {
+                    Label("Segui l'orario del centro", systemImage: "building.2.crop.circle")
                 }
                 Stepper("Anticipo: \(engine.settings.leadMilliseconds) ms", value: $engine.settings.leadMilliseconds, in: 0...3000, step: 100)
                 Stepper("Insisti per \(engine.settings.burstSeconds) s dopo l'apertura", value: $engine.settings.burstSeconds, in: 10...600, step: 10)
             } header: { Text("Scheduler") } footer: {
                 Text(engine.settings.useCustomOpenTime
-                     ? "L'app prenota \(engine.settings.customDaysBefore) giorni prima alle \(String(format: "%02d:%02d", engine.settings.customOpenHour, engine.settings.customOpenMinute))."
-                     : "Usa l'orario di apertura comunicato dal centro (per Wellness Town: 3 giorni prima alle 05:00). Attiva l'orario personalizzato per cambiarlo.")
+                     ? "L'app prenota \(engine.settings.customDaysBefore) giorni prima della lezione alle \(String(format: "%02d:%02d", engine.settings.customOpenHour, engine.settings.customOpenMinute))."
+                     : "Con \"Segui l'orario del centro\" attivo l'app usa l'apertura comunicata da mywellness per ogni lezione (Wellness Town: 3 giorni prima alle 05:00) e ricade su giorni/ora impostati qui solo se il centro non la comunica. Disattivalo per forzare giorni e ora.")
             }
 
             Section {
                 Stepper("Controlla ogni \(engine.settings.pollSeconds) s", value: $engine.settings.pollSeconds, in: 5...300, step: 5)
                 Toggle(isOn: $engine.settings.keepScreenAwake) { Label("Tieni lo schermo acceso", systemImage: "sun.max") }
-            } header: { Text("Watchdog") } footer: {
+            } header: { Text("Osservazione") } footer: {
                 Text("Quando una classe è piena l'app resta in lista d'attesa e controlla i posti liberi a questo intervallo (più fitto nelle ultime ore utili). Appena si libera un posto prenota e ti avvisa.")
             }
 

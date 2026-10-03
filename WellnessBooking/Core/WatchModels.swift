@@ -5,7 +5,7 @@ struct AppSettings: Codable, Equatable {
     var facilityUrl: String = "wellnesstown"
     var facilityId: String = "3ecba6bf-19b8-476b-953a-d4a7a5ec0faa"
     var facilityName: String = "Wellness Town"
-    var nameFilter: String = "Reformer"
+    var nameFilter: String = ""
     var daysAhead: Int = 14
 
     /// Scheduler: se false usa l'orario di apertura comunicato dal server (bookingOpensOn).
@@ -23,6 +23,9 @@ struct AppSettings: Codable, Equatable {
     /// Se la classe è piena, entrare comunque in lista d'attesa (oltre al watchdog).
     var joinWaitingList: Bool = true
 
+    /// Limite di prenotazioni attive imposto dal centro (Wellness Town: 5).
+    var maxActiveBookings: Int = 5
+
     var keepScreenAwake: Bool = true
     var hapticsEnabled: Bool = true
     var priorityNotifications: Bool = true   // interruptionLevel .timeSensitive
@@ -35,7 +38,7 @@ struct AppSettings: Codable, Equatable {
 enum WatchState: Codable, Equatable {
     case pending          // in attesa dell'orario di apertura
     case bursting         // orario raggiunto, tentativi ravvicinati in corso
-    case watching         // classe piena: watchdog attivo
+    case watching         // classe piena: osservazione attiva
     case waitingList      // in lista d'attesa (+ watchdog)
     case booked
     case failed(String)
@@ -45,7 +48,7 @@ enum WatchState: Codable, Equatable {
         switch self {
         case .pending: return "In attesa"
         case .bursting: return "Prenotazione in corso"
-        case .watching: return "Watchdog: piena"
+        case .watching: return "Osservazione: piena"
         case .waitingList: return "Lista d'attesa"
         case .booked: return "Prenotata"
         case .failed: return "Errore"
@@ -102,14 +105,18 @@ struct WatchItem: Codable, Identifiable, Equatable {
         return "\(name.lowercased())|\(c.weekday ?? 0)|\(c.hour ?? 0):\(c.minute ?? 0)"
     }
 
+    /// Orario di apertura calcolato con le impostazioni (giorni prima + ora).
+    func customFireAt(settings s: AppSettings) -> Date? {
+        var cal = DateParsing.calendar
+        cal.timeZone = DateParsing.rome
+        guard let day = cal.date(byAdding: .day, value: -s.customDaysBefore, to: cal.startOfDay(for: start)) else { return nil }
+        return cal.date(bySettingHour: s.customOpenHour, minute: s.customOpenMinute, second: 0, of: day)
+    }
+
+    /// Quando l'app tenterà la prenotazione: orario del centro (se richiesto e disponibile) altrimenti quello impostato.
     func fireAt(settings s: AppSettings) -> Date? {
-        if s.useCustomOpenTime {
-            var cal = DateParsing.calendar
-            cal.timeZone = DateParsing.rome
-            guard let day = cal.date(byAdding: .day, value: -s.customDaysBefore, to: cal.startOfDay(for: start)) else { return nil }
-            return cal.date(bySettingHour: s.customOpenHour, minute: s.customOpenMinute, second: 0, of: day)
-        }
-        return serverOpensOn
+        if !s.useCustomOpenTime, let server = serverOpensOn { return server }
+        return customFireAt(settings: s)
     }
 }
 

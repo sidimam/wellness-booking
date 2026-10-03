@@ -14,7 +14,7 @@ struct WalkthroughView: View {
             TabView(selection: $page) {
                 pageView(icon: "calendar.badge.checkmark", title: "Wellness Booking",
                          text: "Scegli le lezioni che ti interessano: l'app le prenota da sola all'apertura delle prenotazioni, anche alle 5 del mattino.").tag(0)
-                pageView(icon: "eye.fill", title: "Watchdog",
+                pageView(icon: "eye.fill", title: "Osservazione",
                          text: "Se una classe è piena, l'app entra in lista d'attesa e controlla di continuo i posti: appena qualcuno disdice, prenota al volo e ti avvisa con una notifica prioritaria, anche su Apple Watch.").tag(1)
                 loginPage.tag(2)
             }

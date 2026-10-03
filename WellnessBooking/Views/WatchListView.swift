@@ -16,6 +16,8 @@ struct WatchListView: View {
                         Text(engine.isRunning ? "Motore attivo" : "Motore fermo").font(.headline)
                         Text(engine.isLoggedIn ? "Connessa come \(engine.userName ?? engine.username)" : "Non connessa a mywellness")
                             .font(.caption).foregroundStyle(.secondary)
+                        Text("Prenotazioni attive: \(engine.activeBookingsCount)/\(engine.settings.maxActiveBookings)")
+                            .font(.caption).foregroundStyle(engine.bookingLimitReached ? .orange : .secondary)
                     }
                     Spacer()
                     Button(engine.isRunning ? "Ferma" : "Avvia") { engine.isRunning ? engine.stop() : engine.start() }

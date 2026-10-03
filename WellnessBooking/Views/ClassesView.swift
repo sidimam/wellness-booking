@@ -9,6 +9,7 @@ struct ClassesView: View {
     @State private var showAddSheet = false
     @State private var recurring = false
     @State private var didInit = false
+    @State private var detail: ClassEvent?
 
     private var filtered: [ClassEvent] {
         engine.classes.filter { e in
@@ -38,16 +39,18 @@ struct ClassesView: View {
                 if let lr = engine.lastRefresh {
                     Text("\(engine.settings.facilityName) · \(filtered.count) lezioni nei prossimi \(engine.settings.daysAhead) giorni · aggiornato \(lr.itTime)")
                 } else { Text("Scorri verso il basso per aggiornare il calendario.") }
+                Text("Tocca una lezione per vedere lo scheduler e attivare la prenotazione automatica; tocca il cerchio per selezionarne più di una.")
             }
             ForEach(grouped, id: \.0) { day, events in
                 Section(day.itLongDay) {
-                    ForEach(events) { e in ClassRow(event: e, selected: selected.contains(e.key), tracked: engine.isSelected(e))
-                        .contentShape(Rectangle())
-                        .onTapGesture {
+                    ForEach(events) { e in
+                        ClassRow(event: e, selected: selected.contains(e.key), tracked: engine.isSelected(e)) {
                             guard !engine.isSelected(e) else { return }
                             if selected.contains(e.key) { selected.remove(e.key) } else { selected.insert(e.key) }
                             Haptics.tap(enabled: engine.settings.hapticsEnabled)
                         }
+                        .contentShape(Rectangle())
+                        .onTapGesture { detail = e }
                     }
                 }
             }
@@ -73,12 +76,13 @@ struct ClassesView: View {
             filter = engine.settings.nameFilter
             if engine.classes.isEmpty { await engine.refreshClasses() }
         }
-        .confirmationDialog("Aggiungi \(selected.count) lezioni alle prenotazioni automatiche", isPresented: $showAddSheet, titleVisibility: .visible) {
+        .sheet(item: $detail) { e in ClassDetailView(event: e).environmentObject(engine) }
+        .confirmationDialog(selected.count == 1 ? "Aggiungi la lezione alle prenotazioni automatiche" : "Aggiungi \(selected.count) lezioni alle prenotazioni automatiche", isPresented: $showAddSheet, titleVisibility: .visible) {
             Button("Solo queste date") { add(recurring: false) }
             Button("Ogni settimana (stesso giorno e ora)") { add(recurring: true) }
             Button("Annulla", role: .cancel) {}
         } message: {
-            Text("L'app prenoterà all'apertura delle prenotazioni e, se la classe è piena, attiverà il watchdog per prendere al volo i posti che si liberano.")
+            Text("L'app prenoterà all'apertura delle prenotazioni e, se la classe è piena, attiverà l'osservazione per prendere al volo i posti che si liberano.")
         }
     }
 
@@ -94,6 +98,7 @@ struct ClassRow: View {
     let event: ClassEvent
     let selected: Bool
     let tracked: Bool
+    var onToggle: () -> Void = {}
 
     private var statusText: (String, Color) {
         if event.isParticipant == true { return ("Prenotata", .green) }
@@ -106,9 +111,13 @@ struct ClassRow: View {
 
     var body: some View {
         HStack(alignment: .center, spacing: 12) {
-            Image(systemName: tracked ? "checkmark.circle.fill" : (selected ? "checkmark.circle.fill" : "circle"))
-                .font(.title2)
-                .foregroundStyle(tracked ? Color.secondary : Color.accentColor)
+            Button(action: onToggle) {
+                Image(systemName: tracked ? "checkmark.circle.fill" : (selected ? "checkmark.circle.fill" : "circle"))
+                    .font(.title2)
+                    .foregroundStyle(tracked ? Color.secondary : Color.accentColor)
+                    .frame(width: 36, height: 36)
+            }
+            .buttonStyle(.plain)
             VStack(alignment: .leading, spacing: 3) {
                 HStack {
                     Text("\(event.start.itTime) – \(event.end.itTime)").font(.subheadline.weight(.semibold)).monospacedDigit()

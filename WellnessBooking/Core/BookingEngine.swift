@@ -273,8 +273,8 @@ final class BookingEngine: ObservableObject {
                         wake = min(wake, Date().addingTimeInterval(1.5))
                     } else {
                         items[idx].state = .watching
-                        items[idx].lastMessage = "Finestra di apertura conclusa, passo al watchdog"
-                        addLog("\(item.name) \(item.start.itDateTime): watchdog attivo", .info)
+                        items[idx].lastMessage = "Finestra di apertura conclusa, passo all'osservazione"
+                        addLog("\(item.name) \(item.start.itDateTime): osservazione attiva", .info)
                     }
                 case .watching, .waitingList:
                     let due = nextPoll[item.id] ?? now
@@ -303,11 +303,28 @@ final class BookingEngine: ObservableObject {
         return base
     }
 
+    // MARK: - Limite prenotazioni attive
+
+    /// Prenotazioni attive (future) note: dal calendario (isParticipant) unite agli item prenotati dall'app.
+    var activeBookingsCount: Int {
+        let now = Date()
+        var keys = Set(classes.filter { $0.isParticipant == true && $0.start > now }.map(\.key))
+        for it in items where it.state == .booked && it.start > now { keys.insert(it.id) }
+        return keys.count
+    }
+    var bookingLimitReached: Bool { activeBookingsCount >= max(1, settings.maxActiveBookings) }
+
     // MARK: - Tentativo di prenotazione
 
     private func attempt(index idx: Int, reason: String) async {
         guard idx < items.count else { return }
         let item = items[idx]
+        if bookingLimitReached {
+            items[idx].lastMessage = "Limite di \(settings.maxActiveBookings) prenotazioni attive raggiunto: riprovo quando se ne libera una"
+            if items[idx].attempts == 0 { addLog("\(item.name) \(item.start.itDateTime): limite prenotazioni (\(activeBookingsCount)/\(settings.maxActiveBookings)) raggiunto", .warn) }
+            items[idx].attempts += 1
+            return
+        }
         items[idx].attempts += 1
         items[idx].lastCheck = Date()
         do {
@@ -332,13 +349,13 @@ final class BookingEngine: ObservableObject {
         case .waitingList:
             if item.state != .waitingList {
                 items[idx].state = .waitingList
-                addLog("\(item.name) \(item.start.itDateTime): classe piena, sei in lista d'attesa. Watchdog attivo.", .warn)
-                Notifier.shared.notify(title: "Lista d'attesa", body: "\(item.name) \(item.start.itDateTime) è piena: watchdog attivo, prenoto appena si libera un posto.", priority: false)
+                addLog("\(item.name) \(item.start.itDateTime): classe piena, sei in lista d'attesa. Osservazione attiva.", .warn)
+                Notifier.shared.notify(title: "Lista d'attesa", body: "\(item.name) \(item.start.itDateTime) è piena: osservazione attiva, prenoto appena si libera un posto.", priority: false)
             }
         case .full:
             if item.state != .watching && item.state != .waitingList {
                 items[idx].state = .watching
-                addLog("\(item.name) \(item.start.itDateTime): piena, watchdog attivo", .warn)
+                addLog("\(item.name) \(item.start.itDateTime): piena, osservazione attiva", .warn)
             }
         case .notOpenYet(let m):
             items[idx].lastMessage = "Non ancora aperta (\(m))"
