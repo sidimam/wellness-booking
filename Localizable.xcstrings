@@ -6755,6 +6755,34 @@
         }
       }
     },
+    "io": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ich"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "me"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "yo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "moi"
+          }
+        }
+      }
+    },
     "non configurato": {
       "localizations": {
         "de": {
@@ -6807,6 +6835,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "tout de suite (déjà ouvert)"
+          }
+        }
+      }
+    },
+    "È il mio account mywellness": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Es ist mein mywellness-Konto"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "It is my mywellness account"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Es mi cuenta mywellness"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "C'est mon compte mywellness"
           }
         }
       }

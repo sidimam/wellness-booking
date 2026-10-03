@@ -18,6 +18,7 @@ struct GWProfile: Codable, Identifiable, Equatable {
     var facilityId: String
     var facilityName: String
     var maxBookings: Int
+    var userId: String?
     var ownerUserIds: [String]?
     var lastLoginAt: Date?
     var lastLoginError: String?
@@ -173,7 +174,7 @@ actor GatewayClient {
         return r
     }
     func logout() async { _ = try? await request("POST", "/auth/logout", as: Empty.self); token = nil }
-    struct Me: Decodable { var user: GWUser; var version: String; var push: Bool }
+    struct Me: Decodable { var user: GWUser; var version: String; var push: Bool; var myProfileId: String? }
     func me() async throws -> Me { try await request("GET", "/me", as: Me.self) }
     func registerAPNS(token t: String) async throws { struct B: Encodable { let token: String }; _ = try await request("POST", "/devices/apns", body: B(token: t), as: Empty.self) }
     func testNotification() async throws -> Int { struct R: Decodable { var sent: Int }; return try await request("POST", "/devices/test-notification", as: R.self).sent }
@@ -181,9 +182,9 @@ actor GatewayClient {
 
     // MARK: Profili
     func profiles() async throws -> [GWProfile] { try await request("GET", "/profiles", as: [GWProfile].self) }
-    func addProfile(label: String, username: String, password: String, facilityUrl: String, maxBookings: Int, isPrivate: Bool) async throws -> GWProfile {
-        struct B: Encodable { let label, username, password, facilityUrl: String; let maxBookings: Int; let `private`: Bool }
-        return try await request("POST", "/profiles", body: B(label: label, username: username, password: password, facilityUrl: facilityUrl, maxBookings: maxBookings, private: isPrivate), as: GWProfile.self)
+    func addProfile(label: String, username: String, password: String, facilityUrl: String, maxBookings: Int, isPrivate: Bool, mine: Bool) async throws -> GWProfile {
+        struct B: Encodable { let label, username, password, facilityUrl: String; let maxBookings: Int; let `private`: Bool; let mine: Bool }
+        return try await request("POST", "/profiles", body: B(label: label, username: username, password: password, facilityUrl: facilityUrl, maxBookings: maxBookings, private: isPrivate, mine: mine), as: GWProfile.self)
     }
     func deleteProfile(_ id: String) async throws { _ = try await request("DELETE", "/profiles/\(id)", as: Empty.self) }
     func relogin(_ id: String) async throws -> GWProfile { try await request("POST", "/profiles/\(id)/relogin", as: GWProfile.self) }

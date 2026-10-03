@@ -34,6 +34,7 @@ struct ServerProfilesView: View {
     @State private var facility = "wellnesstown"
     @State private var maxBookings = 5
     @State private var isPrivate = false
+    @State private var mine = false
     @State private var busy = false
     @State private var confirmDelete: GWProfile?
 
@@ -44,6 +45,7 @@ struct ServerProfilesView: View {
                     VStack(alignment: .leading, spacing: 3) {
                         HStack {
                             Text(p.label).font(.body.weight(.semibold))
+                            if p.userId == engine.serverUser?.id { Text("io").font(.caption2.bold()).padding(.horizontal, 6).padding(.vertical, 1).background(Color.accentColor.opacity(0.15)).clipShape(Capsule()) }
                             if p.ownerUserIds?.isEmpty == false { Image(systemName: "lock").font(.caption).foregroundStyle(.secondary) }
                             Spacer()
                             Text("\(p.activeBookings)/\(p.maxBookings)").font(.caption.monospacedDigit()).foregroundStyle(p.activeBookings >= p.maxBookings ? .orange : .secondary)
@@ -82,6 +84,7 @@ struct ServerProfilesView: View {
                         TextField("URL centro (es. wellnesstown)", text: $facility).textInputAutocapitalization(.never).autocorrectionDisabled()
                         Stepper("Massimo prenotazioni attive: \(maxBookings)", value: $maxBookings, in: 1...30)
                         Toggle("Visibile solo a me", isOn: $isPrivate)
+                        Toggle("È il mio account mywellness", isOn: $mine)
                     }
                     if let e = engine.lastError { Text(e).font(.footnote).foregroundStyle(.red) }
                 }
@@ -93,7 +96,7 @@ struct ServerProfilesView: View {
                         Button {
                             busy = true
                             Task {
-                                if await engine.serverAddProfile(label: label, username: email, password: password, facilityUrl: facility, maxBookings: maxBookings, isPrivate: isPrivate) {
+                                if await engine.serverAddProfile(label: label, username: email, password: password, facilityUrl: facility, maxBookings: maxBookings, isPrivate: isPrivate, mine: mine) {
                                     showAdd = false; label = ""; email = ""; password = ""
                                 }
                                 busy = false

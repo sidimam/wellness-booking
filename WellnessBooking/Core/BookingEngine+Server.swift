@@ -81,7 +81,8 @@ extension BookingEngine {
         do {
             profiles = try await gateway.profiles()
             if settings.selectedProfileID.isEmpty || !profiles.contains(where: { $0.id == settings.selectedProfileID }) {
-                settings.selectedProfileID = profiles.first?.id ?? ""
+                // profilo personale della persona collegata, altrimenti il primo
+                settings.selectedProfileID = profiles.first { $0.userId == serverUser?.id }?.id ?? profiles.first?.id ?? ""
             }
             let labels = Dictionary(uniqueKeysWithValues: profiles.map { ($0.id, $0.label) })
             let gwItems = try await gateway.items()
@@ -137,9 +138,9 @@ extension BookingEngine {
         await refreshServer(force: true)
     }
 
-    func serverAddProfile(label: String, username: String, password: String, facilityUrl: String, maxBookings: Int, isPrivate: Bool) async -> Bool {
+    func serverAddProfile(label: String, username: String, password: String, facilityUrl: String, maxBookings: Int, isPrivate: Bool, mine: Bool = false) async -> Bool {
         do {
-            let p = try await gateway.addProfile(label: label, username: username, password: password, facilityUrl: facilityUrl, maxBookings: maxBookings, isPrivate: isPrivate)
+            let p = try await gateway.addProfile(label: label, username: username, password: password, facilityUrl: facilityUrl, maxBookings: maxBookings, isPrivate: isPrivate, mine: mine)
             addLog("Profilo \(p.label) aggiunto al gateway", .success)
             settings.selectedProfileID = p.id
             await refreshServer(force: true)
