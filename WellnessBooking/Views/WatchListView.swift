@@ -53,7 +53,7 @@ struct WatchListView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 HStack {
-                    if engine.isServerMode && engine.profiles.count > 1 { ProfileMenu() }
+                    if engine.isServerMode && engine.profiles.count > 1 && engine.serverUser?.isAdmin == true { ProfileMenu() }
                     Button { Task { await engine.refreshClasses() } } label: { Image(systemName: "arrow.clockwise") }
                 }
             }
@@ -80,11 +80,16 @@ struct WatchListView: View {
         if engine.isServerMode {
             Section {
                 HStack(spacing: 10) {
-                    Circle().fill(engine.serverOnline == true ? Color.green : (engine.serverOnline == false ? Color.red : Color.secondary)).frame(width: 10, height: 10)
+                    ZStack(alignment: .bottomTrailing) {
+                        ProfileAvatar(profile: engine.selectedProfile, size: 44)
+                        Circle().fill(engine.serverOnline == true ? Color.green : (engine.serverOnline == false ? Color.red : Color.secondary)).frame(width: 12, height: 12)
+                            .overlay(Circle().stroke(Color(.systemBackground), lineWidth: 2))
+                    }
                     VStack(alignment: .leading, spacing: 2) {
                         Text(engine.serverOnline == false ? "Gateway non raggiungibile" : "Gateway online\(engine.serverVersion.isEmpty ? "" : " · v\(engine.serverVersion)")")
                             .font(.subheadline.weight(.semibold))
                         if let p = engine.selectedProfile {
+                            if let n = p.displayName, !n.isEmpty, n != p.label { Text(n).font(.caption).foregroundStyle(.secondary) }
                             Text("\(p.label): prenotazioni attive \(p.activeBookings)/\(p.maxBookings)")
                                 .font(.caption).foregroundStyle(p.activeBookings >= p.maxBookings ? .orange : .secondary)
                             if p.userId != engine.serverUser?.id {
@@ -124,7 +129,7 @@ struct WatchListView: View {
 
     @ViewBuilder
     private func row(_ item: WatchItem) -> some View {
-        WatchItemRow(item: item, settings: engine.settings, showProfile: engine.isServerMode && engine.profiles.count > 1)
+        WatchItemRow(item: item, settings: engine.settings, showProfile: engine.isServerMode && engine.profiles.count > 1 && engine.serverUser?.isAdmin == true)
             .swipeActions(edge: .trailing) {
                 if item.state == .waitingList && engine.isServerMode {
                     Button(role: .destructive) { confirmLeave = item } label: { Label("Esci dalla lista d'attesa", systemImage: "person.2.slash") }

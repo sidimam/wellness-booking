@@ -23,7 +23,16 @@ struct MoreView: View {
         Form {
             Section {
                 if engine.isServerMode {
-                    LabeledContent { Text(engine.gatewayHostLabel).foregroundStyle(.green).multilineTextAlignment(.trailing) } label: { Label("Collegata", systemImage: "server.rack") }
+                    HStack(spacing: 12) {
+                        ProfileAvatar(profile: engine.profiles.first { $0.userId == engine.serverUser?.id }, size: 44)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(engine.serverUser?.displayName ?? "").font(.body.weight(.semibold))
+                            if let p = engine.profiles.first(where: { $0.userId == engine.serverUser?.id }) {
+                                Text(p.email ?? p.username).font(.caption).foregroundStyle(.secondary)
+                            }
+                            Text(engine.gatewayHostLabel).font(.caption2).foregroundStyle(.green)
+                        }
+                    }
                     LabeledContent {
                         HStack(spacing: 6) {
                             Circle().fill(engine.serverOnline == true ? Color.green : (engine.serverOnline == false ? Color.red : Color.secondary)).frame(width: 9, height: 9)
@@ -35,7 +44,7 @@ struct MoreView: View {
                     if let s = engine.serverStatus {
                         LabeledContent { Text("avviato \(s.startedAt.itDateTime) · prossimo controllo \(s.nextWake.itTime)").font(.caption).foregroundStyle(.secondary).multilineTextAlignment(.trailing) } label: { Label("Motore", systemImage: "bolt") }
                     }
-                    NavigationLink { ServerProfilesView() } label: { Label("Profili mywellness (\(engine.profiles.count))", systemImage: "person.2") }
+                    NavigationLink { ServerProfilesView() } label: { Label(engine.serverUser?.isAdmin == true ? "Profili mywellness (\(engine.profiles.count))" : "Il mio profilo mywellness", systemImage: engine.serverUser?.isAdmin == true ? "person.2" : "person") }
                     NavigationLink { ServerSettingsView() } label: { Label("Scheduler e osservazione", systemImage: "clock.badge") }
                     NavigationLink { CloudflareAccessView() } label: {
                         LabeledContent { Text(engine.cfAccessClientID.isEmpty ? "No" : "Attivo").foregroundStyle(.secondary) } label: { Label("Cloudflare Access", systemImage: "cloud.fill") }

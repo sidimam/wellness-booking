@@ -14,6 +14,12 @@ struct GWProfile: Codable, Identifiable, Equatable {
     var label: String
     var username: String
     var displayName: String?
+    var firstName: String?
+    var lastName: String?
+    var nickName: String?
+    var email: String?
+    var pictureUrl: String?
+    var thumbUrl: String?
     var facilityUrl: String
     var facilityId: String
     var facilityName: String

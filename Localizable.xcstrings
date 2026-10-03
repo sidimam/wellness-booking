@@ -2829,6 +2829,34 @@
         }
       }
     },
+    "Il mio profilo mywellness": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mein mywellness-Profil"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "My mywellness profile"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mi perfil mywellness"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mon profil mywellness"
+          }
+        }
+      }
+    },
     "Il server ha risposto con una pagina web (proxy o Cloudflare Access?)": {
       "localizations": {
         "de": {

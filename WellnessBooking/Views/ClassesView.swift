@@ -66,7 +66,7 @@ struct ClassesView: View {
             }
             ToolbarItem(placement: .topBarTrailing) {
                 HStack {
-                    if engine.isServerMode && engine.profiles.count > 1 { ProfileMenu() }
+                    if engine.isServerMode && engine.profiles.count > 1 && engine.serverUser?.isAdmin == true { ProfileMenu() }
                     Button { showAddSheet = true } label: { Text("Aggiungi \(selected.count)").bold() }
                         .disabled(selected.isEmpty)
                 }

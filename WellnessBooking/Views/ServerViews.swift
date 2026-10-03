@@ -93,6 +93,8 @@ struct ServerProfilesView: View {
             }
             Section {
                 ForEach(engine.profiles) { p in
+                    HStack(spacing: 12) {
+                    ProfileAvatar(profile: p, size: 44)
                     VStack(alignment: .leading, spacing: 3) {
                         HStack {
                             Text(p.label).font(.body.weight(.semibold))
@@ -101,9 +103,11 @@ struct ServerProfilesView: View {
                             Spacer()
                             Text("\(p.activeBookings)/\(p.maxBookings)").font(.caption.monospacedDigit()).foregroundStyle(p.activeBookings >= p.maxBookings ? .orange : .secondary)
                         }
+                        if let n = p.displayName, !n.isEmpty { Text(n + (p.nickName.map { " · \($0)" } ?? "")).font(.caption).foregroundStyle(.secondary) }
                         Text("\(p.username) · \(p.facilityName)").font(.caption).foregroundStyle(.secondary)
                         if let e = p.lastLoginError, !e.isEmpty { Text(e).font(.caption).foregroundStyle(.red) }
                         else if let d = p.lastLoginAt { Text("Login ok \(d.itDateTime)").font(.caption2).foregroundStyle(.green) }
+                    }
                     }
                     .swipeActions(edge: .trailing) {
                         Button(role: .destructive) { confirmDelete = p } label: { Label("Rimuovi", systemImage: "trash") }

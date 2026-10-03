@@ -28,7 +28,10 @@ struct ProfileMenu: View {
                 }
             }
         } label: {
-            Label(engine.selectedProfile?.label ?? "Profilo", systemImage: "person.crop.circle")
+            HStack(spacing: 6) {
+                ProfileAvatar(profile: engine.selectedProfile, size: 24)
+                Text(engine.selectedProfile?.label ?? "Profilo")
+            }
         }
     }
 }
@@ -54,6 +57,28 @@ struct PasswordField: View {
             }
             .buttonStyle(.plain)
             .accessibilityLabel(show ? Text("Nascondi password") : Text("Mostra password"))
+        }
+    }
+}
+
+
+/// Avatar del profilo mywellness (foto o iniziale).
+struct ProfileAvatar: View {
+    let profile: GWProfile?
+    var size: CGFloat = 36
+    var body: some View {
+        Group {
+            if let u = profile?.thumbUrl ?? profile?.pictureUrl, let url = URL(string: u) {
+                AsyncImage(url: url) { img in img.resizable().scaledToFill() } placeholder: { initial }
+            } else { initial }
+        }
+        .frame(width: size, height: size)
+        .clipShape(Circle())
+    }
+    private var initial: some View {
+        ZStack {
+            Circle().fill(Color.accentColor)
+            Text(String((profile?.label ?? "?").prefix(1)).uppercased()).font(.system(size: size / 2.2, weight: .bold)).foregroundStyle(.white)
         }
     }
 }
