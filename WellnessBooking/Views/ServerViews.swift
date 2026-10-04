@@ -202,7 +202,7 @@ struct ServerSettingsView: View {
                 Text("Scrivi tu il testo da cercare nel nome della lezione (es. Reformer → 3 giorni alle 05:01, massimo 3 prenotazioni attive). L'ora viene sempre dalla regola; con \"Segui l'orario del centro\" il giorno di apertura è quello comunicato da mywellness. \"Max prenotazioni\" limita le prenotazioni attive di quel tipo di lezione, oltre al limite del profilo.")
             }
             Section {
-                Stepper("Controlla ogni \(s.pollSeconds) s", value: $s.pollSeconds, in: 5...300, step: 5)
+                Stepper("Controlla ogni \(s.pollSeconds) s", value: $s.pollSeconds, in: 15...300, step: 5)
                 Stepper("Giorni di calendario: \(s.daysAhead)", value: $s.daysAhead, in: 3...30)
                 Toggle(isOn: $s.priorityNotifications) { Label("Notifiche prioritarie", systemImage: "bell.badge") }
             } header: { Text("Osservazione") } footer: {
