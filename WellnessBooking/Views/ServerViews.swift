@@ -183,6 +183,9 @@ struct ServerSettingsView: View {
                             Image(systemName: r.pattern == "*" ? "asterisk.circle" : "textformat").foregroundStyle(.secondary)
                             TextField("Nome lezione (es. Reformer)", text: $r.pattern).textInputAutocapitalization(.never).autocorrectionDisabled().disabled(r.pattern == "*")
                         }
+                        if r.pattern != "*" {
+                            Stepper(r.maxBookings == 0 ? "Max prenotazioni: solo limite profilo" : "Max prenotazioni: \(r.maxBookings)", value: $r.maxBookings, in: 0...20)
+                        }
                         HStack {
                             Stepper("Giorni prima: \(r.daysBefore)", value: $r.daysBefore, in: 0...30)
                             DatePicker("", selection: .init(get: { Calendar.current.date(bySettingHour: r.hour, minute: r.minute, second: 0, of: Date()) ?? Date() },
@@ -196,7 +199,7 @@ struct ServerSettingsView: View {
                 Stepper("Anticipo: \(s.leadMilliseconds) ms", value: $s.leadMilliseconds, in: 0...3000, step: 100)
                 Stepper("Insisti per \(s.burstSeconds) s dopo l'apertura", value: $s.burstSeconds, in: 10...600, step: 10)
             } header: { Text("Scheduler") } footer: {
-                Text("Scrivi tu il testo da cercare nel nome della lezione (es. Reformer → 3 giorni alle 05:01): una regola con un nome vince sempre. \"Segui l'orario del centro\" riguarda solo le lezioni coperte da *, per cui si usa l'apertura comunicata da mywellness.")
+                Text("Scrivi tu il testo da cercare nel nome della lezione (es. Reformer → 3 giorni alle 05:01, massimo 3 prenotazioni attive). L'ora viene sempre dalla regola; con \"Segui l'orario del centro\" il giorno di apertura è quello comunicato da mywellness. \"Max prenotazioni\" limita le prenotazioni attive di quel tipo di lezione, oltre al limite del profilo.")
             }
             Section {
                 Stepper("Controlla ogni \(s.pollSeconds) s", value: $s.pollSeconds, in: 5...300, step: 5)

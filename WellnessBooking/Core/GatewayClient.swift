@@ -26,6 +26,7 @@ struct GWProfile: Codable, Identifiable, Equatable {
     var maxBookings: Int
     var userId: String?
     var ownerUserIds: [String]?
+    var limits: [GWLimit]?
     var lastLoginAt: Date?
     var lastLoginError: String?
     var activeBookings: Int
@@ -37,6 +38,14 @@ struct GWOpenRule: Codable, Identifiable, Equatable {
     var daysBefore: Int
     var hour: Int
     var minute: Int
+    var maxBookings: Int = 0
+}
+
+struct GWLimit: Codable, Equatable, Identifiable {
+    var id: String { pattern }
+    var pattern: String
+    var active: Int
+    var max: Int
 }
 
 struct GWSettings: Codable, Equatable {

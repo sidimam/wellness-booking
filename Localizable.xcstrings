@@ -268,6 +268,34 @@
     "%@ – %@": {
       "shouldTranslate": false
     },
+    "%@: %lld/%lld": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: %lld/%lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: %lld/%lld"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: %lld/%lld"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ : %lld/%lld"
+          }
+        }
+      }
+    },
     "%@: prenotazioni attive %lld/%lld": {
       "localizations": {
         "de": {
@@ -3727,6 +3755,62 @@
         }
       }
     },
+    "Max prenotazioni: %lld": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Max. Buchungen: %lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Max bookings: %lld"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Máx. reservas: %lld"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réservations max : %lld"
+          }
+        }
+      }
+    },
+    "Max prenotazioni: solo limite profilo": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Max. Buchungen: nur Profil-Limit"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Max bookings: profile limit only"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Máx. reservas: solo límite del perfil"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réservations max : limite du profil seulement"
+          }
+        }
+      }
+    },
     "Mostra password": {
       "localizations": {
         "de": {
@@ -6413,6 +6497,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "Vous saisissez le texte à chercher dans le nom du cours (ex. Reformer → 3 jours à 05:01) : une règle nommée l'emporte toujours. « Suivre l'horaire du club » ne concerne que les cours couverts par *, pour lesquels l'ouverture indiquée par mywellness est utilisée."
+          }
+        }
+      }
+    },
+    "Scrivi tu il testo da cercare nel nome della lezione (es. Reformer → 3 giorni alle 05:01, massimo 3 prenotazioni attive). L'ora viene sempre dalla regola; con \"Segui l'orario del centro\" il giorno di apertura è quello comunicato da mywellness. \"Max prenotazioni\" limita le prenotazioni attive di quel tipo di lezione, oltre al limite del profilo.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du gibst den Text ein, der im Kursnamen gesucht wird (z. B. Reformer → 3 Tage um 05:01, max. 3 aktive Buchungen). Die Uhrzeit kommt immer aus der Regel; mit „Zeitplan des Studios folgen“ ist der Öffnungstag der von mywellness gemeldete. „Max. Buchungen“ begrenzt aktive Buchungen dieser Kursart zusätzlich zum Profil-Limit."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You type the text to look for in the class name (e.g. Reformer → 3 days at 05:01, max 3 active bookings). The time always comes from the rule; with \"Follow the club's schedule\" the opening day is the one reported by mywellness. \"Max bookings\" limits active bookings of that kind of class, besides the profile limit."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tú escribes el texto a buscar en el nombre de la clase (p. ej. Reformer → 3 días a las 05:01, máximo 3 reservas activas). La hora viene siempre de la regla; con \"Seguir el horario del centro\" el día de apertura es el indicado por mywellness. \"Máx. reservas\" limita las reservas activas de ese tipo de clase, además del límite del perfil."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous saisissez le texte à chercher dans le nom du cours (ex. Reformer → 3 jours à 05:01, 3 réservations actives max). L'heure vient toujours de la règle ; avec « Suivre l'horaire du club » le jour d'ouverture est celui indiqué par mywellness. « Réservations max » limite les réservations actives de ce type de cours, en plus de la limite du profil."
           }
         }
       }

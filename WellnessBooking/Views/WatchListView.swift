@@ -92,6 +92,9 @@ struct WatchListView: View {
                             if let n = p.displayName, !n.isEmpty, n != p.label { Text(n).font(.caption).foregroundStyle(.secondary) }
                             Text("\(p.label): prenotazioni attive \(p.activeBookings)/\(p.maxBookings)")
                                 .font(.caption).foregroundStyle(p.activeBookings >= p.maxBookings ? .orange : .secondary)
+                            ForEach(p.limits ?? []) { l in
+                                Text("\(l.pattern): \(l.active)/\(l.max)").font(.caption).foregroundStyle(l.active >= l.max ? .orange : .secondary)
+                            }
                             if p.userId != engine.serverUser?.id {
                                 Text("Stai vedendo il profilo di \(p.label) (scelto dal menu profilo).").font(.caption2).foregroundStyle(.orange)
                             }

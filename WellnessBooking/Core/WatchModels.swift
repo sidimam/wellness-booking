@@ -179,7 +179,11 @@ struct WatchItem: Codable, Identifiable, Equatable {
     /// Quando l'app tenterà la prenotazione: orario del centro (se richiesto e disponibile) altrimenti quello impostato.
     func fireAt(settings s: AppSettings) -> Date? {
         if let f = serverFireAt { return f }
-        if !s.hasSpecificRule(for: name), !s.useCustomOpenTime, let server = serverOpensOn { return server }
+        let r = s.rule(for: name)
+        var cal = DateParsing.calendar; cal.timeZone = DateParsing.rome
+        if !s.useCustomOpenTime, let server = serverOpensOn {
+            return cal.date(bySettingHour: r.hour, minute: r.minute, second: 0, of: server)
+        }
         return customFireAt(settings: s)
     }
 }
