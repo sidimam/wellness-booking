@@ -20,7 +20,8 @@ extension BookingEngine {
     }
     var gatewayHostLabel: String {
         let host = URL(string: settings.serverURL)?.host ?? settings.serverURL
-        return "\(host) · \(serverUser?.displayName ?? serverUsername)\(serverVersion.isEmpty ? "" : " · v\(serverVersion)")"
+        let v = serverVersion.hasPrefix("v") ? serverVersion : "v" + serverVersion
+        return "\(host) · \(serverUser?.displayName ?? serverUsername)\(serverVersion.isEmpty ? "" : " · \(v)")"
     }
 
     func restoreServer() async {

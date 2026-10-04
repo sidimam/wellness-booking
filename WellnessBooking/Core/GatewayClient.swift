@@ -204,8 +204,8 @@ actor GatewayClient {
     // MARK: Auth
     struct LoginResponse: Decodable { var token: String; var user: GWUser; var version: String?; var push: Bool? }
     func login(username: String, password: String, deviceName: String) async throws -> LoginResponse {
-        struct B: Encodable { let username, password, deviceName: String }
-        let r = try await request("POST", "/auth/login", body: B(username: username, password: password, deviceName: deviceName), auth: false, as: LoginResponse.self)
+        struct B: Encodable { let username, password, deviceName: String; let selfOnly: Bool }
+        let r = try await request("POST", "/auth/login", body: B(username: username, password: password, deviceName: deviceName, selfOnly: true), auth: false, as: LoginResponse.self)
         token = r.token
         return r
     }

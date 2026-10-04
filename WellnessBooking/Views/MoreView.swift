@@ -40,6 +40,10 @@ struct MoreView: View {
                                 .foregroundStyle(engine.serverOnline == false ? .red : .secondary)
                         }
                     } label: { Label("Container", systemImage: "shippingbox") }
+                    if let p = engine.selectedProfile {
+                        LabeledContent { Text("\(p.activeBookings)/\(p.maxBookings)" + (p.limits ?? []).map { " · \($0.pattern) \($0.active)/\($0.max)" }.joined()).foregroundStyle(.secondary) } label: { Label("Prenotazioni attive", systemImage: "checkmark.circle") }
+                    }
+                    if let d = engine.serverLastSeen { LabeledContent { Text(d.itTime).foregroundStyle(.secondary) } label: { Label("Ultimo contatto", systemImage: "clock") } }
                     Button { Task { await engine.refreshServer(force: true) } } label: { Label("Verifica ora", systemImage: "arrow.clockwise") }
                     if let s = engine.serverStatus {
                         LabeledContent { Text("avviato \(s.startedAt.itDateTime) · prossimo controllo \(s.nextWake.itTime)").font(.caption).foregroundStyle(.secondary).multilineTextAlignment(.trailing) } label: { Label("Motore", systemImage: "bolt") }

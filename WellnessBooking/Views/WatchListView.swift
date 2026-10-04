@@ -38,7 +38,13 @@ struct WatchListView: View {
                         }
                     }
                 } header: { Text("Prenotate su mywellness · \(engine.selectedProfile?.label ?? "")") } footer: {
-                    Text("Tutte le prenotazioni attive del profilo, fatte dal gateway o dall'app/sito Technogym. Scorri a sinistra per disdire.")
+                    VStack(alignment: .leading, spacing: 2) {
+                        if let p = engine.selectedProfile {
+                            Text("Prenotazioni attive \(p.activeBookings)/\(p.maxBookings)" + (p.limits ?? []).map { " · \($0.pattern) \($0.active)/\($0.max)" }.joined())
+                                .foregroundStyle(p.activeBookings >= p.maxBookings ? .orange : .secondary)
+                        }
+                        Text("Tutte le prenotazioni attive del profilo, fatte dal gateway o dall'app/sito Technogym. Scorri a sinistra per disdire.")
+                    }
                 }
             }
             if active.isEmpty && done.isEmpty {
@@ -78,34 +84,12 @@ struct WatchListView: View {
 
     @ViewBuilder private var header: some View {
         if engine.isServerMode {
-            Section {
-                HStack(spacing: 10) {
-                    ZStack(alignment: .bottomTrailing) {
-                        ProfileAvatar(profile: engine.selectedProfile, size: 44)
-                        Circle().fill(engine.serverOnline == true ? Color.green : (engine.serverOnline == false ? Color.red : Color.secondary)).frame(width: 12, height: 12)
-                            .overlay(Circle().stroke(Color(.systemBackground), lineWidth: 2))
-                    }
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(engine.serverOnline == false ? "Gateway non raggiungibile" : "Gateway online\(engine.serverVersion.isEmpty ? "" : " · v\(engine.serverVersion)")")
-                            .font(.subheadline.weight(.semibold))
-                        if let p = engine.selectedProfile {
-                            if let n = p.displayName, !n.isEmpty, n != p.label { Text(n).font(.caption).foregroundStyle(.secondary) }
-                            Text("\(p.label): prenotazioni attive \(p.activeBookings)/\(p.maxBookings)")
-                                .font(.caption).foregroundStyle(p.activeBookings >= p.maxBookings ? .orange : .secondary)
-                            ForEach(p.limits ?? []) { l in
-                                Text("\(l.pattern): \(l.active)/\(l.max)").font(.caption).foregroundStyle(l.active >= l.max ? .orange : .secondary)
-                            }
-                            if p.userId != engine.serverUser?.id {
-                                Text("Stai vedendo il profilo di \(p.label) (scelto dal menu profilo).").font(.caption2).foregroundStyle(.orange)
-                            }
-                        } else {
-                            Text("Nessun profilo mywellness: collega il tuo account in Altro → Profili mywellness.").font(.caption).foregroundStyle(.orange)
-                        }
-                    }
-                    Spacer()
-                    if let d = engine.serverLastSeen { Text(d.itTime).font(.caption2).foregroundStyle(.tertiary) }
+            if engine.serverOnline == false || engine.lastError != nil || engine.selectedProfile == nil {
+                Section {
+                    if engine.serverOnline == false { Label("Gateway non raggiungibile", systemImage: "wifi.exclamationmark").foregroundStyle(.red) }
+                    if let e = engine.lastError { Label(e, systemImage: "exclamationmark.triangle").font(.footnote).foregroundStyle(.orange) }
+                    if engine.selectedProfile == nil { Text("Nessun profilo mywellness: collega il tuo account in Altro → Profili mywellness.").font(.footnote).foregroundStyle(.orange) }
                 }
-                if let e = engine.lastError { Label(e, systemImage: "exclamationmark.triangle").font(.footnote).foregroundStyle(.orange) }
             }
         } else {
             Section {

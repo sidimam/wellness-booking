@@ -383,6 +383,34 @@
     "%lld/%lld": {
       "shouldTranslate": false
     },
+    "%lld/%lld%@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld/%lld%@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld/%lld%@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld/%lld%@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld/%lld%@"
+          }
+        }
+      }
+    },
     "Accedi a mywellness": {
       "localizations": {
         "de": {
@@ -5408,6 +5436,62 @@
         }
       }
     },
+    "Prenotazioni attive": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktive Buchungen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active bookings"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reservas activas"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réservations actives"
+          }
+        }
+      }
+    },
+    "Prenotazioni attive %lld/%lld%@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktive Buchungen %lld/%lld%@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active bookings %lld/%lld%@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reservas activas %lld/%lld%@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réservations actives %lld/%lld%@"
+          }
+        }
+      }
+    },
     "Prenotazioni attive: %lld/%lld": {
       "localizations": {
         "de": {
@@ -7366,6 +7450,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "URL du club (ex. wellnesstown)"
+          }
+        }
+      }
+    },
+    "Ultimo contatto": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Letzter Kontakt"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last contact"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Último contacto"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dernier contact"
           }
         }
       }
