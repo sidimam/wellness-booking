@@ -40,6 +40,7 @@ extension BookingEngine {
                 // offline: mantieni la modalità server con i dati in cache
                 if let u = Keychain.get("gw.user"), let d = try? JSONDecoder().decode(GWUser.self, from: Data(u.utf8)) { serverUser = d }
                 lastError = error.localizedDescription
+                startServerPolling()   // riprova da solo ogni 20 s invece di aspettare "Verifica ora"
             }
         }
     }
@@ -95,15 +96,27 @@ extension BookingEngine {
     /// Verifica che il container risponda (/healthz).
     @discardableResult
     func checkServerHealth() async -> Bool {
-        do {
-            let h = try await gateway.health()
-            serverOnline = true; serverLastSeen = Date()
-            if !h.version.isEmpty { serverVersion = h.version }
-            return true
-        } catch {
-            serverOnline = false
-            return false
+        // Due tentativi: al rientro dallo sfondo la rete impiega qualche istante a tornare e un
+        // singolo errore non deve far risultare il gateway "non raggiungibile".
+        for attempt in 0..<2 {
+            do {
+                let h = try await gateway.health()
+                serverOnline = true; serverLastSeen = Date()
+                if !h.version.isEmpty { serverVersion = h.version }
+                return true
+            } catch {
+                if attempt == 0 { try? await Task.sleep(nanoseconds: 1_500_000_000) }
+            }
         }
+        serverOnline = false
+        return false
+    }
+
+    /// Rientro in primo piano: riparte il polling (iOS lo sospende in background) e aggiorna subito.
+    func resumeServer() async {
+        guard isServerMode else { return }
+        if serverPollTask == nil || serverPollTask?.isCancelled == true { startServerPolling() }
+        await refreshServer(force: false)
     }
 
     func refreshServer(force: Bool, quiet: Bool = false) async {
@@ -136,8 +149,10 @@ extension BookingEngine {
             if serverSettings == nil || force { serverSettings = try? await gateway.settings() }
             lastRefresh = Date(); lastError = nil
         } catch {
-            if (error as? GatewayClient.Failure)?.status == 401 { Keychain.delete("gw.token"); serverUser = nil; addLog("Sessione del gateway scaduta", .warn) }
-            else if !quiet { lastError = error.localizedDescription }
+            if (error as? GatewayClient.Failure)?.status == 401 {
+                // conferma con /me prima di scollegare: evita logout per un 401 sporadico
+                if (try? await gateway.me()) == nil { Keychain.delete("gw.token"); serverUser = nil; addLog("Sessione del gateway scaduta", .warn) }
+            } else if !quiet { lastError = error.localizedDescription }
         }
     }
 

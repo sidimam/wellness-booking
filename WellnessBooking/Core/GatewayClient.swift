@@ -146,8 +146,9 @@ actor GatewayClient {
         self.baseURL = baseURL
         self.token = token
         let cfg = URLSessionConfiguration.ephemeral
-        cfg.timeoutIntervalForRequest = 20
-        cfg.waitsForConnectivity = false
+        cfg.timeoutIntervalForRequest = 25
+        cfg.waitsForConnectivity = true
+        cfg.timeoutIntervalForResource = 40
         session = URLSession(configuration: cfg)
     }
 
@@ -169,7 +170,6 @@ actor GatewayClient {
         }
         let (data, resp) = try await session.data(for: req)
         guard let http = resp as? HTTPURLResponse else { throw Failure(message: "Risposta non valida", status: 0) }
-        if http.statusCode == 401 { token = nil }
         guard (200..<300).contains(http.statusCode) else {
             if let ct = http.value(forHTTPHeaderField: "Content-Type"), ct.contains("text/html") {
                 let host = http.url?.host ?? ""
@@ -192,7 +192,7 @@ actor GatewayClient {
     /// GET /healthz (senza autenticazione): il container è su?
     func health() async throws -> Health {
         var req = URLRequest(url: baseURL.appendingPathComponent("healthz"))
-        req.timeoutInterval = 6
+        req.timeoutInterval = 12
         for (k, v) in extraHeaders where !v.isEmpty { req.setValue(v, forHTTPHeaderField: k) }
         let (data, resp) = try await session.data(for: req)
         guard let http = resp as? HTTPURLResponse, (200..<300).contains(http.statusCode) else {

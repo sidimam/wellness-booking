@@ -36,7 +36,8 @@ struct WellnessBookingApp: App {
                 Self.scheduleBackgroundWork(deadline: engine.nextBackgroundDeadline)
                 HomeScreenShortcuts.install(running: engine.isRunning)
             case .active:
-                if engine.isRunning { Task { await engine.refreshClasses() } }
+                if engine.isServerMode { Task { await engine.resumeServer() } }
+                else if engine.isRunning { Task { await engine.refreshClasses() } }
             default: break
             }
         }
