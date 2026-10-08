@@ -233,6 +233,14 @@ struct ServerSettingsView: View {
 struct ProfileDetailView: View {
     @EnvironmentObject var engine: BookingEngine
     let profile: GWProfile
+    @State private var showAddCenter = false
+    @State private var newCenter = ""
+    @State private var newCenterMax = 5
+    @State private var busy = false
+    @State private var confirmRemove: GWProfile?
+
+    /// Tutti i centri dello stesso account mywellness (un profilo per centro).
+    private var centers: [GWProfile] { engine.profiles.filter { $0.username == profile.username }.sorted { $0.facilityName < $1.facilityName } }
 
     private static let knownLabels: [String: LocalizedStringResource] = [
         "id": "ID utente", "firstName": "Nome", "lastName": "Cognome", "nickName": "Nickname", "email": "Email",
@@ -280,12 +288,26 @@ struct ProfileDetailView: View {
                 .frame(maxWidth: .infinity)
                 .listRowBackground(Color.clear)
             }
-            Section("Centro") {
-                LabeledContent("Centro", value: profile.facilityName)
-                LabeledContent("Prenotazioni attive", value: "\(profile.activeBookings)/\(profile.maxBookings)")
-                ForEach(profile.limits ?? []) { l in LabeledContent(l.pattern, value: "\(l.active)/\(l.max)") }
-                if let d = profile.lastLoginAt { LabeledContent("Ultimo login mywellness", value: d.itDateTime) }
-                if let e = profile.lastLoginError, !e.isEmpty { Text(e).foregroundStyle(.red).font(.footnote) }
+            Section {
+                ForEach(centers) { c in
+                    Button { engine.selectProfile(c.id) } label: {
+                        HStack(spacing: 10) {
+                            Image(systemName: c.id == engine.selectedProfile?.id ? "checkmark.circle.fill" : "building.2").foregroundStyle(c.id == engine.selectedProfile?.id ? Color.accentColor : .secondary)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(c.facilityName).foregroundStyle(.primary)
+                                Text("Prenotazioni attive \(c.activeBookings)/\(c.maxBookings)" + (c.limits ?? []).map { " · \($0.pattern) \($0.active)/\($0.max)" }.joined()).font(.caption).foregroundStyle(.secondary)
+                                if let e = c.lastLoginError, !e.isEmpty { Text(e).font(.caption).foregroundStyle(.red) }
+                                else if let d = c.lastLoginAt { Text("Ultimo login mywellness \(d.itDateTime)").font(.caption2).foregroundStyle(.secondary) }
+                            }
+                        }
+                    }
+                    .swipeActions(edge: .trailing) {
+                        if centers.count > 1 { Button(role: .destructive) { confirmRemove = c } label: { Label("Rimuovi centro", systemImage: "trash") } }
+                    }
+                }
+                Button { newCenterMax = profile.maxBookings; showAddCenter = true } label: { Label("Aggiungi centro Technogym", systemImage: "plus.circle") }
+            } header: { Text(centers.count > 1 ? "Centri (\(centers.count))" : "Centro") } footer: {
+                Text("Lo stesso account mywellness può essere iscritto a più centri: ogni centro ha il suo calendario, le sue lezioni seguite e il suo limite. Tocca un centro per renderlo attivo in Lezioni e Prenotazioni.")
             }
             Section {
                 if rows.isEmpty {
@@ -305,5 +327,34 @@ struct ProfileDetailView: View {
         .navigationTitle("Il mio profilo")
         .navigationBarTitleDisplayMode(.inline)
         .refreshable { await engine.refreshServer(force: true) }
+        .alert("Rimuovere questo centro e le sue lezioni seguite?", isPresented: .init(get: { confirmRemove != nil }, set: { if !$0 { confirmRemove = nil } })) {
+            Button("Rimuovi", role: .destructive) { if let c = confirmRemove { Task { await engine.serverDeleteProfile(c) } } }
+            Button("Annulla", role: .cancel) {}
+        } message: { Text(confirmRemove?.facilityName ?? "") }
+        .sheet(isPresented: $showAddCenter) {
+            NavigationStack {
+                Form {
+                    Section {
+                        TextField("URL centro (es. wellnesstown)", text: $newCenter).textInputAutocapitalization(.never).autocorrectionDisabled()
+                        Stepper("Massimo prenotazioni attive: \(newCenterMax)", value: $newCenterMax, in: 1...30)
+                    } footer: {
+                        Text("È la parte finale dell'indirizzo del widget mywellness del centro (widgets.mywellness.com/facility/<URL>/…). Il gateway usa le stesse credenziali mywellness di questo profilo.")
+                    }
+                    if let e = engine.lastError { Text(e).font(.footnote).foregroundStyle(.red) }
+                }
+                .navigationTitle("Nuovo centro")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) { Button("Annulla") { showAddCenter = false } }
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button {
+                            busy = true
+                            Task { if await engine.serverAddCenter(from: profile, facilityUrl: newCenter, maxBookings: newCenterMax) { showAddCenter = false; newCenter = "" }; busy = false }
+                        } label: { if busy { ProgressView() } else { Text("Aggiungi").bold() } }
+                        .disabled(newCenter.trimmingCharacters(in: .whitespaces).isEmpty || busy)
+                    }
+                }
+            }
+        }
     }
 }

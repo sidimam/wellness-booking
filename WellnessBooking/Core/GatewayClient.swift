@@ -263,6 +263,11 @@ actor GatewayClient {
         struct B: Encodable { let label, username, password, facilityUrl: String; let maxBookings: Int; let `private`: Bool; let mine: Bool }
         return try await request("POST", "/profiles", body: B(label: label, username: username, password: password, facilityUrl: facilityUrl, maxBookings: maxBookings, private: isPrivate, mine: mine), as: GWProfile.self)
     }
+    /// Altro centro per lo stesso account mywellness: il gateway copia credenziali e proprietario dal profilo sorgente.
+    func addCenter(copyFrom profileId: String, facilityUrl: String, maxBookings: Int) async throws -> GWProfile {
+        struct B: Encodable { let facilityUrl: String; let maxBookings: Int; let copyFromProfileId: String }
+        return try await request("POST", "/profiles", body: B(facilityUrl: facilityUrl, maxBookings: maxBookings, copyFromProfileId: profileId), as: GWProfile.self)
+    }
     func deleteProfile(_ id: String) async throws { _ = try await request("DELETE", "/profiles/\(id)", as: Empty.self) }
     func relogin(_ id: String) async throws -> GWProfile { try await request("POST", "/profiles/\(id)/relogin", as: GWProfile.self) }
     func classes(profile: String, refresh: Bool) async throws -> [GWClass] {

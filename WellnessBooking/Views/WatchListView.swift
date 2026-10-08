@@ -59,7 +59,7 @@ struct WatchListView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 HStack {
-                    if engine.isServerMode && engine.profiles.count > 1 && engine.serverUser?.isAdmin == true { ProfileMenu() }
+                    if engine.isServerMode && engine.profiles.count > 1 { ProfileMenu() }
                     Button { Task { await engine.refreshClasses() } } label: { Image(systemName: "arrow.clockwise") }
                 }
             }
@@ -116,7 +116,7 @@ struct WatchListView: View {
 
     @ViewBuilder
     private func row(_ item: WatchItem) -> some View {
-        WatchItemRow(item: item, settings: engine.settings, showProfile: engine.isServerMode && engine.profiles.count > 1 && engine.serverUser?.isAdmin == true)
+        WatchItemRow(item: item, settings: engine.settings, showProfile: engine.isServerMode && engine.profiles.count > 1)
             .swipeActions(edge: .trailing) {
                 if item.state == .waitingList && engine.isServerMode {
                     Button(role: .destructive) { confirmLeave = item } label: { Label("Esci dalla lista d'attesa", systemImage: "person.2.slash") }

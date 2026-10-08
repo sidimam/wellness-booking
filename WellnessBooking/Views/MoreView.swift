@@ -48,7 +48,7 @@ struct MoreView: View {
                     if let s = engine.serverStatus {
                         LabeledContent { Text("avviato \(s.startedAt.itDateTime) · prossimo controllo \(s.nextWake.itTime)").font(.caption).foregroundStyle(.secondary).multilineTextAlignment(.trailing) } label: { Label("Motore", systemImage: "bolt") }
                     }
-                    if let mine = engine.profiles.first(where: { $0.userId == engine.serverUser?.id }) {
+                    if let mine = engine.profiles.first(where: { $0.id == engine.selectedProfile?.id && $0.userId == engine.serverUser?.id }) ?? engine.profiles.first(where: { $0.userId == engine.serverUser?.id }) {
                         NavigationLink { ProfileDetailView(profile: mine) } label: { Label("Il mio profilo mywellness", systemImage: "person.text.rectangle") }
                     }
                     if engine.serverUser?.isAdmin == true || !engine.profiles.contains(where: { $0.userId == engine.serverUser?.id }) {

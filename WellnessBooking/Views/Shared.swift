@@ -24,7 +24,9 @@ struct ProfileMenu: View {
         Menu {
             ForEach(engine.profiles) { p in
                 Button { engine.selectProfile(p.id) } label: {
-                    if p.id == engine.selectedProfile?.id { Label(p.label, systemImage: "checkmark") } else { Text(p.label) }
+                    // stesso account su più centri: mostra il centro accanto all'etichetta
+                    let title = engine.profiles.filter { $0.username == p.username }.count > 1 ? "\(p.label) · \(p.facilityName)" : p.label
+                    if p.id == engine.selectedProfile?.id { Label(title, systemImage: "checkmark") } else { Text(title) }
                 }
             }
         } label: {

@@ -9000,6 +9000,258 @@
           }
         }
       }
+    },
+    "Prenotazioni attive %lld/%lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active bookings %lld/%lld"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reservas activas %lld/%lld"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réservations actives %lld/%lld"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktive Buchungen %lld/%lld"
+          }
+        }
+      }
+    },
+    "Ultimo login mywellness %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last mywellness login %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Último inicio de sesión mywellness %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dernière connexion mywellness %@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Letzte mywellness-Anmeldung %@"
+          }
+        }
+      }
+    },
+    "Rimuovi centro": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove club"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quitar centro"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retirer le club"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Studio entfernen"
+          }
+        }
+      }
+    },
+    "Aggiungi centro Technogym": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add Technogym club"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Añadir centro Technogym"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajouter un club Technogym"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Technogym-Studio hinzufügen"
+          }
+        }
+      }
+    },
+    "Centri (%lld)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clubs (%lld)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Centros (%lld)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clubs (%lld)"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Studios (%lld)"
+          }
+        }
+      }
+    },
+    "Lo stesso account mywellness può essere iscritto a più centri: ogni centro ha il suo calendario, le sue lezioni seguite e il suo limite. Tocca un centro per renderlo attivo in Lezioni e Prenotazioni.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The same mywellness account can be a member of several clubs: each club has its own schedule, tracked classes and limit. Tap a club to make it active in Classes and Bookings."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La misma cuenta mywellness puede estar inscrita en varios centros: cada centro tiene su calendario, sus clases seguidas y su límite. Toca un centro para activarlo en Clases y Reservas."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le même compte mywellness peut être inscrit dans plusieurs clubs : chaque club a son planning, ses cours suivis et sa limite. Touchez un club pour l'activer dans Cours et Réservations."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dasselbe mywellness-Konto kann in mehreren Studios angemeldet sein: jedes Studio hat seinen Kalender, seine verfolgten Kurse und sein Limit. Tippe ein Studio an, um es in Kurse und Buchungen aktiv zu machen."
+          }
+        }
+      }
+    },
+    "Rimuovere questo centro e le sue lezioni seguite?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove this club and its tracked classes?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Quitar este centro y sus clases seguidas?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retirer ce club et ses cours suivis ?"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieses Studio und seine verfolgten Kurse entfernen?"
+          }
+        }
+      }
+    },
+    "È la parte finale dell'indirizzo del widget mywellness del centro (widgets.mywellness.com/facility/<URL>/…). Il gateway usa le stesse credenziali mywellness di questo profilo.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "It is the last part of the club's mywellness widget address (widgets.mywellness.com/facility/<URL>/…). The gateway uses the same mywellness credentials as this profile."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Es la parte final de la dirección del widget mywellness del centro (widgets.mywellness.com/facility/<URL>/…). El gateway usa las mismas credenciales mywellness de este perfil."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "C'est la dernière partie de l'adresse du widget mywellness du club (widgets.mywellness.com/facility/<URL>/…). La passerelle utilise les mêmes identifiants mywellness que ce profil."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Es ist der letzte Teil der Adresse des mywellness-Widgets des Studios (widgets.mywellness.com/facility/<URL>/…). Das Gateway nutzt dieselben mywellness-Zugangsdaten wie dieses Profil."
+          }
+        }
+      }
+    },
+    "Nuovo centro": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New club"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nuevo centro"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nouveau club"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neues Studio"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

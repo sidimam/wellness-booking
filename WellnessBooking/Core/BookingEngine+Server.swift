@@ -213,6 +213,17 @@ extension BookingEngine {
         } catch { lastError = error.localizedDescription; return false }
     }
 
+    /// Aggiunge un altro centro Technogym allo stesso account mywellness del profilo dato.
+    func serverAddCenter(from p: GWProfile, facilityUrl: String, maxBookings: Int) async -> Bool {
+        do {
+            let n = try await gateway.addCenter(copyFrom: p.id, facilityUrl: facilityUrl, maxBookings: maxBookings)
+            addLog("Centro \(n.facilityName) aggiunto per \(p.username)", .success)
+            selectProfile(n.id)
+            await refreshServer(force: true)
+            return true
+        } catch { lastError = error.localizedDescription; return false }
+    }
+
     func serverDeleteProfile(_ p: GWProfile) async {
         do { try await gateway.deleteProfile(p.id); addLog("Profilo \(p.label) rimosso dal gateway", .warn) } catch { lastError = error.localizedDescription }
         await refreshServer(force: true)

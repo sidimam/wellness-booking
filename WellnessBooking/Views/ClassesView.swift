@@ -66,7 +66,7 @@ struct ClassesView: View {
             }
             ToolbarItem(placement: .topBarTrailing) {
                 HStack {
-                    if engine.isServerMode && engine.profiles.count > 1 && engine.serverUser?.isAdmin == true { ProfileMenu() }
+                    if engine.isServerMode && engine.profiles.count > 1 { ProfileMenu() }
                     Button { onlyBookable.toggle(); Haptics.tap(enabled: engine.settings.hapticsEnabled) } label: {
                         Image(systemName: onlyBookable ? "line.3.horizontal.decrease.circle.fill" : "line.3.horizontal.decrease.circle")
                     }
