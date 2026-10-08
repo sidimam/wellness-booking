@@ -250,9 +250,11 @@ struct ProfileDetailView: View {
         "externalId": "ID esterno", "phoneNumber": "Telefono", "mobilePhone": "Cellulare", "address": "Indirizzo",
         "city": "Città", "country": "Paese", "zipCode": "CAP", "timeZone": "Fuso orario", "height": "Altezza", "weight": "Peso",
         "createdOn": "Iscritto dal", "lastLogin": "Ultimo accesso", "privacyAccepted": "Privacy accettata",
-        "hasPrivateProfile": "Profilo privato", "isGuest": "Ospite", "mobileNumber": "Cellulare", "status": "Stato"
+        "hasPrivateProfile": "Profilo privato", "isGuest": "Ospite", "mobileNumber": "Cellulare", "status": "Stato",
+        "accountUsername": "Nome account", "defaultCulture": "Lingua predefinita", "userCultureInfo": "Impostazioni regionali",
+        "timeZoneWindowsId": "Fuso orario", "canBeMultipleUser": "Account condiviso"
     ]
-    private static let hidden: Set<String> = ["pictureUrl", "thumbPictureUrl", "picture", "thumbUrl", "pictureHttps"]
+    private static let hidden: Set<String> = ["pictureUrl", "thumbPictureUrl", "picture", "thumbUrl", "pictureHttps", "credentialId", "displayBirthDate"]
 
     private var rows: [(key: String, label: String, value: String)] {
         guard let id = profile.identity else { return [] }
