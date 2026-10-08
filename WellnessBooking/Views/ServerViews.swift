@@ -201,6 +201,7 @@ struct ServerSettingsView: View {
             } header: { Text("Scheduler") } footer: {
                 Text("Scrivi tu il testo da cercare nel nome della lezione (es. Reformer → 3 giorni alle 05:01, massimo 3 prenotazioni attive). L'ora viene sempre dalla regola; con \"Segui l'orario del centro\" il giorno di apertura è quello comunicato da mywellness. \"Max prenotazioni\" è una quota separata per quel tipo di lezione (es. Reformer 3): quelle lezioni non contano nel limite del profilo.")
             }
+            .disabled(readOnly)
             Section {
                 Stepper("Controlla ogni \(s.pollSeconds) s", value: $s.pollSeconds, in: 5...300, step: 5)
                 Stepper("Vicino alla lezione ogni \(s.nearPollSeconds) s", value: $s.nearPollSeconds, in: 2...60)
@@ -210,9 +211,10 @@ struct ServerSettingsView: View {
             } header: { Text("Osservazione") } footer: {
                 Text("Quando una classe è piena il gateway resta in lista d'attesa e legge i posti liberi dal calendario pubblico (senza usare il tuo account) a questo ritmo, più fitto nelle ultime ore. Appena compare un posto prenota subito, con tentativi ravvicinati, e manda la notifica.")
             }
+            .disabled(readOnly)
             if readOnly { Section { Text("Solo l'amministratore del gateway può modificare queste impostazioni.").font(.footnote).foregroundStyle(.secondary) } }
         }
-        .disabled(readOnly)
+        // NON .disabled sull'intera Form: disabiliterebbe anche lo scorrimento (le singole sezioni sono disabilitate sotto).
         .navigationTitle("Scheduler del gateway")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
