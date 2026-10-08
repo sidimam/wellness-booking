@@ -30,6 +30,45 @@ struct GWProfile: Codable, Identifiable, Equatable {
     var lastLoginAt: Date?
     var lastLoginError: String?
     var activeBookings: Int
+    var identity: [String: JSONValue]?   // userContext mywellness completo (senza token/password)
+}
+
+/// Valore JSON generico (per i campi del profilo mywellness che il gateway inoltra così come sono).
+enum JSONValue: Codable, Equatable, Hashable {
+    case string(String), number(Double), bool(Bool), null
+    case array([JSONValue]), object([String: JSONValue])
+    init(from decoder: Decoder) throws {
+        let c = try decoder.singleValueContainer()
+        if c.decodeNil() { self = .null }
+        else if let b = try? c.decode(Bool.self) { self = .bool(b) }
+        else if let n = try? c.decode(Double.self) { self = .number(n) }
+        else if let s = try? c.decode(String.self) { self = .string(s) }
+        else if let a = try? c.decode([JSONValue].self) { self = .array(a) }
+        else if let o = try? c.decode([String: JSONValue].self) { self = .object(o) }
+        else { throw DecodingError.dataCorruptedError(in: c, debugDescription: "JSON non riconosciuto") }
+    }
+    func encode(to encoder: Encoder) throws {
+        var c = encoder.singleValueContainer()
+        switch self {
+        case .string(let s): try c.encode(s)
+        case .number(let n): try c.encode(n)
+        case .bool(let b): try c.encode(b)
+        case .null: try c.encodeNil()
+        case .array(let a): try c.encode(a)
+        case .object(let o): try c.encode(o)
+        }
+    }
+    /// Testo leggibile del valore (vuoto per null/collezioni vuote).
+    var display: String {
+        switch self {
+        case .string(let s): return s
+        case .number(let n): return n == n.rounded() && abs(n) < 1e15 ? String(Int(n)) : String(n)
+        case .bool(let b): return b ? String(localized: "Sì") : String(localized: "No")
+        case .null: return ""
+        case .array(let a): return a.map(\.display).filter { !$0.isEmpty }.joined(separator: ", ")
+        case .object(let o): return o.keys.sorted().compactMap { k in let v = o[k]!.display; return v.isEmpty ? nil : "\(k): \(v)" }.joined(separator: " · ")
+        }
+    }
 }
 
 struct GWOpenRule: Codable, Identifiable, Equatable {
@@ -53,7 +92,9 @@ struct GWSettings: Codable, Equatable {
     var openRules: [GWOpenRule] = []
     var leadMilliseconds: Int = 300
     var burstSeconds: Int = 120
-    var pollSeconds: Int = 20
+    var pollSeconds: Int = 15
+    var nearPollSeconds: Int = 3
+    var nearHours: Int = 4
     var daysAhead: Int = 14
     var priorityNotifications: Bool = true
 }

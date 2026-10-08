@@ -48,7 +48,12 @@ struct MoreView: View {
                     if let s = engine.serverStatus {
                         LabeledContent { Text("avviato \(s.startedAt.itDateTime) · prossimo controllo \(s.nextWake.itTime)").font(.caption).foregroundStyle(.secondary).multilineTextAlignment(.trailing) } label: { Label("Motore", systemImage: "bolt") }
                     }
-                    NavigationLink { ServerProfilesView() } label: { Label(engine.serverUser?.isAdmin == true ? "Profili mywellness (\(engine.profiles.count))" : "Il mio profilo mywellness", systemImage: engine.serverUser?.isAdmin == true ? "person.2" : "person") }
+                    if let mine = engine.profiles.first(where: { $0.userId == engine.serverUser?.id }) {
+                        NavigationLink { ProfileDetailView(profile: mine) } label: { Label("Il mio profilo mywellness", systemImage: "person.text.rectangle") }
+                    }
+                    if engine.serverUser?.isAdmin == true || !engine.profiles.contains(where: { $0.userId == engine.serverUser?.id }) {
+                        NavigationLink { ServerProfilesView() } label: { Label(engine.serverUser?.isAdmin == true ? "Profili mywellness (\(engine.profiles.count))" : "Collega il mio account mywellness", systemImage: engine.serverUser?.isAdmin == true ? "person.2" : "person.crop.circle.badge.plus") }
+                    }
                     NavigationLink { ServerSettingsView() } label: { Label("Scheduler e osservazione", systemImage: "clock.badge") }
                     NavigationLink { CloudflareAccessView() } label: {
                         LabeledContent { Text(engine.cfAccessClientID.isEmpty ? "No" : "Attivo").foregroundStyle(.secondary) } label: { Label("Cloudflare Access", systemImage: "cloud.fill") }

@@ -199,14 +199,16 @@ struct ServerSettingsView: View {
                 Stepper("Anticipo: \(s.leadMilliseconds) ms", value: $s.leadMilliseconds, in: 0...3000, step: 100)
                 Stepper("Insisti per \(s.burstSeconds) s dopo l'apertura", value: $s.burstSeconds, in: 10...600, step: 10)
             } header: { Text("Scheduler") } footer: {
-                Text("Scrivi tu il testo da cercare nel nome della lezione (es. Reformer → 3 giorni alle 05:01, massimo 3 prenotazioni attive). L'ora viene sempre dalla regola; con \"Segui l'orario del centro\" il giorno di apertura è quello comunicato da mywellness. \"Max prenotazioni\" limita le prenotazioni attive di quel tipo di lezione, oltre al limite del profilo.")
+                Text("Scrivi tu il testo da cercare nel nome della lezione (es. Reformer → 3 giorni alle 05:01, massimo 3 prenotazioni attive). L'ora viene sempre dalla regola; con \"Segui l'orario del centro\" il giorno di apertura è quello comunicato da mywellness. \"Max prenotazioni\" è una quota separata per quel tipo di lezione (es. Reformer 3): quelle lezioni non contano nel limite del profilo.")
             }
             Section {
-                Stepper("Controlla ogni \(s.pollSeconds) s", value: $s.pollSeconds, in: 15...300, step: 5)
+                Stepper("Controlla ogni \(s.pollSeconds) s", value: $s.pollSeconds, in: 5...300, step: 5)
+                Stepper("Vicino alla lezione ogni \(s.nearPollSeconds) s", value: $s.nearPollSeconds, in: 2...60)
+                Stepper("Vicino alla lezione = ultime \(s.nearHours) ore", value: $s.nearHours, in: 1...24)
                 Stepper("Giorni di calendario: \(s.daysAhead)", value: $s.daysAhead, in: 3...30)
                 Toggle(isOn: $s.priorityNotifications) { Label("Notifiche prioritarie", systemImage: "bell.badge") }
             } header: { Text("Osservazione") } footer: {
-                Text("Quando una classe è piena il gateway resta in lista d'attesa e controlla i posti liberi a questo intervallo (più fitto nelle ultime ore utili). Appena si libera un posto prenota e manda la notifica.")
+                Text("Quando una classe è piena il gateway resta in lista d'attesa e legge i posti liberi dal calendario pubblico (senza usare il tuo account) a questo ritmo, più fitto nelle ultime ore. Appena compare un posto prenota subito, con tentativi ravvicinati, e manda la notifica.")
             }
             if readOnly { Section { Text("Solo l'amministratore del gateway può modificare queste impostazioni.").font(.footnote).foregroundStyle(.secondary) } }
         }
@@ -223,5 +225,85 @@ struct ServerSettingsView: View {
         .onAppear { if !loaded, let ss = engine.serverSettings { s = ss; loaded = true } }
         .task { if engine.serverSettings == nil { await engine.refreshServer(force: true) }; if let ss = engine.serverSettings, !loaded { s = ss; loaded = true } }
         .alert("Impostazioni salvate sul gateway", isPresented: $saved) { Button("OK") {} }
+    }
+}
+
+
+/// Scheda del profilo mywellness dell'utente collegato: tutto ciò che il gateway riceve da Technogym al login.
+struct ProfileDetailView: View {
+    @EnvironmentObject var engine: BookingEngine
+    let profile: GWProfile
+
+    private static let knownLabels: [String: LocalizedStringResource] = [
+        "id": "ID utente", "firstName": "Nome", "lastName": "Cognome", "nickName": "Nickname", "email": "Email",
+        "gender": "Genere", "birthDate": "Data di nascita", "dateOfBirth": "Data di nascita", "culture": "Lingua",
+        "language": "Lingua", "measurementSystem": "Unità di misura", "unitOfMeasure": "Unità di misura",
+        "facilityName": "Centro", "facilityId": "ID centro", "currentFacilityId": "ID centro", "userType": "Tipo utente",
+        "externalId": "ID esterno", "phoneNumber": "Telefono", "mobilePhone": "Cellulare", "address": "Indirizzo",
+        "city": "Città", "country": "Paese", "zipCode": "CAP", "timeZone": "Fuso orario", "height": "Altezza", "weight": "Peso",
+        "createdOn": "Iscritto dal", "lastLogin": "Ultimo accesso", "privacyAccepted": "Privacy accettata",
+        "hasPrivateProfile": "Profilo privato", "isGuest": "Ospite", "mobileNumber": "Cellulare", "status": "Stato"
+    ]
+    private static let hidden: Set<String> = ["pictureUrl", "thumbPictureUrl", "picture", "thumbUrl", "pictureHttps"]
+
+    private var rows: [(key: String, label: String, value: String)] {
+        guard let id = profile.identity else { return [] }
+        return id.keys.sorted().compactMap { k in
+            guard !Self.hidden.contains(k), let v = id[k] else { return nil }
+            var text = v.display
+            if text.isEmpty { return nil }
+            if let d = ISO8601DateFormatter().date(from: text) ?? Self.plainDate(text) { text = d.itDateTime }
+            let label = Self.knownLabels[k].map { String(localized: $0) } ?? Self.humanize(k)
+            return (k, label, text)
+        }
+    }
+    private static func plainDate(_ s: String) -> Date? {
+        let f = DateFormatter(); f.locale = Locale(identifier: "en_US_POSIX"); f.timeZone = TimeZone(identifier: "Europe/Rome")
+        for fmt in ["yyyy-MM-dd'T'HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ssXXXXX", "yyyy-MM-dd"] { f.dateFormat = fmt; if let d = f.date(from: s) { return d } }
+        return nil
+    }
+    private static func humanize(_ key: String) -> String {
+        var out = ""
+        for ch in key { if ch.isUppercase, !out.isEmpty { out.append(" ") }; out.append(ch) }
+        return out.prefix(1).uppercased() + out.dropFirst().lowercased()
+    }
+
+    var body: some View {
+        List {
+            Section {
+                VStack(spacing: 10) {
+                    ProfileAvatar(profile: profile, size: 96)
+                    Text(profile.displayName ?? profile.label).font(.title2.weight(.semibold))
+                    if let n = profile.nickName, !n.isEmpty { Text(n).font(.subheadline).foregroundStyle(.secondary) }
+                    Text(profile.email ?? profile.username).font(.footnote).foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity)
+                .listRowBackground(Color.clear)
+            }
+            Section("Centro") {
+                LabeledContent("Centro", value: profile.facilityName)
+                LabeledContent("Prenotazioni attive", value: "\(profile.activeBookings)/\(profile.maxBookings)")
+                ForEach(profile.limits ?? []) { l in LabeledContent(l.pattern, value: "\(l.active)/\(l.max)") }
+                if let d = profile.lastLoginAt { LabeledContent("Ultimo login mywellness", value: d.itDateTime) }
+                if let e = profile.lastLoginError, !e.isEmpty { Text(e).foregroundStyle(.red).font(.footnote) }
+            }
+            Section {
+                if rows.isEmpty {
+                    Text("Il gateway non ha ancora salvato i dettagli del profilo: rifai il login mywellness (aggiornamento alla v0.1.15 o successiva).").font(.footnote).foregroundStyle(.secondary)
+                } else {
+                    ForEach(rows, id: \.key) { r in
+                        LabeledContent(r.label) { Text(r.value).multilineTextAlignment(.trailing).textSelection(.enabled) }
+                    }
+                }
+            } header: { Text("Dati Technogym mywellness") } footer: {
+                Text("Sono i dati che mywellness restituisce al login del tuo account; il gateway li conserva senza token né password.")
+            }
+            Section {
+                Button { Task { await engine.serverRelogin(profile) } } label: { Label("Aggiorna dal mywellness (nuovo login)", systemImage: "arrow.clockwise") }
+            }
+        }
+        .navigationTitle("Il mio profilo")
+        .navigationBarTitleDisplayMode(.inline)
+        .refreshable { await engine.refreshServer(force: true) }
     }
 }
