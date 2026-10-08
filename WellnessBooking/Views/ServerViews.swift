@@ -165,13 +165,15 @@ struct ServerProfilesView: View {
     }
 }
 
-/// Impostazioni del motore sul gateway (modificabili dall'amministratore).
+/// Impostazioni dello scheduler sul gateway: PERSONALI per ogni utente (amministratore o no); le predefinite
+/// le decide l'amministratore dalla web UI e valgono per chi non ha salvato le proprie.
 struct ServerSettingsView: View {
     @EnvironmentObject var engine: BookingEngine
     @State private var s = GWSettings()
     @State private var loaded = false
     @State private var saved = false
-    private var readOnly: Bool { !(engine.serverUser?.isAdmin ?? false) }
+    @State private var confirmReset = false
+    private var readOnly: Bool { false }
 
     var body: some View {
         Form {
@@ -212,7 +214,17 @@ struct ServerSettingsView: View {
                 Text("Quando una classe è piena il gateway resta in lista d'attesa e legge i posti liberi dal calendario pubblico (senza usare il tuo account) a questo ritmo, più fitto nelle ultime ore. Appena compare un posto prenota subito, con tentativi ravvicinati, e manda la notifica.")
             }
             .disabled(readOnly)
-            if readOnly { Section { Text("Solo l'amministratore del gateway può modificare queste impostazioni.").font(.footnote).foregroundStyle(.secondary) } }
+            Section {
+                if s.custom == true {
+                    Button(role: .destructive) { confirmReset = true } label: { Label("Torna alle predefinite", systemImage: "arrow.uturn.backward") }
+                }
+            } footer: {
+                Text(s.custom == true ? "Queste sono le tue impostazioni personali: valgono per le tue lezioni. Le predefinite del gateway le decide l'amministratore dalla web UI." : "Stai usando le impostazioni predefinite del gateway: salvando diventano le tue impostazioni personali e valgono solo per le tue lezioni.")
+            }
+        }
+        .alert("Tornare alle impostazioni predefinite?", isPresented: $confirmReset) {
+            Button("Torna alle predefinite", role: .destructive) { Task { await engine.resetServerSettings(); if let ss = engine.serverSettings { s = ss } } }
+            Button("Annulla", role: .cancel) {}
         }
         // NON .disabled sull'intera Form: disabiliterebbe anche lo scorrimento (le singole sezioni sono disabilitate sotto).
         .navigationTitle("Scheduler del gateway")
@@ -220,13 +232,13 @@ struct ServerSettingsView: View {
         .toolbar {
             if !readOnly {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Salva") { Task { await engine.saveServerSettings(s); saved = true } }
+                    Button("Salva") { Task { await engine.saveServerSettings(s); if let ss = engine.serverSettings { s = ss }; saved = true } }
                 }
             }
         }
         .onAppear { if !loaded, let ss = engine.serverSettings { s = ss; loaded = true } }
         .task { if engine.serverSettings == nil { await engine.refreshServer(force: true) }; if let ss = engine.serverSettings, !loaded { s = ss; loaded = true } }
-        .alert("Impostazioni salvate sul gateway", isPresented: $saved) { Button("OK") {} }
+        .alert("Impostazioni personali salvate sul gateway", isPresented: $saved) { Button("OK") {} }
     }
 }
 

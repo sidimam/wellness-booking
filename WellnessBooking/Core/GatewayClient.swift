@@ -97,6 +97,7 @@ struct GWSettings: Codable, Equatable {
     var nearHours: Int = 4
     var daysAhead: Int = 14
     var priorityNotifications: Bool = true
+    var custom: Bool? = nil   // true = impostazioni personali diverse dalle predefinite del gateway
 }
 
 struct GWItem: Codable, Identifiable, Equatable {
@@ -304,5 +305,7 @@ actor GatewayClient {
     // MARK: Impostazioni e registro
     func settings() async throws -> GWSettings { try await request("GET", "/settings", as: GWSettings.self) }
     func putSettings(_ s: GWSettings) async throws -> GWSettings { try await request("PUT", "/settings", body: s, as: GWSettings.self) }
+    /// Torna alle impostazioni predefinite del gateway (elimina quelle personali).
+    func resetSettings() async throws -> GWSettings { try await request("DELETE", "/settings", as: GWSettings.self) }
     func log(limit: Int = 200) async throws -> [GWLogLine] { try await request("GET", "/log", query: ["limit": String(limit)], as: [GWLogLine].self) }
 }

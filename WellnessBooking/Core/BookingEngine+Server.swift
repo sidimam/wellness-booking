@@ -235,7 +235,11 @@ extension BookingEngine {
     }
 
     func saveServerSettings(_ s: GWSettings) async {
-        do { serverSettings = try await gateway.putSettings(s); addLog("Impostazioni del gateway salvate", .success) } catch { lastError = error.localizedDescription }
+        do { serverSettings = try await gateway.putSettings(s); addLog("Impostazioni personali dello scheduler salvate", .success); await refreshServer(force: true) } catch { lastError = error.localizedDescription }
+    }
+
+    func resetServerSettings() async {
+        do { serverSettings = try await gateway.resetSettings(); addLog("Scheduler: tornato alle impostazioni predefinite", .warn); await refreshServer(force: true) } catch { lastError = error.localizedDescription }
     }
 
     func loadServerLog() async {

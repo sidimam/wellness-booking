@@ -9364,6 +9364,146 @@
           }
         }
       }
+    },
+    "Torna alle predefinite": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back to defaults"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Volver a los predeterminados"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Revenir aux valeurs par défaut"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zurück zu den Standardwerten"
+          }
+        }
+      }
+    },
+    "Queste sono le tue impostazioni personali: valgono per le tue lezioni. Le predefinite del gateway le decide l'amministratore dalla web UI.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "These are your personal settings: they apply to your classes. The gateway defaults are set by the administrator in the web UI."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estos son tus ajustes personales: valen para tus clases. Los predeterminados del gateway los decide el administrador en la web."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce sont vos réglages personnels : ils s'appliquent à vos cours. Les valeurs par défaut de la passerelle sont définies par l'administrateur dans l'interface web."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Das sind deine persönlichen Einstellungen: sie gelten für deine Kurse. Die Standardwerte des Gateways legt der Administrator in der Web-UI fest."
+          }
+        }
+      }
+    },
+    "Stai usando le impostazioni predefinite del gateway: salvando diventano le tue impostazioni personali e valgono solo per le tue lezioni.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You are using the gateway defaults: saving makes them your personal settings, applied only to your classes."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estás usando los ajustes predeterminados del gateway: al guardar se convierten en tus ajustes personales y valen solo para tus clases."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous utilisez les valeurs par défaut de la passerelle : en enregistrant, elles deviennent vos réglages personnels et ne s'appliquent qu'à vos cours."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du nutzt die Standardwerte des Gateways: beim Speichern werden sie zu deinen persönlichen Einstellungen und gelten nur für deine Kurse."
+          }
+        }
+      }
+    },
+    "Tornare alle impostazioni predefinite?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back to the default settings?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Volver a los ajustes predeterminados?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Revenir aux réglages par défaut ?"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zurück zu den Standardeinstellungen?"
+          }
+        }
+      }
+    },
+    "Impostazioni personali salvate sul gateway": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personal settings saved on the gateway"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajustes personales guardados en el gateway"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réglages personnels enregistrés sur la passerelle"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Persönliche Einstellungen auf dem Gateway gespeichert"
+          }
+        }
+      }
     }
   },
   "version": "1.0"
