@@ -5,6 +5,7 @@ struct WatchListView: View {
     @EnvironmentObject var engine: BookingEngine
     @State private var confirmCancel: (name: String, classId: String, partitionDate: Int)?
     @State private var confirmLeave: WatchItem?
+    @State private var confirmRemove: (item: WatchItem, rule: Bool)?
 
     private var active: [WatchItem] { engine.items.filter { !$0.state.isTerminal } }
     private func bookedByGateway(_ e: ClassEvent) -> Bool {
@@ -76,6 +77,16 @@ struct WatchListView: View {
             }
             Button("Annulla", role: .cancel) {}
         } message: { Text(confirmCancel?.name ?? "") }
+        .alert(confirmRemove?.rule == true ? "Fermare la ricorrenza?" : "Rimuovere la lezione?", isPresented: .init(get: { confirmRemove != nil }, set: { if !$0 { confirmRemove = nil } })) {
+            Button(confirmRemove?.rule == true ? "Ferma e disdici" : "Rimuovi e disdici", role: .destructive) {
+                if let c = confirmRemove { if c.rule { engine.removeRule(of: c.item) } else { engine.remove(c.item) } }
+            }
+            Button("Annulla", role: .cancel) {}
+        } message: {
+            Text(confirmRemove?.rule == true
+                 ? "Tutte le lezioni future di questa serie vengono rimosse e, se prenotate o in lista d'attesa, disdette su mywellness."
+                 : (confirmRemove?.item.state == .waitingList ? "La lezione esce anche dalla lista d'attesa su mywellness." : "La prenotazione viene disdetta anche su mywellness."))
+        }
         .alert("Uscire dalla lista d'attesa?", isPresented: .init(get: { confirmLeave != nil }, set: { if !$0 { confirmLeave = nil } })) {
             Button("Esci dalla lista d'attesa", role: .destructive) { if let it = confirmLeave { Task { await engine.serverLeaveWaitingList(it) } } }
             Button("Annulla", role: .cancel) {}
@@ -118,12 +129,14 @@ struct WatchListView: View {
     private func row(_ item: WatchItem) -> some View {
         WatchItemRow(item: item, settings: engine.settings, showProfile: engine.isServerMode && engine.profiles.count > 1)
             .swipeActions(edge: .trailing) {
-                if item.state == .waitingList && engine.isServerMode {
-                    Button(role: .destructive) { confirmLeave = item } label: { Label("Esci dalla lista d'attesa", systemImage: "person.2.slash") }
+                // Rimuovere = anche disdire su mywellness (prenotazione o lista d'attesa), lato gateway.
+                Button(role: .destructive) {
+                    if engine.isServerMode && (item.state == .booked || item.state == .waitingList) { confirmRemove = (item, false) } else { engine.remove(item) }
+                } label: {
+                    Label(item.state == .booked ? "Rimuovi e disdici" : (item.state == .waitingList ? "Rimuovi ed esci dalla lista" : "Rimuovi"), systemImage: "trash")
                 }
-                Button { engine.remove(item) } label: { Label("Rimuovi", systemImage: "trash") }.tint(.gray)
                 if item.recurring {
-                    Button { engine.removeRule(of: item) } label: { Label("Stop ricorrenza", systemImage: "repeat.circle") }.tint(.orange)
+                    Button { if engine.isServerMode { confirmRemove = (item, true) } else { engine.removeRule(of: item) } } label: { Label("Stop ricorrenza", systemImage: "repeat.circle") }.tint(.orange)
                 }
             }
             .swipeActions(edge: .leading) {

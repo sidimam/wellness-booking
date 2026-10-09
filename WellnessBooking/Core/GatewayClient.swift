@@ -295,8 +295,10 @@ actor GatewayClient {
         struct B: Encodable { let profileId, classId: String; let partitionDate: Int; let recurring: Bool }
         return try await request("POST", "/items", body: B(profileId: profile, classId: classId, partitionDate: partitionDate, recurring: recurring), as: GWItem.self)
     }
-    func deleteItem(_ id: String, rule: Bool) async throws {
-        _ = try await request("DELETE", "/items/\(id)", query: rule ? ["rule": "1"] : [:], as: Empty.self)
+    /// Esito della rimozione: il gateway disdice anche su mywellness (prenotazione o lista d'attesa).
+    struct RemoveResult: Decodable { var ok: Bool; var removed: Int; var unbooked: [String]; var leftWaitingList: [String]; var errors: [String] }
+    func deleteItem(_ id: String, rule: Bool) async throws -> RemoveResult {
+        try await request("DELETE", "/items/\(id)", query: rule ? ["rule": "1"] : [:], as: RemoveResult.self)
     }
     func retry(_ id: String) async throws -> GWItem {
         try await request("POST", "/items/\(id)/retry", as: GWItem.self)

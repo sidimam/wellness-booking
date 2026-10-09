@@ -173,9 +173,21 @@ extension BookingEngine {
         await refreshServer(force: false)
     }
 
+    /// Rimuove la lezione (o la ricorrenza) sul gateway, che la disdice anche su mywellness.
     func serverRemove(_ item: WatchItem, rule: Bool) async {
-        do { try await gateway.deleteItem(item.id, rule: rule) } catch { lastError = error.localizedDescription }
-        await refreshServer(force: false)
+        do {
+            let r = try await gateway.deleteItem(item.id, rule: rule)
+            for u in r.unbooked { addLog("Disdetta su mywellness: \(u)", .warn) }
+            for l in r.leftWaitingList { addLog("Uscita dalla lista d'attesa: \(l)", .warn) }
+            if r.errors.isEmpty {
+                addLog(rule ? "Ricorrenza fermata: \(item.name)" : "Rimossa: \(item.name) \(item.start.itDateTime)", .info)
+                Haptics.success(enabled: settings.hapticsEnabled)
+            } else {
+                lastError = r.errors.joined(separator: "\n")
+                for e in r.errors { addLog(e, .error) }
+            }
+        } catch { lastError = error.localizedDescription }
+        await refreshServer(force: true)
     }
 
     func serverRetry(_ item: WatchItem) async {
