@@ -243,7 +243,8 @@ struct ServerSettingsView: View {
 }
 
 
-/// Scheda del profilo mywellness dell'utente collegato: tutto ciò che il gateway riceve da Technogym al login.
+/// Scheda del profilo mywellness dell'utente collegato: dati Technogym in forma leggibile (date e lingua formattate,
+/// nome e cognome insieme, ID e campi tecnici in una sezione a scomparsa).
 struct ProfileDetailView: View {
     @EnvironmentObject var engine: BookingEngine
     let profile: GWProfile
@@ -252,44 +253,58 @@ struct ProfileDetailView: View {
     @State private var newCenterMax = 5
     @State private var busy = false
     @State private var confirmRemove: GWProfile?
+    @State private var showTechnical = false
 
     /// Tutti i centri dello stesso account mywellness (un profilo per centro).
     private var centers: [GWProfile] { engine.profiles.filter { $0.username == profile.username }.sorted { $0.facilityName < $1.facilityName } }
 
-    private static let knownLabels: [String: LocalizedStringResource] = [
-        "id": "ID utente", "firstName": "Nome", "lastName": "Cognome", "nickName": "Nickname", "email": "Email",
-        "gender": "Genere", "birthDate": "Data di nascita", "dateOfBirth": "Data di nascita", "culture": "Lingua",
-        "language": "Lingua", "measurementSystem": "Unità di misura", "unitOfMeasure": "Unità di misura",
-        "facilityName": "Centro", "facilityId": "ID centro", "currentFacilityId": "ID centro", "userType": "Tipo utente",
-        "externalId": "ID esterno", "phoneNumber": "Telefono", "mobilePhone": "Cellulare", "address": "Indirizzo",
-        "city": "Città", "country": "Paese", "zipCode": "CAP", "timeZone": "Fuso orario", "height": "Altezza", "weight": "Peso",
-        "createdOn": "Iscritto dal", "lastLogin": "Ultimo accesso", "privacyAccepted": "Privacy accettata",
-        "hasPrivateProfile": "Profilo privato", "isGuest": "Ospite", "mobileNumber": "Cellulare", "status": "Stato",
-        "accountUsername": "Nome account", "defaultCulture": "Lingua predefinita", "userCultureInfo": "Impostazioni regionali",
-        "timeZoneWindowsId": "Fuso orario", "canBeMultipleUser": "Account condiviso"
+    private static let windowsTZ: [String: String] = [
+        "W. Europe Standard Time": "Europe/Rome", "Central Europe Standard Time": "Europe/Budapest", "Central European Standard Time": "Europe/Warsaw",
+        "Romance Standard Time": "Europe/Paris", "GMT Standard Time": "Europe/London", "UTC": "UTC", "E. Europe Standard Time": "Europe/Bucharest",
+        "GTB Standard Time": "Europe/Athens", "Eastern Standard Time": "America/New_York", "Pacific Standard Time": "America/Los_Angeles"
     ]
-    private static let hidden: Set<String> = ["pictureUrl", "thumbPictureUrl", "picture", "thumbUrl", "pictureHttps", "credentialId", "displayBirthDate"]
+    private static func date(fromISODay s: String) -> Date? {
+        let f = DateFormatter(); f.locale = Locale(identifier: "en_US_POSIX"); f.timeZone = TimeZone(identifier: "Europe/Rome"); f.dateFormat = "yyyy-MM-dd"
+        return f.date(from: s)
+    }
+    private func longDate(_ d: Date) -> String { d.formatted(.dateTime.day().month(.wide).year().locale(AppLanguage.current.locale)) }
+    private func language(_ code: String) -> String {
+        let loc = AppLanguage.current.locale
+        if let n = loc.localizedString(forIdentifier: code) { return n.prefix(1).uppercased() + n.dropFirst() }
+        return code
+    }
+    private func timeZoneName(_ id: String) -> String {
+        guard let iana = Self.windowsTZ[id], let tz = TimeZone(identifier: iana) else { return id }
+        return (tz.localizedName(for: .standard, locale: AppLanguage.current.locale) ?? iana) + " (\(iana))"
+    }
+    private func gender(_ g: String) -> String { g == "M" ? String(localized: "Uomo") : (g == "F" ? String(localized: "Donna") : g) }
+    private func units(_ u: String) -> String { u.lowercased().contains("metric") ? String(localized: "Metrico") : (u.lowercased().contains("imperial") ? String(localized: "Imperiale") : u) }
+    private func birth(_ s: String) -> String {
+        guard let d = Self.date(fromISODay: s) else { return s }
+        let years = Calendar.current.dateComponents([.year], from: d, to: Date()).year ?? 0
+        return longDate(d) + " (\(years) " + String(localized: "anni") + ")"
+    }
 
-    private var rows: [(key: String, label: String, value: String)] {
-        guard let id = profile.identity else { return [] }
-        return id.keys.sorted().compactMap { k in
-            guard !Self.hidden.contains(k), let v = id[k] else { return nil }
-            var text = v.display
-            if text.isEmpty { return nil }
-            if let d = ISO8601DateFormatter().date(from: text) ?? Self.plainDate(text) { text = d.itDateTime }
-            let label = Self.knownLabels[k].map { String(localized: $0) } ?? Self.humanize(k)
-            return (k, label, text)
-        }
+    /// Righe leggibili della scheda, nell'ordine deciso con l'utente.
+    private var readableRows: [(label: String, value: String)] {
+        guard let c = profile.card else { return [] }
+        var r: [(String, String)] = []
+        if !c.fullName.isEmpty { r.append((String(localized: "Nome e cognome"), c.fullName)) }
+        if let n = c.nickName, !n.isEmpty { r.append((String(localized: "Nickname"), n)) }
+        if let e = c.email, !e.isEmpty { r.append((String(localized: "Email"), e)) }
+        if let g = c.gender, !g.isEmpty { r.append((String(localized: "Genere"), gender(g))) }
+        if let b = c.birthDate, !b.isEmpty { r.append((String(localized: "Data di nascita"), birth(b))) }
+        if let l = c.culture, !l.isEmpty { r.append((String(localized: "Lingua"), language(l))) }
+        if let u = c.measurementSystem, !u.isEmpty { r.append((String(localized: "Unità di misura"), units(u))) }
+        if let m = c.memberSince { r.append((String(localized: "Iscritto dal"), longDate(m))) }
+        if let t = c.timeZoneWindowsId, !t.isEmpty { r.append((String(localized: "Fuso orario"), timeZoneName(t))) }
+        return r
     }
-    private static func plainDate(_ s: String) -> Date? {
-        let f = DateFormatter(); f.locale = Locale(identifier: "en_US_POSIX"); f.timeZone = TimeZone(identifier: "Europe/Rome")
-        for fmt in ["yyyy-MM-dd'T'HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ssXXXXX", "yyyy-MM-dd"] { f.dateFormat = fmt; if let d = f.date(from: s) { return d } }
-        return nil
-    }
-    private static func humanize(_ key: String) -> String {
-        var out = ""
-        for ch in key { if ch.isUppercase, !out.isEmpty { out.append(" ") }; out.append(ch) }
-        return out.prefix(1).uppercased() + out.dropFirst().lowercased()
+    private var technicalRows: [(label: String, value: String)] {
+        var r: [(String, String)] = []
+        if let id = profile.card?.userId, !id.isEmpty { r.append((String(localized: "ID utente"), id)) }
+        for (k, v) in (profile.card?.extra ?? [:]).sorted(by: { $0.key < $1.key }) { r.append((k, v)) }
+        return r
     }
 
     var body: some View {
@@ -326,11 +341,18 @@ struct ProfileDetailView: View {
                 Text("Lo stesso account mywellness può essere iscritto a più centri: ogni centro ha il suo calendario, le sue lezioni seguite e il suo limite. Tocca un centro per renderlo attivo in Lezioni e Prenotazioni.")
             }
             Section {
-                if rows.isEmpty {
+                if readableRows.isEmpty {
                     Text("Il gateway non ha ancora salvato i dettagli del profilo: rifai il login mywellness (aggiornamento alla v0.1.15 o successiva).").font(.footnote).foregroundStyle(.secondary)
                 } else {
-                    ForEach(rows, id: \.key) { r in
+                    ForEach(readableRows, id: \.label) { r in
                         LabeledContent(r.label) { Text(r.value).multilineTextAlignment(.trailing).textSelection(.enabled) }
+                    }
+                    if !technicalRows.isEmpty {
+                        DisclosureGroup(isExpanded: $showTechnical) {
+                            ForEach(technicalRows, id: \.label) { r in
+                                LabeledContent(r.label) { Text(r.value).font(.caption.monospaced()).multilineTextAlignment(.trailing).textSelection(.enabled) }
+                            }
+                        } label: { Label("Dati tecnici", systemImage: "info.circle").foregroundStyle(.secondary) }
                     }
                 }
             } header: { Text("Dati Technogym mywellness") } footer: {

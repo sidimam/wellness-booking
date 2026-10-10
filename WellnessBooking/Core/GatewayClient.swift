@@ -31,6 +31,22 @@ struct GWProfile: Codable, Identifiable, Equatable {
     var lastLoginError: String?
     var activeBookings: Int
     var identity: [String: JSONValue]?   // userContext mywellness completo (senza token/password)
+    var card: GWIdentityCard?            // dati mywellness normalizzati dal gateway (per la scheda profilo)
+}
+
+/// Dati del profilo mywellness normalizzati dal gateway; l'app li formatta nella lingua dell'utente.
+struct GWIdentityCard: Codable, Equatable {
+    var fullName: String
+    var nickName: String?
+    var email: String?
+    var gender: String?
+    var birthDate: String?          // YYYY-MM-DD
+    var culture: String?            // es. it-IT
+    var measurementSystem: String?  // Metric / Imperial
+    var memberSince: Date?
+    var timeZoneWindowsId: String?
+    var userId: String?
+    var extra: [String: String]?
 }
 
 /// Valore JSON generico (per i campi del profilo mywellness che il gateway inoltra così come sono).
