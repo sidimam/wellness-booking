@@ -51,6 +51,7 @@ struct MoreView: View {
                     if let mine = engine.profiles.first(where: { $0.id == engine.selectedProfile?.id && $0.userId == engine.serverUser?.id }) ?? engine.profiles.first(where: { $0.userId == engine.serverUser?.id }) {
                         NavigationLink { ProfileDetailView(profile: mine) } label: { Label("Il mio profilo mywellness", systemImage: "person.text.rectangle") }
                     }
+                    NavigationLink { PeopleView() } label: { Label("Persone del centro", systemImage: "person.3") }
                     if engine.serverUser?.isAdmin == true || !engine.profiles.contains(where: { $0.userId == engine.serverUser?.id }) {
                         NavigationLink { ServerProfilesView() } label: { Label(engine.serverUser?.isAdmin == true ? "Profili mywellness (\(engine.profiles.count))" : "Collega il mio account mywellness", systemImage: engine.serverUser?.isAdmin == true ? "person.2" : "person.crop.circle.badge.plus") }
                     }

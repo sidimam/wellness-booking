@@ -35,6 +35,8 @@ struct ClassDetailView: View {
                     if event.isInWaitingList == true { Label("Sei in lista d'attesa", systemImage: "person.2.wave.2").foregroundStyle(.orange) }
                 }
 
+                if engine.isServerMode { ParticipantsSection(event: event) }
+
                 Section {
                     if let o = event.opensOn {
                         LabeledContent("Apertura comunicata dal centro", value: "\(o.itShortDay) \(o.itTime)")

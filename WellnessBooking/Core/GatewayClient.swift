@@ -327,3 +327,55 @@ actor GatewayClient {
     func resetSettings() async throws -> GWSettings { try await request("DELETE", "/settings", as: GWSettings.self) }
     func log(limit: Int = 200) async throws -> [GWLogLine] { try await request("GET", "/log", query: ["limit": String(limit)], as: [GWLogLine].self) }
 }
+
+
+// MARK: Persone (soci visti nelle lezioni e classifica MOVEs; dati pubblici raccolti dal gateway in people.db)
+struct GWMember: Codable, Identifiable, Equatable {
+    var id: String
+    var nickName: String
+    var pictureUrl: String?
+    var `private`: Bool
+    var firstSeen: String
+    var lastSeen: String
+    var seenCount: Int
+    var classes: [String]?
+    var joinedOn: String?
+    var station: String?
+    var equipment: String?
+    var extra: [String: JSONValue]?
+    var bestWeekPosition: Int?
+    var bestMonthPosition: Int?
+    var displayName: String { `private` ? String(localized: "Profilo privato") : (nickName.isEmpty ? "—" : nickName) }
+}
+struct GWParticipants: Decodable { var participants: [GWMember]; var observedAt: String?; var liveError: String? }
+struct GWAttendance: Decodable, Identifiable {
+    var classId: String; var partitionDate: Int; var name: String; var start: Date; var room: String?; var trainer: String?; var joinedOn: String?; var station: String?
+    var id: String { "\(classId)|\(partitionDate)" }
+}
+struct GWLeaderboardRow: Decodable, Identifiable, Equatable {
+    var facilityId: String; var trend: String; var period: String; var position: Int; var nickName: String; var pictureUrl: String?; var moves: Int; var observedAt: String; var memberId: String?
+    var id: String { "\(trend)|\(period)|\(position)" }
+}
+struct GWLeaderboard: Decodable { var facilityId: String; var trend: String; var period: String; var periods: [String]; var entries: [GWLeaderboardRow] }
+struct GWMemberDetail: Decodable { var member: GWMember; var attendance: [GWAttendance]; var leaderboard: [GWLeaderboardRow] }
+struct GWPeopleStats: Decodable { var members: Int; var classes: Int; var attendance: Int; var lastUpdate: String? }
+
+extension GatewayClient {
+    func participants(profile: String, classId: String, partitionDate: Int, live: Bool = true) async throws -> GWParticipants {
+        try await request("GET", "/profiles/\(profile)/classes/\(classId)/\(partitionDate)/participants", query: live ? [:] : ["live": "0"], as: GWParticipants.self)
+    }
+    func members(facility: String?, query: String) async throws -> [GWMember] {
+        var q: [String: String] = ["limit": "300"]
+        if let f = facility { q["facility"] = f }
+        if !query.isEmpty { q["q"] = query }
+        return try await request("GET", "/people/members", query: q, as: [GWMember].self)
+    }
+    func member(_ id: String) async throws -> GWMemberDetail { try await request("GET", "/people/members/\(id)", as: GWMemberDetail.self) }
+    func leaderboard(facility: String?, trend: String, period: String?) async throws -> GWLeaderboard {
+        var q = ["trend": trend]
+        if let f = facility { q["facility"] = f }
+        if let p = period, !p.isEmpty { q["period"] = p }
+        return try await request("GET", "/people/leaderboard", query: q, as: GWLeaderboard.self)
+    }
+    func peopleStats() async throws -> GWPeopleStats { try await request("GET", "/people/stats", as: GWPeopleStats.self) }
+}

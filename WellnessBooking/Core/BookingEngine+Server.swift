@@ -254,6 +254,15 @@ extension BookingEngine {
         do { serverSettings = try await gateway.resetSettings(); addLog("Scheduler: tornato alle impostazioni predefinite", .warn); await refreshServer(force: true) } catch { lastError = error.localizedDescription }
     }
 
+    // MARK: Persone
+    func participants(for event: ClassEvent) async throws -> GWParticipants {
+        guard let p = selectedProfile else { throw GatewayClient.Failure(message: String(localized: "Nessun profilo selezionato"), status: 0) }
+        return try await gateway.participants(profile: p.id, classId: event.id, partitionDate: event.partitionDate)
+    }
+    func members(query: String) async throws -> [GWMember] { try await gateway.members(facility: selectedProfile?.facilityId, query: query) }
+    func member(_ id: String) async throws -> GWMemberDetail { try await gateway.member(id) }
+    func leaderboard(trend: String, period: String?) async throws -> GWLeaderboard { try await gateway.leaderboard(facility: selectedProfile?.facilityId, trend: trend, period: period) }
+
     func loadServerLog() async {
         serverLog = (try? await gateway.log(limit: 300)) ?? []
     }
