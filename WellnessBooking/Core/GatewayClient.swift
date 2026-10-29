@@ -120,7 +120,9 @@ extension GWSettings {
         let day: Date
         if followServerOpenTime, let o = e.opensOn { day = cal.startOfDay(for: o) }
         else { day = cal.date(byAdding: .day, value: -base.daysBefore, to: cal.startOfDay(for: e.start)) ?? e.start }
-        guard let r = rule(for: e.name, on: day), let t = cal.date(bySettingHour: r.hour, minute: r.minute, second: 0, of: day) else { return nil }
+        guard let r = rule(for: e.name, on: day), var t = cal.date(bySettingHour: r.hour, minute: r.minute, second: 0, of: day) else { return nil }
+        // come il gateway: mai prima dell'apertura comunicata dal centro (un minuto dopo, se è più tardi della regola)
+        if followServerOpenTime, let o = e.opensOn, o > t { t = o.addingTimeInterval(60) }
         return (t, r)
     }
 }
