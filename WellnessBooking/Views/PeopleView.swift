@@ -1,12 +1,27 @@
 import SwiftUI
 
 /// Avatar di un socio (foto pubblica o iniziale; i profili privati restano anonimi).
+/// Con `zoomable` un tocco sulla foto la apre a tutto schermo (pizzica o doppio tocco per ingrandire).
 struct MemberAvatar: View {
     let member: GWMember
     var size: CGFloat = 40
+    var zoomable = false
+    @State private var zoomed = false
+    private var photoURL: URL? {
+        guard !member.private, let u = member.pictureUrl, !u.isEmpty else { return nil }
+        return URL(string: u)
+    }
     var body: some View {
+        if zoomable, let url = photoURL {
+            Button { zoomed = true } label: { circle }
+                .buttonStyle(.borderless)
+                .accessibilityLabel("Ingrandisci la foto")
+                .fullScreenCover(isPresented: $zoomed) { PhotoZoomView(url: url, title: member.displayName) }
+        } else { circle }
+    }
+    private var circle: some View {
         Group {
-            if !member.private, let u = member.pictureUrl, !u.isEmpty, let url = URL(string: u) {
+            if let url = photoURL {
                 AsyncImage(url: url) { img in img.resizable().scaledToFill() } placeholder: { initial }
             } else { initial }
         }
@@ -21,19 +36,56 @@ struct MemberAvatar: View {
     }
 }
 
-/// Riga di un socio: foto, nickname, quante volte visto, lezioni, posizioni in classifica.
+/// Foto di un socio a tutto schermo: pizzica o doppio tocco per ingrandire, Chiudi o trascina in basso per uscire.
+struct PhotoZoomView: View {
+    let url: URL
+    let title: String
+    @Environment(\.dismiss) private var dismiss
+    @State private var scale: CGFloat = 1
+    @State private var base: CGFloat = 1
+    var body: some View {
+        NavigationStack {
+            ZStack {
+                Color.black.ignoresSafeArea()
+                AsyncImage(url: url) { img in
+                    img.resizable().scaledToFit()
+                        .scaleEffect(scale)
+                        .gesture(MagnifyGesture().onChanged { scale = max(1, min(5, base * $0.magnification)) }.onEnded { _ in base = scale })
+                        .onTapGesture(count: 2) { withAnimation { scale = scale > 1 ? 1 : 2.5; base = scale } }
+                } placeholder: { ProgressView().tint(.white) }
+            }
+            .navigationTitle(title)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbarColorScheme(.dark, for: .navigationBar)
+            .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Chiudi") { dismiss() } } }
+        }
+        .gesture(DragGesture().onEnded { if $0.translation.height > 120 && scale == 1 { dismiss() } })
+    }
+}
+
+/// Riga di un socio: foto (toccabile per ingrandirla), nome e cognome con il nickname sotto,
+/// quante volte visto, lezioni, posizioni in classifica. Un tocco sul testo apre la scheda (`onOpen`).
 struct MemberRow: View {
     let member: GWMember
     var showJoined = false
+    var onOpen: (() -> Void)? = nil
     var body: some View {
         HStack(spacing: 12) {
-            MemberAvatar(member: member, size: 44)
+            MemberAvatar(member: member, size: 52, zoomable: true)
+            if let open = onOpen {
+                Button(action: open) { details }.buttonStyle(.borderless).tint(.primary)
+            } else { details }
+        }
+    }
+    private var details: some View {
+        HStack {
             VStack(alignment: .leading, spacing: 3) {
                 HStack(spacing: 6) {
-                    Text(member.displayName).font(.body.weight(.semibold)).foregroundStyle(member.private ? .secondary : .primary)
+                    Text(member.displayName).font(.headline).foregroundStyle(member.private ? .secondary : .primary).multilineTextAlignment(.leading)
                     if let w = member.bestWeekPosition { Text("🏆 #\(w)").font(.caption2).padding(.horizontal, 6).padding(.vertical, 1).background(Color.yellow.opacity(0.25)).clipShape(Capsule()) }
                 }
-                if let n = member.secondaryNick { Text(n).font(.caption).foregroundStyle(.secondary).lineLimit(1) }
+                if let n = member.secondaryNick { Text(n).font(.subheadline).foregroundStyle(.secondary).lineLimit(1) }
                 if let c = member.classes, !c.isEmpty { Text(c.prefix(3).joined(separator: " · ")).font(.caption).foregroundStyle(.secondary).lineLimit(1) }
                 HStack(spacing: 8) {
                     Text(member.seenCount > 1 ? "Visto \(member.seenCount) volte" : "Nuovo").font(.caption2).foregroundStyle(member.seenCount > 1 ? Color.green : .secondary)
@@ -41,8 +93,9 @@ struct MemberRow: View {
                     if let st = member.station, !st.isEmpty { Text("postazione \(st)").font(.caption2).foregroundStyle(.secondary) }
                 }
             }
-            Spacer()
+            Spacer(minLength: 0)
         }
+        .contentShape(Rectangle())
     }
 }
 
@@ -75,13 +128,13 @@ struct ParticipantsSection: View {
             if let r = result {
                 if r.participants.isEmpty { Text("Nessun iscritto visibile.").foregroundStyle(.secondary) }
                 ForEach(r.participants) { m in
-                    Button { selected = m } label: { MemberRow(member: m, showJoined: true) }.buttonStyle(.plain)
+                    MemberRow(member: m, showJoined: true) { selected = m }
                 }
             }
         } header: {
             HStack { Text("Partecipanti"); Spacer(); if let r = result { Text("\(r.participants.count)").foregroundStyle(.secondary) } }
         } footer: {
-            if let r = result, let o = r.observedAt, let d = ISO8601DateFormatter.lenient(o) { Text("Aggiornato \(d.itShortDay) \(d.itTime) · tocca una persona per lo storico. Chi ha il profilo privato resta anonimo.") }
+            if let r = result, let o = r.observedAt, let d = ISO8601DateFormatter.lenient(o) { Text("Aggiornato \(d.itShortDay) \(d.itTime) · tocca il nome per lo storico, la foto per ingrandirla. Chi ha il profilo privato resta anonimo.") }
         }
         .task { await load() }
         .sheet(item: $selected) { m in NavigationStack { MemberDetailView(memberId: m.id) } }
@@ -105,7 +158,7 @@ struct MemberDetailView: View {
             if let d = detail {
                 Section {
                     VStack(spacing: 8) {
-                        MemberAvatar(member: d.member, size: 88)
+                        MemberAvatar(member: d.member, size: 120, zoomable: true)
                         Text(d.member.displayName).font(.title2.weight(.semibold))
                         if let n = d.member.secondaryNick { Text(n).font(.subheadline).foregroundStyle(.secondary) }
                         Text("Visto \(d.member.seenCount) volte").font(.footnote).foregroundStyle(.secondary)
@@ -176,7 +229,7 @@ struct PeopleView: View {
                 Text("La stessa classifica dell'app Technogym (Sfide). Le persone già viste in una lezione sono toccabili.")
             }
             Section {
-                ForEach(members) { m in Button { selected = m } label: { MemberRow(member: m) }.buttonStyle(.plain) }
+                ForEach(members) { m in MemberRow(member: m) { selected = m } }
                 if members.isEmpty { Text("Nessun socio ancora registrato: apri una lezione e la sezione Partecipanti, oppure aspetta la lettura automatica.").font(.footnote).foregroundStyle(.secondary) }
             } header: { Text("Compagni di corso (\(members.count))") } footer: {
                 Text("Soci visti nelle lezioni che segui o hai prenotato, i più frequenti prima. Dati pubblici di mywellness: nickname, foto, nome e cognome del profilo pubblico; i profili privati restano anonimi.")
@@ -217,3 +270,25 @@ struct PeopleView: View {
         do { members = try await engine.members(query: query); error = nil } catch { self.error = error.localizedDescription }
     }
 }
+
+#if DEBUG
+/// Elenco partecipanti di prova per i test visivi (`-demoParticipants`, solo Debug). Dati inventati, foto della famiglia.
+struct DemoParticipantsView: View {
+    private let members: [GWMember] = [
+        GWMember(id: "d1", nickName: "daniela.manieri", firstName: "Daniela", lastName: "Manieri", pictureUrl: "https://publicmedia.mywellness.com/users/photo/x0101x/35d415cc-4283-469d-8b31-9b6a40ac21ac_large.jpg", private: false, firstSeen: "2026-10-01T08:00:00Z", lastSeen: "2026-10-29T08:00:00Z", seenCount: 12, classes: ["Group Reformer", "PILATES"], joinedOn: "2026-10-26T07:01:00Z", bestWeekPosition: 3),
+        GWMember(id: "d2", nickName: "mario_r", firstName: "Mario Giovanni", lastName: "Rossi Bianchi", pictureUrl: nil, private: false, firstSeen: "2026-10-01T08:00:00Z", lastSeen: "2026-10-29T08:00:00Z", seenCount: 1, classes: ["HYDROBIKE"]),
+        GWMember(id: "d3", nickName: "Giusi", pictureUrl: nil, private: false, firstSeen: "2026-10-01T08:00:00Z", lastSeen: "2026-10-29T08:00:00Z", seenCount: 4, classes: ["INDOOR WALK"]),
+        GWMember(id: "d4", nickName: "*******", pictureUrl: nil, private: true, firstSeen: "2026-10-01T08:00:00Z", lastSeen: "2026-10-29T08:00:00Z", seenCount: 2),
+    ]
+    @State private var opened: String?
+    var body: some View {
+        NavigationStack {
+            List {
+                Section("Partecipanti") { ForEach(members) { m in MemberRow(member: m, showJoined: true) { opened = m.displayName } } }
+                if let o = opened { Section { Text("Aperta la scheda di \(o)") } }
+            }
+            .navigationTitle("Demo partecipanti")
+        }
+    }
+}
+#endif

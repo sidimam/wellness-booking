@@ -17,9 +17,18 @@ struct WellnessBookingApp: App {
         _ = Notifier.shared
     }
 
+    /// In Debug `-demoParticipants` mostra solo l'elenco partecipanti di prova (test visivi nel simulatore senza login).
+    @ViewBuilder private var root: some View {
+        #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("-demoParticipants") { DemoParticipantsView() } else { ContentView() }
+        #else
+        ContentView()
+        #endif
+    }
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            root
                 .environmentObject(engine)
                 .environmentObject(quickActions)
                 .tint(AppIconColor.tint(for: engine.settings.accent))

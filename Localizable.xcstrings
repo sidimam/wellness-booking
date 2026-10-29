@@ -10261,34 +10261,6 @@
         }
       }
     },
-    "Aggiornato %@ %@ · tocca una persona per lo storico. Chi ha il profilo privato resta anonimo.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Updated %@ %@ · tap a person for the history. Private profiles stay anonymous."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Actualizado %@ %@ · toca una persona para el historial. Los perfiles privados permanecen anónimos."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mis à jour %@ %@ · touchez une personne pour l'historique. Les profils privés restent anonymes."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aktualisiert %@ %@ · tippe eine Person für den Verlauf an. Private Profile bleiben anonym."
-          }
-        }
-      }
-    },
     "dal %@ · ultima volta %@": {
       "localizations": {
         "en": {
@@ -11041,6 +11013,62 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mitglieder aus den Kursen, die du verfolgst oder gebucht hast, die häufigsten zuerst. Öffentliche mywellness-Daten: Spitzname, Foto, Vor- und Nachname des öffentlichen Profils; private Profile bleiben anonym."
+          }
+        }
+      }
+    },
+    "Aggiornato %@ %@ · tocca il nome per lo storico, la foto per ingrandirla. Chi ha il profilo privato resta anonimo.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Updated %@ %@ · tap the name for the history, the photo to enlarge it. Private profiles stay anonymous."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actualizado %@ %@ · toca el nombre para el historial y la foto para ampliarla. Los perfiles privados permanecen anónimos."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mis à jour %@ %@ · touchez le nom pour l'historique, la photo pour l'agrandir. Les profils privés restent anonymes."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktualisiert %@ %@ · Namen tippen für den Verlauf, Foto zum Vergrößern. Private Profile bleiben anonym."
+          }
+        }
+      }
+    },
+    "Ingrandisci la foto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enlarge photo"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ampliar la foto"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Agrandir la photo"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Foto vergrößern"
           }
         }
       }
