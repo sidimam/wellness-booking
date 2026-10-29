@@ -165,6 +165,15 @@ struct ServerProfilesView: View {
     }
 }
 
+extension ServerSettingsView {
+    static func dayString(_ d: Date) -> String {
+        let f = DateFormatter(); f.locale = Locale(identifier: "en_US_POSIX"); f.timeZone = TimeZone(identifier: "Europe/Rome"); f.dateFormat = "yyyy-MM-dd"; return f.string(from: d)
+    }
+    static func date(_ s: String) -> Date? {
+        let f = DateFormatter(); f.locale = Locale(identifier: "en_US_POSIX"); f.timeZone = TimeZone(identifier: "Europe/Rome"); f.dateFormat = "yyyy-MM-dd"; return f.date(from: s)
+    }
+}
+
 /// Impostazioni dello scheduler sul gateway: PERSONALI per ogni utente (amministratore o no); le predefinite
 /// le decide l'amministratore dalla web UI e valgono per chi non ha salvato le proprie.
 struct ServerSettingsView: View {
@@ -187,6 +196,14 @@ struct ServerSettingsView: View {
                         }
                         if r.pattern != "*" {
                             Stepper(r.maxBookings == 0 ? "Max prenotazioni: solo limite profilo" : "Max prenotazioni: \(r.maxBookings)", value: $r.maxBookings, in: 0...20)
+                            Stepper((r.maxPerWeek ?? 0) == 0 ? "Max a settimana: nessun limite" : "Max a settimana: \(r.maxPerWeek ?? 0)",
+                                    value: Binding(get: { r.maxPerWeek ?? 0 }, set: { r.maxPerWeek = $0 == 0 ? nil : $0 }), in: 0...14)
+                        }
+                        Toggle("Valida da una data", isOn: Binding(get: { !(r.validFrom ?? "").isEmpty },
+                                                                    set: { r.validFrom = $0 ? ServerSettingsView.dayString(Date()) : nil }))
+                        if let vf = r.validFrom, !vf.isEmpty {
+                            DatePicker("Valida dal", selection: Binding(get: { ServerSettingsView.date(vf) ?? Date() }, set: { r.validFrom = ServerSettingsView.dayString($0) }),
+                                       displayedComponents: .date)
                         }
                         HStack {
                             Stepper("Giorni prima: \(r.daysBefore)", value: $r.daysBefore, in: 0...30)
@@ -201,7 +218,7 @@ struct ServerSettingsView: View {
                 Stepper("Anticipo: \(s.leadMilliseconds) ms", value: $s.leadMilliseconds, in: 0...3000, step: 100)
                 Stepper("Insisti per \(s.burstSeconds) s dopo l'apertura", value: $s.burstSeconds, in: 10...600, step: 10)
             } header: { Text("Scheduler") } footer: {
-                Text("Scrivi tu il testo da cercare nel nome della lezione (es. Reformer → 3 giorni alle 05:01, massimo 3 prenotazioni attive). L'ora viene sempre dalla regola; con \"Segui l'orario del centro\" il giorno di apertura è quello comunicato da mywellness. \"Max prenotazioni\" è una quota separata per quel tipo di lezione (es. Reformer 3): quelle lezioni non contano nel limite del profilo.")
+                Text("Scrivi tu il testo da cercare nel nome della lezione (es. Reformer → 3 giorni alle 05:01, massimo 3 prenotazioni attive). L'ora viene sempre dalla regola; con \"Segui l'orario del centro\" il giorno di apertura è quello comunicato da mywellness. \"Max prenotazioni\" è una quota separata per quel tipo di lezione (es. Reformer 3): quelle lezioni non contano nel limite del profilo. \"Max a settimana\" limita quel tipo di lezione nella stessa settimana (lunedì–domenica). \"Valida da una data\" fa partire la regola da un giorno di apertura (es. Reformer alle 07:01 dal 1° novembre): per lo stesso nome vale la regola con la data più recente già raggiunta.")
             }
             .disabled(readOnly)
             Section {
@@ -326,7 +343,7 @@ struct ProfileDetailView: View {
                             Image(systemName: c.id == engine.selectedProfile?.id ? "checkmark.circle.fill" : "building.2").foregroundStyle(c.id == engine.selectedProfile?.id ? Color.accentColor : .secondary)
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(c.facilityName).foregroundStyle(.primary)
-                                Text("Prenotazioni attive \(c.activeBookings)/\(c.maxBookings)" + (c.limits ?? []).map { " · \($0.pattern) \($0.active)/\($0.max)" }.joined()).font(.caption).foregroundStyle(.secondary)
+                                Text("Prenotazioni attive \(c.activeBookings)/\(c.maxBookings)" + (c.limits ?? []).map { " · " + $0.summary }.joined()).font(.caption).foregroundStyle(.secondary)
                                 if let e = c.lastLoginError, !e.isEmpty { Text(e).font(.caption).foregroundStyle(.red) }
                                 else if let d = c.lastLoginAt { Text("Ultimo login mywellness \(d.itDateTime)").font(.caption2).foregroundStyle(.secondary) }
                             }

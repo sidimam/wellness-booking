@@ -8,7 +8,12 @@ struct ClassDetailView: View {
 
     private var tracked: WatchItem? { engine.items.first { $0.id == event.key } }
     private var probe: WatchItem { WatchItem(event: event, recurring: false) }
-    private var fireAt: Date? { probe.fireAt(settings: engine.settings) }
+    /// In modalità gateway l'ora viene dalle regole del gateway (con data di validità), altrimenti da quelle locali.
+    private var serverPlan: (date: Date, rule: GWOpenRule)? { engine.isServerMode ? engine.serverSettings?.fireAt(for: event) : nil }
+    private var fireAt: Date? {
+        if engine.isServerMode { return tracked?.serverFireAt ?? serverPlan?.date }
+        return probe.fireAt(settings: engine.settings)
+    }
     private var weekday: String {
         let f = DateFormatter(); f.locale = AppLanguage.current.locale; f.dateFormat = "EEEE"; return f.string(from: event.start)
     }
@@ -48,8 +53,12 @@ struct ClassDetailView: View {
                         }
                     }
                     LabeledContent("Regola") {
-                        let r = engine.settings.rule(for: event.name)
-                        Text("\(r.isDefault ? "*" : r.pattern) · \(r.daysBefore) gg · \(String(format: "%02d:%02d", r.hour, r.minute))")
+                        if let r = serverPlan?.rule {
+                            Text("\(r.pattern) · \(r.daysBefore) gg · \(String(format: "%02d:%02d", r.hour, r.minute))" + ((r.maxPerWeek ?? 0) > 0 ? " · max \(r.maxPerWeek!)/" + String(localized: "sett.") : ""))
+                        } else {
+                            let r = engine.settings.rule(for: event.name)
+                            Text("\(r.isDefault ? "*" : r.pattern) · \(r.daysBefore) gg · \(String(format: "%02d:%02d", r.hour, r.minute))")
+                        }
                     }
                     if !engine.isServerMode {
                         Toggle(isOn: .init(get: { !engine.settings.useCustomOpenTime }, set: { engine.settings.useCustomOpenTime = !$0 })) {

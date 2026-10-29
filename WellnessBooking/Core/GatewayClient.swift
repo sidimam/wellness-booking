@@ -94,6 +94,35 @@ struct GWOpenRule: Codable, Identifiable, Equatable {
     var hour: Int
     var minute: Int
     var maxBookings: Int = 0
+    var maxPerWeek: Int? = nil     // prenotazioni massime per settimana (lun-dom); nil/0 = nessun limite
+    var validFrom: String? = nil   // YYYY-MM-DD: vale per le aperture da questo giorno (nil = sempre)
+
+    func applies(on day: String) -> Bool { (validFrom ?? "").isEmpty || validFrom! <= day }
+}
+
+extension GWSettings {
+    private static let dayFormatter: DateFormatter = {
+        let f = DateFormatter(); f.locale = Locale(identifier: "en_US_POSIX"); f.timeZone = TimeZone(identifier: "Europe/Rome"); f.dateFormat = "yyyy-MM-dd"; return f
+    }()
+    /// Regola del gateway valida per una lezione e un giorno di apertura (stessa logica del gateway:
+    /// prima le regole con nome, poi "*"; tra le valide vince la data di validità più recente).
+    func rule(for name: String, on day: Date) -> GWOpenRule? {
+        let d = Self.dayFormatter.string(from: day)
+        func pick(_ rs: [GWOpenRule]) -> GWOpenRule? { rs.filter { $0.applies(on: d) }.max { ($0.validFrom ?? "") < ($1.validFrom ?? "") } }
+        let named = openRules.filter { let p = $0.pattern.trimmingCharacters(in: .whitespaces); return !p.isEmpty && p != "*" && name.localizedCaseInsensitiveContains(p) }
+        if let r = pick(named) { return r }
+        return pick(openRules.filter { $0.pattern.trimmingCharacters(in: .whitespaces) == "*" })
+    }
+    /// Quando il gateway proverà a prenotare una lezione non ancora seguita.
+    func fireAt(for e: ClassEvent) -> (date: Date, rule: GWOpenRule)? {
+        let cal = { var c = Calendar(identifier: .gregorian); c.timeZone = TimeZone(identifier: "Europe/Rome")!; return c }()
+        guard let base = rule(for: e.name, on: e.start) else { return nil }
+        let day: Date
+        if followServerOpenTime, let o = e.opensOn { day = cal.startOfDay(for: o) }
+        else { day = cal.date(byAdding: .day, value: -base.daysBefore, to: cal.startOfDay(for: e.start)) ?? e.start }
+        guard let r = rule(for: e.name, on: day), let t = cal.date(bySettingHour: r.hour, minute: r.minute, second: 0, of: day) else { return nil }
+        return (t, r)
+    }
 }
 
 struct GWLimit: Codable, Equatable, Identifiable {
@@ -101,6 +130,14 @@ struct GWLimit: Codable, Equatable, Identifiable {
     var pattern: String
     var active: Int
     var max: Int
+    var perWeek: Int? = nil
+    var thisWeek: Int? = nil
+    /// Testo compatto: "Reformer 1/3 (sett. 1/2)".
+    var summary: String {
+        var s = max > 0 ? "\(pattern) \(active)/\(max)" : pattern
+        if let w = perWeek, w > 0 { s += " (" + String(localized: "sett.") + " \(thisWeek ?? 0)/\(w))" }
+        return s
+    }
 }
 
 struct GWSettings: Codable, Equatable {

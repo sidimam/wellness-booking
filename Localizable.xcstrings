@@ -10876,6 +10876,174 @@
           }
         }
       }
+    },
+    "sett.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "wk"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "sem."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "sem."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wo."
+          }
+        }
+      }
+    },
+    "Max a settimana: nessun limite": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Max per week: no limit"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Máx. por semana: sin límite"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Max par semaine : aucune limite"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Max. pro Woche: kein Limit"
+          }
+        }
+      }
+    },
+    "Max a settimana: %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Max per week: %lld"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Máx. por semana: %lld"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Max par semaine : %lld"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Max. pro Woche: %lld"
+          }
+        }
+      }
+    },
+    "Valida da una data": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Valid from a date"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Válida desde una fecha"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Valable à partir d'une date"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gültig ab einem Datum"
+          }
+        }
+      }
+    },
+    "Valida dal": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Valid from"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Válida desde"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Valable dès"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gültig ab"
+          }
+        }
+      }
+    },
+    "Scrivi tu il testo da cercare nel nome della lezione (es. Reformer → 3 giorni alle 05:01, massimo 3 prenotazioni attive). L'ora viene sempre dalla regola; con \"Segui l'orario del centro\" il giorno di apertura è quello comunicato da mywellness. \"Max prenotazioni\" è una quota separata per quel tipo di lezione (es. Reformer 3): quelle lezioni non contano nel limite del profilo. \"Max a settimana\" limita quel tipo di lezione nella stessa settimana (lunedì–domenica). \"Valida da una data\" fa partire la regola da un giorno di apertura (es. Reformer alle 07:01 dal 1° novembre): per lo stesso nome vale la regola con la data più recente già raggiunta.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Type the text to look for in the class name (e.g. Reformer → 3 days at 05:01, max 3 active bookings). The time always comes from the rule; with \"Follow the club's time\" the opening day is the one reported by mywellness. \"Max bookings\" is a separate quota for that kind of class (e.g. Reformer 3): those classes do not count in the profile limit. \"Max per week\" limits that kind of class within the same week (Monday–Sunday). \"Valid from a date\" starts the rule on an opening day (e.g. Reformer at 07:01 from 1 November): for the same name, the rule with the most recent date already reached applies."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escribe el texto a buscar en el nombre de la clase (p. ej. Reformer → 3 días a las 05:01, máximo 3 reservas activas). La hora viene siempre de la regla; con \"Seguir el horario del centro\" el día de apertura es el que comunica mywellness. \"Máx. reservas\" es una cuota separada para ese tipo de clase (p. ej. Reformer 3): esas clases no cuentan en el límite del perfil. \"Máx. por semana\" limita ese tipo de clase en la misma semana (lunes–domingo). \"Válida desde una fecha\" hace empezar la regla en un día de apertura (p. ej. Reformer a las 07:01 desde el 1 de noviembre): para el mismo nombre vale la regla con la fecha más reciente ya alcanzada."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saisissez le texte à rechercher dans le nom du cours (ex. Reformer → 3 jours à 05:01, maximum 3 réservations actives). L'heure vient toujours de la règle ; avec « Suivre l'horaire du club » le jour d'ouverture est celui communiqué par mywellness. « Max réservations » est un quota séparé pour ce type de cours (ex. Reformer 3) : ces cours ne comptent pas dans la limite du profil. « Max par semaine » limite ce type de cours dans la même semaine (lundi–dimanche). « Valable à partir d'une date » fait démarrer la règle un jour d'ouverture (ex. Reformer à 07:01 dès le 1er novembre) : pour un même nom, la règle avec la date la plus récente déjà atteinte s'applique."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gib den Text ein, der im Kursnamen gesucht wird (z. B. Reformer → 3 Tage um 05:01, maximal 3 aktive Buchungen). Die Uhrzeit kommt immer aus der Regel; mit „Zeit des Studios folgen“ ist der Öffnungstag der von mywellness gemeldete. „Max. Buchungen“ ist ein eigenes Kontingent für diese Kursart (z. B. Reformer 3): diese Kurse zählen nicht zum Profil-Limit. „Max. pro Woche“ begrenzt diese Kursart in derselben Woche (Montag–Sonntag). „Gültig ab einem Datum“ lässt die Regel an einem Öffnungstag beginnen (z. B. Reformer um 07:01 ab 1. November): bei gleichem Namen gilt die Regel mit dem jüngsten bereits erreichten Datum."
+          }
+        }
+      }
     }
   },
   "version": "1.0"

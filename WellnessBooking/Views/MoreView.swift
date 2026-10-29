@@ -41,7 +41,7 @@ struct MoreView: View {
                         }
                     } label: { Label("Container", systemImage: "shippingbox") }
                     if let p = engine.selectedProfile {
-                        LabeledContent { Text("\(p.activeBookings)/\(p.maxBookings)" + (p.limits ?? []).map { " · \($0.pattern) \($0.active)/\($0.max)" }.joined()).foregroundStyle(.secondary) } label: { Label("Prenotazioni attive", systemImage: "checkmark.circle") }
+                        LabeledContent { Text("\(p.activeBookings)/\(p.maxBookings)" + (p.limits ?? []).map { " · " + $0.summary }.joined()).foregroundStyle(.secondary) } label: { Label("Prenotazioni attive", systemImage: "checkmark.circle") }
                     }
                     if let d = engine.serverLastSeen { LabeledContent { Text(d.itTime).foregroundStyle(.secondary) } label: { Label("Ultimo contatto", systemImage: "clock") } }
                     Button { Task { await engine.refreshServer(force: true) } } label: { Label("Verifica ora", systemImage: "arrow.clockwise") }

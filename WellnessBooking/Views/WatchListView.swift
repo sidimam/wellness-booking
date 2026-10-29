@@ -41,7 +41,7 @@ struct WatchListView: View {
                 } header: { Text("Prenotate su mywellness · \(engine.selectedProfile?.label ?? "")") } footer: {
                     VStack(alignment: .leading, spacing: 2) {
                         if let p = engine.selectedProfile {
-                            Text("Prenotazioni attive \(p.activeBookings)/\(p.maxBookings)" + (p.limits ?? []).map { " · \($0.pattern) \($0.active)/\($0.max)" }.joined())
+                            Text("Prenotazioni attive \(p.activeBookings)/\(p.maxBookings)" + (p.limits ?? []).map { " · " + $0.summary }.joined())
                                 .foregroundStyle(p.activeBookings >= p.maxBookings ? .orange : .secondary)
                         }
                         Text("Tutte le prenotazioni attive del profilo, fatte dal gateway o dall'app/sito Technogym. Scorri a sinistra per disdire.")
