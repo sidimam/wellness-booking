@@ -16,7 +16,7 @@ struct MemberAvatar: View {
         ZStack {
             Circle().fill(member.private ? Color.secondary.opacity(0.3) : Color.accentColor.opacity(0.85))
             if member.private { Image(systemName: "person.fill.questionmark").imageScale(.medium).foregroundStyle(.white) }
-            else { Text(String(member.nickName.prefix(1)).uppercased()).font(.system(size: size / 2.2, weight: .bold)).foregroundStyle(.white) }
+            else { Text(String((member.fullName ?? member.nickName).prefix(1)).uppercased()).font(.system(size: size / 2.2, weight: .bold)).foregroundStyle(.white) }
         }
     }
 }
@@ -33,6 +33,7 @@ struct MemberRow: View {
                     Text(member.displayName).font(.body.weight(.semibold)).foregroundStyle(member.private ? .secondary : .primary)
                     if let w = member.bestWeekPosition { Text("🏆 #\(w)").font(.caption2).padding(.horizontal, 6).padding(.vertical, 1).background(Color.yellow.opacity(0.25)).clipShape(Capsule()) }
                 }
+                if let n = member.secondaryNick { Text(n).font(.caption).foregroundStyle(.secondary).lineLimit(1) }
                 if let c = member.classes, !c.isEmpty { Text(c.prefix(3).joined(separator: " · ")).font(.caption).foregroundStyle(.secondary).lineLimit(1) }
                 HStack(spacing: 8) {
                     Text(member.seenCount > 1 ? "Visto \(member.seenCount) volte" : "Nuovo").font(.caption2).foregroundStyle(member.seenCount > 1 ? Color.green : .secondary)
@@ -106,6 +107,7 @@ struct MemberDetailView: View {
                     VStack(spacing: 8) {
                         MemberAvatar(member: d.member, size: 88)
                         Text(d.member.displayName).font(.title2.weight(.semibold))
+                        if let n = d.member.secondaryNick { Text(n).font(.subheadline).foregroundStyle(.secondary) }
                         Text("Visto \(d.member.seenCount) volte").font(.footnote).foregroundStyle(.secondary)
                         if let f = ISO8601DateFormatter.lenient(d.member.firstSeen), let l = ISO8601DateFormatter.lenient(d.member.lastSeen) {
                             Text("dal \(f.itShortDay) · ultima volta \(l.itShortDay)").font(.caption).foregroundStyle(.secondary)
@@ -177,11 +179,11 @@ struct PeopleView: View {
                 ForEach(members) { m in Button { selected = m } label: { MemberRow(member: m) }.buttonStyle(.plain) }
                 if members.isEmpty { Text("Nessun socio ancora registrato: apri una lezione e la sezione Partecipanti, oppure aspetta la lettura automatica.").font(.footnote).foregroundStyle(.secondary) }
             } header: { Text("Compagni di corso (\(members.count))") } footer: {
-                Text("Soci visti nelle lezioni che segui o hai prenotato, i più frequenti prima. Dati pubblici di mywellness: nickname, foto, profilo privato.")
+                Text("Soci visti nelle lezioni che segui o hai prenotato, i più frequenti prima. Dati pubblici di mywellness: nickname, foto, nome e cognome del profilo pubblico; i profili privati restano anonimi.")
             }
             if let e = error { Section { Text(e).foregroundStyle(.red).font(.footnote) } }
         }
-        .searchable(text: $query, prompt: "Cerca nickname")
+        .searchable(text: $query, prompt: "Cerca nome o nickname")
         .navigationTitle("Persone")
         .navigationBarTitleDisplayMode(.inline)
         .task { await loadAll() }

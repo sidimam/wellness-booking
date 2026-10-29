@@ -10765,62 +10765,6 @@
         }
       }
     },
-    "Soci visti nelle lezioni che segui o hai prenotato, i più frequenti prima. Dati pubblici di mywellness: nickname, foto, profilo privato.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Members seen in the classes you track or booked, most frequent first. Public mywellness data: nickname, picture, private profile."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Socios vistos en las clases que sigues o has reservado, los más frecuentes primero. Datos públicos de mywellness: apodo, foto, perfil privado."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Membres vus dans les cours que vous suivez ou avez réservés, les plus fréquents d'abord. Données publiques mywellness : pseudo, photo, profil privé."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mitglieder aus den Kursen, die du verfolgst oder gebucht hast, die häufigsten zuerst. Öffentliche mywellness-Daten: Spitzname, Foto, privates Profil."
-          }
-        }
-      }
-    },
-    "Cerca nickname": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Search nickname"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Buscar apodo"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rechercher un pseudo"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Spitzname suchen"
-          }
-        }
-      }
-    },
     "Persone": {
       "localizations": {
         "en": {
@@ -11041,6 +10985,62 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gib den Text ein, der im Kursnamen gesucht wird (z. B. Reformer → 3 Tage um 05:01, maximal 3 aktive Buchungen). Die Uhrzeit kommt immer aus der Regel; mit „Zeit des Studios folgen“ ist der Öffnungstag der von mywellness gemeldete. „Max. Buchungen“ ist ein eigenes Kontingent für diese Kursart (z. B. Reformer 3): diese Kurse zählen nicht zum Profil-Limit. „Max. pro Woche“ begrenzt diese Kursart in derselben Woche (Montag–Sonntag). „Gültig ab einem Datum“ lässt die Regel an einem Öffnungstag beginnen (z. B. Reformer um 07:01 ab 1. November): bei gleichem Namen gilt die Regel mit dem jüngsten bereits erreichten Datum."
+          }
+        }
+      }
+    },
+    "Cerca nome o nickname": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search name or nickname"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buscar nombre o apodo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rechercher un nom ou un pseudo"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name oder Spitzname suchen"
+          }
+        }
+      }
+    },
+    "Soci visti nelle lezioni che segui o hai prenotato, i più frequenti prima. Dati pubblici di mywellness: nickname, foto, nome e cognome del profilo pubblico; i profili privati restano anonimi.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Members seen in the classes you track or booked, most frequent first. Public mywellness data: nickname, picture, first and last name of the public profile; private profiles stay anonymous."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Socios vistos en las clases que sigues o has reservado, los más frecuentes primero. Datos públicos de mywellness: apodo, foto, nombre y apellidos del perfil público; los perfiles privados permanecen anónimos."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Membres vus dans les cours que vous suivez ou avez réservés, les plus fréquents d'abord. Données publiques mywellness : pseudo, photo, nom et prénom du profil public ; les profils privés restent anonymes."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mitglieder aus den Kursen, die du verfolgst oder gebucht hast, die häufigsten zuerst. Öffentliche mywellness-Daten: Spitzname, Foto, Vor- und Nachname des öffentlichen Profils; private Profile bleiben anonym."
           }
         }
       }

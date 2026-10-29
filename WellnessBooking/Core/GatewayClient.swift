@@ -372,6 +372,8 @@ actor GatewayClient {
 struct GWMember: Codable, Identifiable, Equatable {
     var id: String
     var nickName: String
+    var firstName: String? = nil   // dal profilo pubblico mywellness (gateway ≥ 0.2.8; vuoto se privato)
+    var lastName: String? = nil
     var pictureUrl: String?
     var `private`: Bool
     var firstSeen: String
@@ -384,7 +386,14 @@ struct GWMember: Codable, Identifiable, Equatable {
     var extra: [String: JSONValue]?
     var bestWeekPosition: Int?
     var bestMonthPosition: Int?
-    var displayName: String { `private` ? String(localized: "Profilo privato") : (nickName.isEmpty ? "—" : nickName) }
+    /// Nome e cognome del profilo pubblico, se il gateway li ha letti.
+    var fullName: String? {
+        let n = [firstName, lastName].compactMap { $0?.trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty }.joined(separator: " ")
+        return `private` || n.isEmpty ? nil : n
+    }
+    var displayName: String { `private` ? String(localized: "Profilo privato") : (fullName ?? (nickName.isEmpty ? "—" : nickName)) }
+    /// Il nickname come riga secondaria quando il titolo è nome e cognome.
+    var secondaryNick: String? { fullName != nil && !nickName.isEmpty ? nickName : nil }
 }
 struct GWParticipants: Decodable { var participants: [GWMember]; var observedAt: String?; var liveError: String? }
 struct GWAttendance: Decodable, Identifiable {
