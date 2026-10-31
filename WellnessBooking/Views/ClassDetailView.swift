@@ -14,6 +14,12 @@ struct ClassDetailView: View {
         if engine.isServerMode { return tracked?.serverFireAt ?? serverPlan?.date }
         return probe.fireAt(settings: engine.settings)
     }
+    /// Tentativi dopo il primo (es. 07:01 dopo 05:01): dal gateway per le lezioni seguite, altrimenti dalle regole.
+    private var laterAttempts: [Date] {
+        guard engine.isServerMode else { return [] }
+        if let t = tracked, !t.serverFireTimes.isEmpty { return t.laterAttempts }
+        return Array((engine.serverSettings?.fireTimes(for: event)?.dates ?? []).dropFirst())
+    }
     private var weekday: String {
         let f = DateFormatter(); f.locale = AppLanguage.current.locale; f.dateFormat = "EEEE"; return f.string(from: event.start)
     }
@@ -42,19 +48,20 @@ struct ClassDetailView: View {
 
                 if engine.isServerMode { ParticipantsSection(event: event) }
 
+                if event.end > Date() {
                 Section {
                     if let o = event.opensOn {
                         LabeledContent("Apertura comunicata dal centro", value: "\(o.itShortDay) \(o.itTime)")
                     }
                     if let f = fireAt {
                         LabeledContent("L'app prenoterà") {
-                            Text(f > Date() ? "\(f.itShortDay) alle \(f.itTime)" : "subito (apertura già avvenuta)")
+                            Text(f > Date() ? "\(f.itShortDay) alle \(f.itTime)" + laterAttempts.map { " " + String(localized: "e alle") + " \($0.itTime)" }.joined() : "subito (apertura già avvenuta)")
                                 .foregroundStyle(Color.accentColor).bold()
                         }
                     }
                     LabeledContent("Regola") {
                         if let r = serverPlan?.rule {
-                            Text("\(r.pattern) · \(r.daysBefore) gg · \(String(format: "%02d:%02d", r.hour, r.minute))" + ((r.maxPerWeek ?? 0) > 0 ? " · max \(r.maxPerWeek!)/" + String(localized: "sett.") : ""))
+                            Text("\(r.pattern) · \(r.daysBefore) gg · \(String(format: "%02d:%02d", r.hour, r.minute))" + (r.alsoHM.map { " + " + String(format: "%02d:%02d", $0.h, $0.m) } ?? "") + ((r.maxPerWeek ?? 0) > 0 ? " · max \(r.maxPerWeek!)/" + String(localized: "sett.") : ""))
                         } else {
                             let r = engine.settings.rule(for: event.name)
                             Text("\(r.isDefault ? "*" : r.pattern) · \(r.daysBefore) gg · \(String(format: "%02d:%02d", r.hour, r.minute))")
@@ -91,6 +98,7 @@ struct ClassDetailView: View {
                         Button { subscribe(recurring: true) } label: { Label("Prenota ogni \(weekday) alle \(event.start.itTime)", systemImage: "repeat") }
                     }
                 } header: { Text("Prenotazione automatica") }
+                }   // lezione conclusa: solo dettagli e partecipanti
             }
             .navigationTitle(event.name)
             .navigationBarTitleDisplayMode(.inline)

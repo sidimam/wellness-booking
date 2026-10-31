@@ -13,7 +13,7 @@ struct ClassesView: View {
 
     private var filtered: [ClassEvent] {
         engine.classes.filter { e in
-            guard e.start > Date() else { return false }
+            guard e.start >= DateParsing.calendar.startOfDay(for: Date()) else { return false }   // le lezioni di oggi restano fino a mezzanotte
             if onlyBookable && (e.bookingInfo?.bookingAvailable == false) { return false }
             let f = filter.trimmingCharacters(in: .whitespaces)
             return f.isEmpty || e.name.localizedCaseInsensitiveContains(f)
@@ -45,7 +45,7 @@ struct ClassesView: View {
                 Section(day.itLongDay) {
                     ForEach(events) { e in
                         ClassRow(event: e, selected: selected.contains(e.key), tracked: engine.isSelected(e)) {
-                            guard !engine.isSelected(e) else { return }
+                            guard !engine.isSelected(e), e.end > Date() else { return }
                             if selected.contains(e.key) { selected.remove(e.key) } else { selected.insert(e.key) }
                             Haptics.tap(enabled: engine.settings.hapticsEnabled)
                         }
@@ -108,7 +108,9 @@ struct ClassRow: View {
     let tracked: Bool
     var onToggle: () -> Void = {}
 
+    private var ended: Bool { event.end < Date() }
     private var statusText: (String, Color) {
+        if ended { return (String(localized: "Conclusa"), .secondary) }
         if event.isParticipant == true { return (String(localized: "Prenotata"), .green) }
         if event.isInWaitingList == true { return (String(localized: "In lista d'attesa"), .orange) }
         if event.bookingInfo?.bookingAvailable == false { return (String(localized: "Non prenotabile online"), .secondary) }
@@ -121,12 +123,14 @@ struct ClassRow: View {
         HStack(alignment: .center, spacing: 12) {
             ClassThumb(url: event.pictureUrl, size: 48)
             Button(action: onToggle) {
-                Image(systemName: tracked ? "checkmark.circle.fill" : (selected ? "checkmark.circle.fill" : "circle"))
+                Image(systemName: ended ? "person.2" : (tracked ? "checkmark.circle.fill" : (selected ? "checkmark.circle.fill" : "circle")))
                     .font(.title2)
-                    .foregroundStyle(tracked ? Color.secondary : Color.accentColor)
+                    .foregroundStyle(tracked || ended ? Color.secondary : Color.accentColor)
                     .frame(width: 36, height: 36)
             }
             .buttonStyle(.plain)
+            .disabled(ended)
+            .accessibilityHidden(ended)
             VStack(alignment: .leading, spacing: 3) {
                 HStack {
                     Text("\(event.start.itTime) – \(event.end.itTime)").font(.subheadline.weight(.semibold)).monospacedDigit()
@@ -142,6 +146,6 @@ struct ClassRow: View {
             }
         }
         .padding(.vertical, 2)
-        .opacity(tracked ? 0.6 : 1)
+        .opacity(ended ? 0.55 : (tracked ? 0.6 : 1))
     }
 }

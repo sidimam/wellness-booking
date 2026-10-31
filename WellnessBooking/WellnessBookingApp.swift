@@ -20,7 +20,15 @@ struct WellnessBookingApp: App {
     /// In Debug `-demoParticipants` mostra solo l'elenco partecipanti di prova (test visivi nel simulatore senza login).
     @ViewBuilder private var root: some View {
         #if DEBUG
-        if ProcessInfo.processInfo.arguments.contains("-demoParticipants") { DemoParticipantsView() } else { ContentView() }
+        if ProcessInfo.processInfo.arguments.contains("-demoParticipants") { DemoParticipantsView() } else {
+            // -mockGateway <url>: collega il gateway di prova (scripts/mockui.py del repo wellness-gateway) per i test nel simulatore
+            ContentView().task {
+                let args = ProcessInfo.processInfo.arguments
+                if let i = args.firstIndex(of: "-mockGateway"), i + 1 < args.count {
+                    _ = await engine.serverLogin(url: args[i + 1], username: "mock", password: "mock")
+                }
+            }
+        }
         #else
         ContentView()
         #endif

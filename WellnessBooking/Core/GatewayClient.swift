@@ -96,6 +96,12 @@ struct GWOpenRule: Codable, Identifiable, Equatable {
     var maxBookings: Int = 0
     var maxPerWeek: Int? = nil     // prenotazioni massime per settimana (lun-dom); nil/0 = nessun limite
     var validFrom: String? = nil   // YYYY-MM-DD: vale per le aperture da questo giorno (nil = sempre)
+    var alsoAt: String? = nil      // HH:MM: secondo primo tentativo nello stesso giorno (gateway ≥ 0.2.10), nil = nessuno
+    /// Ora e minuti del secondo tentativo, se impostato.
+    var alsoHM: (h: Int, m: Int)? {
+        let p = (alsoAt ?? "").split(separator: ":").compactMap { Int($0) }
+        return p.count == 2 && (0..<24).contains(p[0]) && (0..<60).contains(p[1]) ? (p[0], p[1]) : nil
+    }
 
     func applies(on day: String) -> Bool { (validFrom ?? "").isEmpty || validFrom! <= day }
 }
@@ -113,17 +119,25 @@ extension GWSettings {
         if let r = pick(named) { return r }
         return pick(openRules.filter { $0.pattern.trimmingCharacters(in: .whitespaces) == "*" })
     }
-    /// Quando il gateway proverà a prenotare una lezione non ancora seguita.
-    func fireAt(for e: ClassEvent) -> (date: Date, rule: GWOpenRule)? {
+    /// Quando il gateway proverà a prenotare una lezione non ancora seguita: tutti i tentativi di apertura,
+    /// come il gateway 0.2.10 (orario della regola, secondo orario "anche alle", apertura comunicata + 1 minuto).
+    func fireTimes(for e: ClassEvent) -> (dates: [Date], rule: GWOpenRule)? {
         let cal = { var c = Calendar(identifier: .gregorian); c.timeZone = TimeZone(identifier: "Europe/Rome")!; return c }()
         guard let base = rule(for: e.name, on: e.start) else { return nil }
         let day: Date
         if followServerOpenTime, let o = e.opensOn { day = cal.startOfDay(for: o) }
         else { day = cal.date(byAdding: .day, value: -base.daysBefore, to: cal.startOfDay(for: e.start)) ?? e.start }
-        guard let r = rule(for: e.name, on: day), var t = cal.date(bySettingHour: r.hour, minute: r.minute, second: 0, of: day) else { return nil }
-        // come il gateway: mai prima dell'apertura comunicata dal centro (un minuto dopo, se è più tardi della regola)
-        if followServerOpenTime, let o = e.opensOn, o > t { t = o.addingTimeInterval(60) }
-        return (t, r)
+        guard let r = rule(for: e.name, on: day), let t = cal.date(bySettingHour: r.hour, minute: r.minute, second: 0, of: day) else { return nil }
+        var ts = [t]
+        if let hm = r.alsoHM, let t2 = cal.date(bySettingHour: hm.h, minute: hm.m, second: 0, of: day) { ts.append(t2) }
+        if followServerOpenTime, let o = e.opensOn { ts.append(o.addingTimeInterval(60)) }
+        ts.sort()
+        var out: [Date] = []
+        for x in ts where out.last.map({ x.timeIntervalSince($0) >= 60 }) ?? true { out.append(x) }
+        return (out, r)
+    }
+    func fireAt(for e: ClassEvent) -> (date: Date, rule: GWOpenRule)? {
+        fireTimes(for: e).flatMap { t in t.dates.first.map { ($0, t.rule) } }
     }
 }
 
@@ -168,6 +182,8 @@ struct GWItem: Codable, Identifiable, Equatable {
     var pictureUrl: String?
     var serverOpensOn: Date?
     var fireAt: Date?
+    var fireTimes: [Date]? = nil   // tutti i tentativi di apertura (gateway ≥ 0.2.10)
+    var round: Int? = nil
     var recurring: Bool
     var state: String
     var lastMessage: String
@@ -396,7 +412,7 @@ struct GWMember: Codable, Identifiable, Equatable {
     var secondaryNick: String? { fullName != nil && !nickName.isEmpty ? nickName : nil }
 }
 struct GWParticipants: Decodable { var participants: [GWMember]; var observedAt: String?; var liveError: String? }
-struct GWAttendance: Decodable, Identifiable {
+struct GWAttendance: Decodable, Identifiable, Hashable {
     var classId: String; var partitionDate: Int; var name: String; var start: Date; var room: String?; var trainer: String?; var joinedOn: String?; var station: String?
     var id: String { "\(classId)|\(partitionDate)" }
 }

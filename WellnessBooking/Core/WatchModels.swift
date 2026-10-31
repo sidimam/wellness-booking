@@ -143,7 +143,7 @@ struct WatchItem: Codable, Identifiable, Equatable {
         id = g.id; classId = g.classId; partitionDate = g.partitionDate; name = g.name
         start = g.start; end = g.end; room = g.room; trainer = g.trainer; pictureUrl = g.pictureUrl
         profileId = g.profileId; self.profileLabel = profileLabel
-        serverOpensOn = g.serverOpensOn; serverFireAt = g.fireAt
+        serverOpensOn = g.serverOpensOn; serverFireAt = g.fireAt; serverFireTimes = g.fireTimes ?? []; serverRound = g.round ?? 0
         maxParticipants = g.maxParticipants; availablePlaces = g.availablePlaces
         recurring = g.recurring; lastMessage = g.lastMessage; lastCheck = g.lastCheck; attempts = g.attempts
         switch g.state {
@@ -159,6 +159,13 @@ struct WatchItem: Codable, Identifiable, Equatable {
     }
     /// Orario calcolato dal server (vince su quello locale quando presente).
     var serverFireAt: Date?
+    /// Tutti i tentativi di apertura calcolati dal gateway (es. 05:01 e 07:01) e quello in corso.
+    var serverFireTimes: [Date] = []
+    var serverRound = 0
+    /// I tentativi dopo il primo, come testo "07:01" (per "Prenoto … e alle …").
+    var laterAttempts: [Date] { Array(serverFireTimes.dropFirst()) }
+    /// Il prossimo tentativo dopo una raffica non riuscita (osservazione in attesa del secondo orario).
+    var nextServerAttempt: Date? { serverRound + 1 < serverFireTimes.count ? serverFireTimes[serverRound + 1] : nil }
 
     /// Regola settimanale derivata (nome + giorno + ora) usata per agganciare le occorrenze future.
     var ruleKey: String {

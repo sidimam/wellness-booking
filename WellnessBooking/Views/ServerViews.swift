@@ -211,6 +211,13 @@ struct ServerSettingsView: View {
                                                             set: { let c = Calendar.current.dateComponents([.hour, .minute], from: $0); r.hour = c.hour ?? 5; r.minute = c.minute ?? 0 }),
                                        displayedComponents: .hourAndMinute).labelsHidden()
                         }
+                        Toggle("Secondo tentativo nello stesso giorno", isOn: Binding(get: { r.alsoHM != nil },
+                                                                                      set: { r.alsoAt = $0 ? String(format: "%02d:%02d", min(r.hour + 2, 23), r.minute) : nil }))
+                        if let hm = r.alsoHM {
+                            DatePicker("Anche alle", selection: .init(get: { Calendar.current.date(bySettingHour: hm.h, minute: hm.m, second: 0, of: Date()) ?? Date() },
+                                                                      set: { let c = Calendar.current.dateComponents([.hour, .minute], from: $0); r.alsoAt = String(format: "%02d:%02d", c.hour ?? 7, c.minute ?? 1) }),
+                                       displayedComponents: .hourAndMinute)
+                        }
                     }
                 }
                 .onDelete { idx in s.openRules.remove(atOffsets: idx) }

@@ -141,7 +141,7 @@ struct ParticipantsSection: View {
     }
     private func load() async {
         loading = true; defer { loading = false }
-        do { result = try await engine.participants(for: event); error = result?.liveError }
+        do { result = try await engine.participants(for: event); error = result?.liveError.flatMap { $0.isEmpty ? nil : $0 } }
         catch { self.error = error.localizedDescription }
     }
 }
@@ -152,6 +152,7 @@ struct MemberDetailView: View {
     let memberId: String
     @State private var detail: GWMemberDetail?
     @State private var error: String?
+    @State private var openClass: GWAttendance?
 
     var body: some View {
         List {
@@ -173,13 +174,15 @@ struct MemberDetailView: View {
                         ForEach(d.leaderboard) { l in LabeledContent("\(l.trend == "week" ? String(localized: "settimana") : String(localized: "mese")) \(l.period)", value: "#\(l.position) · \(l.moves) MOVEs") }
                     }
                 }
-                Section("Presenze registrate (\(d.attendance.count))") {
-                    ForEach(d.attendance) { a in
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text(a.name).font(.body)
-                            Text("\(a.start.itShortDay) \(a.start.itTime)" + (a.room.map { " · \($0)" } ?? "") + (a.station.map { " · postazione \($0)" } ?? "")).font(.caption).foregroundStyle(.secondary)
-                        }
-                    }
+                let now = Date()
+                let next = d.attendance.filter { $0.start >= now }.sorted { $0.start < $1.start }
+                let past = d.attendance.filter { $0.start < now }
+                Section("Iscritto alle prossime lezioni (\(next.count))") {
+                    if next.isEmpty { Text("Nessuna").foregroundStyle(.secondary) }
+                    ForEach(next) { a in attendanceRow(a) }
+                }
+                Section("Lezioni passate (\(past.count))") {
+                    ForEach(past) { a in attendanceRow(a) }
                 }
                 if let ex = d.member.extra, !ex.isEmpty {
                     Section { DisclosureGroup { ForEach(ex.keys.sorted(), id: \.self) { k in LabeledContent(k) { Text(ex[k]!.display).font(.caption.monospaced()) } } } label: { Label("Dati tecnici", systemImage: "info.circle").foregroundStyle(.secondary) } }
@@ -188,9 +191,67 @@ struct MemberDetailView: View {
         }
         .navigationTitle(detail?.member.displayName ?? "Socio")
         .navigationBarTitleDisplayMode(.inline)
+        .navigationDestination(item: $openClass) { a in ClassPeopleView(attendance: a) }
         .task { do { detail = try await engine.member(memberId) } catch { self.error = error.localizedDescription } }
     }
+    /// Una lezione del socio: tocco → chi partecipa (e da lì un altro socio, e così via).
+    private func attendanceRow(_ a: GWAttendance) -> some View {
+        Button { openClass = a } label: {
+            HStack {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(a.name).font(.headline)
+                    Text("\(a.start.itShortDay) \(a.start.itTime)" + (a.room.map { " · \($0)" } ?? "") + (a.station.map { " · postazione \($0)" } ?? "")).font(.caption).foregroundStyle(.secondary)
+                }
+                Spacer()
+                Image(systemName: "person.2").foregroundStyle(.secondary)
+                Image(systemName: "chevron.right").imageScale(.small).foregroundStyle(.tertiary)
+            }
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
 }
+
+/// Chi partecipa a una lezione aperta dalla scheda di un socio: ogni partecipante apre la sua scheda,
+/// dalla quale si torna alle sue lezioni (navigazione ciclica nello stesso stack).
+struct ClassPeopleView: View {
+    @EnvironmentObject var engine: BookingEngine
+    let attendance: GWAttendance
+    @State private var result: GWParticipants?
+    @State private var error: String?
+    @State private var openMember: MemberRef?
+
+    var body: some View {
+        List {
+            Section {
+                LabeledContent("Quando", value: "\(attendance.start.itLongDay) · \(attendance.start.itTime)")
+                if let r = attendance.room, !r.isEmpty { LabeledContent("Sala", value: r) }
+                if let t = attendance.trainer, !t.isEmpty { LabeledContent("Istruttore", value: t.capitalized) }
+            }
+            Section {
+                if result == nil && error == nil { HStack { ProgressView(); Text("Lettura degli iscritti da mywellness…").foregroundStyle(.secondary) } }
+                if let e = error { Text(e).font(.footnote).foregroundStyle(.red) }
+                if let r = result {
+                    if r.participants.isEmpty { Text("Nessun iscritto visibile.").foregroundStyle(.secondary) }
+                    ForEach(r.participants) { m in MemberRow(member: m, showJoined: true) { openMember = MemberRef(id: m.id) } }
+                }
+            } header: {
+                HStack { Text("Partecipanti"); Spacer(); if let r = result { Text("\(r.participants.count)").foregroundStyle(.secondary) } }
+            }
+        }
+        .navigationTitle(attendance.name)
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationDestination(item: $openMember) { m in MemberDetailView(memberId: m.id) }
+        .task {
+            do { result = try await engine.participants(classId: attendance.classId, partitionDate: attendance.partitionDate); error = result?.liveError.flatMap { $0.isEmpty ? nil : $0 } }
+            catch { self.error = error.localizedDescription }
+        }
+        .refreshable { if let r = try? await engine.participants(classId: attendance.classId, partitionDate: attendance.partitionDate) { result = r } }
+    }
+}
+
+/// Riferimento a un socio per la navigazione (GWMember non è Hashable per i dati tecnici).
+struct MemberRef: Hashable, Identifiable { let id: String }
 
 /// Persone del centro: classifica MOVEs (settimana/mese, periodi passati) e compagni di corso.
 struct PeopleView: View {

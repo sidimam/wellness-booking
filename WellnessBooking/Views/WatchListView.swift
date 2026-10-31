@@ -177,7 +177,10 @@ struct WatchItemRow: View {
                 Text("\(item.start.itLongDay) · \(item.start.itTime)–\(item.end.itTime)").font(.subheadline)
                 if showProfile, let p = item.profileLabel { Text(p).font(.caption).foregroundStyle(Color.accentColor) }
                 if item.state == .pending, let f = item.fireAt(settings: settings) {
-                    Text("Prenoto \(f.itShortDay) alle \(f.itTime)").font(.caption).foregroundStyle(.secondary)
+                    Text("Prenoto \(f.itShortDay) alle \(f.itTime)" + item.laterAttempts.map { " " + String(localized: "e alle") + " \($0.itTime)" }.joined()).font(.caption).foregroundStyle(.secondary)
+                }
+                if item.state == .watching, let n = item.nextServerAttempt, n > Date() {
+                    Text("Nuovo tentativo alle \(n.itTime)").font(.caption).foregroundStyle(.secondary)
                 }
                 if case .failed(let m) = item.state {
                     Text(m).font(.caption).foregroundStyle(.red)
