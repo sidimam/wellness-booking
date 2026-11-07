@@ -7,7 +7,7 @@
 set -o pipefail
 cd "$(dirname "$0")/.."
 DD_ROOT="${DD_ROOT:-$HOME/Library/Caches/WellnessBooking-build}"; mkdir -p "$DD_ROOT"
-KIT="${KIT:-/Volumes/LocalData/Claude/WellnessBooking/WellnessBooking-RecoveryKit/apple}"
+KIT="${KIT:-$(cd ../.. && pwd -P)/WellnessBooking-RecoveryKit/apple}"   # kit accanto a git/, ovunque sia la cartella
 AUTH=()
 if [ -f "$KIT/AuthKey_Z9NY29WQ4M.p8" ] && [ -f "$KIT/asc_issuer.txt" ]; then
   AUTH=(-authenticationKeyPath "$KIT/AuthKey_Z9NY29WQ4M.p8" -authenticationKeyID Z9NY29WQ4M -authenticationKeyIssuerID "$(cat "$KIT/asc_issuer.txt")")
