@@ -5,6 +5,7 @@ senza rileggere le conversazioni: ogni commit aggiunge qui la sua voce (cosa, pe
 Le voci fino al 16/11/2026 sono ricostruite dalla storia git (messaggio del commit e hash).
 
 ## 2026-11-16
+- **Wiki: nuova pagina `Changelog.md`** in inglese (come le wiki di wellness-gateway e Unraid Drive), una sezione per build TestFlight ricavata dai 35 commit, con link in `_Sidebar.md` e in `Home.md`; rimanda a questo `changelog.md` per il dettaglio dei commit. Controllato: nessun rimando al vecchio `CHANGELOG.md` nelle cartelle WellnessBooking e WellnessGateway.
 - Nuovo `changelog.md`: storia ricostruita dai commit (strumento `tools/changelog_da_git.sh` della cartella Claude); da qui in poi ogni commit aggiunge la sua voce in cima.
 
 ## 2026-11-07
